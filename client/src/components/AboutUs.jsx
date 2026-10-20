@@ -1,13 +1,26 @@
 import React from 'react';
 import { Heart, Check, Sparkles, ArrowRight } from 'lucide-react';
 
-export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer }) {
-  const highlights = [
+export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, content }) {
+  const data = content || {};
+  const defaultHighlights = [
     'Daily Annadhanam drives nourishing destitute elders and street dwellers',
     'Sacred traditional final cremation ceremonies for unclaimed deceased bodies',
     'Educational sponsorships, student tuition, school uniforms, and books',
     'Women vocational skill development workshops for financial freedom'
   ];
+
+  const highlights = (data.highlights && data.highlights.length > 0)
+    ? data.highlights
+    : defaultHighlights;
+
+  const badge = data.badge || 'About us';
+  const title = data.title || 'Upholding Dharma through Selfless Service';
+  const description1 = data.description1 || 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.';
+  const quote = data.quote || '“Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.”';
+  const image = data.image || 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg';
+  const experienceBadgeTitle = data.experienceBadgeTitle || '100% Volunteer Driven';
+  const experienceBadgeSub = data.experienceBadgeSub || 'Every rupee contributed directly impacts lives on ground in Pondicherry.';
 
   return (
     <section id="about" className="py-20 bg-stone-50/60 overflow-hidden">
@@ -23,7 +36,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer })
               {/* Main Image */}
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
                 <img
-                  src="https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg"
+                  src={image}
                   alt="Dharmic Life Foundation Service"
                   className="w-full h-[480px] sm:h-[540px] object-cover hover:scale-105 transition-transform duration-700"
                   onError={(e) => { e.target.src = '/images/about.jpg'; }}
@@ -35,8 +48,8 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer })
                     <Sparkles size={22} className="text-[#E48A2D]" />
                   </div>
                   <div>
-                    <h5 className="font-bold text-gray-900 text-sm font-serif">100% Volunteer Driven</h5>
-                    <p className="text-xs text-gray-600">Every rupee contributed directly impacts lives on ground in Pondicherry.</p>
+                    <h5 className="font-bold text-gray-900 text-sm font-serif">{experienceBadgeTitle}</h5>
+                    <p className="text-xs text-gray-600">{experienceBadgeSub}</p>
                   </div>
                 </div>
               </div>
@@ -49,18 +62,18 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer })
               {/* Subtitle */}
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2.5">
                 <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-                <span>About us</span>
+                <span>{badge}</span>
               </div>
               
               {/* Heading */}
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-                Upholding Dharma through Selfless Service
+                {title}
               </h2>
             </div>
 
             {/* Description Paragraph */}
             <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.
+              {description1}
             </p>
 
             {/* Feature Checklist */}
@@ -79,7 +92,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer })
 
             {/* Quote / Highlight Strip */}
             <div className="p-4 rounded-xl bg-amber-50/70 border-l-4 border-[#E48A2D] text-xs sm:text-sm text-gray-800 italic">
-              “Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.”
+              {quote}
             </div>
 
             {/* Buttons */}

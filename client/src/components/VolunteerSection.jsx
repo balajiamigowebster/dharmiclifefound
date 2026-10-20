@@ -1,11 +1,11 @@
 import React from 'react';
 import { Users, Droplets, GraduationCap, Coins, ArrowRight, Heart } from 'lucide-react';
 
-export default function VolunteerSection({ onOpenVolunteer, onNavigate }) {
+export default function VolunteerSection({ onOpenVolunteer, onNavigate, content }) {
   const metrics = [
-    { label: 'Save Water & Health Initiatives', value: 90, icon: Droplets },
-    { label: 'Education & Child Support', value: 80, icon: GraduationCap },
-    { label: 'Food Relief & Annadhanam Seva', value: 95, icon: Coins },
+    { label: content?.mealsLabel || 'Daily Meals Served & Food Relief', value: 95, icon: Coins, count: content?.mealsServed || '85,000+' },
+    { label: content?.studentsLabel || 'Education & Child Support', value: 80, icon: GraduationCap, count: content?.studentsSupported || '650+' },
+    { label: content?.soulsLabel || 'Unclaimed Souls Vedic Cremation', value: 90, icon: Droplets, count: content?.soulsHonored || '420+' },
   ];
 
   return (
@@ -31,7 +31,9 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate }) {
                     <Users size={20} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 font-serif">120+ Active Volunteers</h4>
+                    <h4 className="font-bold text-gray-900 font-serif">
+                      {content?.volunteersActive || '120+'} {content?.volunteersLabel || 'Active Volunteers'}
+                    </h4>
                     <p className="text-xs text-gray-500">Uniting across districts with unconditional empathy.</p>
                   </div>
                 </div>

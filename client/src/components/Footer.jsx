@@ -169,6 +169,18 @@ export default function Footer({ onOpenContact, onNavigate }) {
                   Contact Us
                 </a>
               </li>
+              <li>
+                <a
+                  href="/admin"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onNavigate) onNavigate('admin');
+                  }}
+                  className="text-stone-400 hover:text-[#E48A2D] transition block font-medium"
+                >
+                  Admin Portal
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -216,6 +228,17 @@ export default function Footer({ onOpenContact, onNavigate }) {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <p className="text-center sm:text-left">
             &copy; 2026 Copyrights by <span className="text-white font-semibold">Dharmic Life Foundation</span> . All Rights Reserved | Designed by <a href="https://amigowebster.in" target="_blank" rel="noreferrer" className="text-[#E48A2D] hover:underline">amigowebster</a>
+            <span className="mx-2 text-stone-600">|</span>
+            <a
+              href="/admin"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('admin');
+              }}
+              className="text-stone-400 hover:text-white transition"
+            >
+              Admin Portal
+            </a>
           </p>
 
           <div className="flex items-center gap-4 text-white">

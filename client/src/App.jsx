@@ -33,6 +33,9 @@ import VolunteerModal from './components/Modals/VolunteerModal';
 import ActivityModal from './components/Modals/ActivityModal';
 import ContactModal from './components/Modals/ContactModal';
 
+// Admin Panel
+import AdminPanel from './components/Admin/AdminPanel';
+
 // API
 import {
   fetchActivities,
@@ -40,7 +43,8 @@ import {
   fetchTestimonials,
   fetchBlogPosts,
   fetchTeam,
-  fetchGallery
+  fetchGallery,
+  fetchHomepageContent
 } from './api';
 
 export default function App() {
@@ -50,6 +54,7 @@ export default function App() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [team, setTeam] = useState([]);
   const [gallery, setGallery] = useState([]);
+  const [homeContent, setHomeContent] = useState(null);
 
   // Activity Slugs matching live site
   const activitySlugs = [
@@ -67,6 +72,7 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
+      if (path.includes('admin') || hash.includes('admin')) return 'admin';
       if (path.includes('trustees') || hash.includes('trustees')) return 'trustees';
       if (path.includes('trust') || hash.includes('trust')) return 'trust';
       if (path.includes('contact') || hash.includes('contact')) return 'contact';
@@ -90,13 +96,14 @@ export default function App() {
 
   useEffect(() => {
     async function loadData() {
-      const [acts, evs, tests, blogs, tm, gal] = await Promise.all([
+      const [acts, evs, tests, blogs, tm, gal, hpContent] = await Promise.all([
         fetchActivities(),
         fetchEvents(),
         fetchTestimonials(),
         fetchBlogPosts(),
         fetchTeam(),
-        fetchGallery()
+        fetchGallery(),
+        fetchHomepageContent()
       ]);
 
       if (acts && acts.length > 0) setActivities(acts);
@@ -105,6 +112,7 @@ export default function App() {
       if (blogs && blogs.length > 0) setBlogPosts(blogs);
       if (tm && tm.length > 0) setTeam(tm);
       if (gal && gal.length > 0) setGallery(gal);
+      if (hpContent) setHomeContent(hpContent);
     }
     loadData();
   }, []);
@@ -114,7 +122,9 @@ export default function App() {
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
-      if (path.includes('trustees') || hash.includes('trustees')) {
+      if (path.includes('admin') || hash.includes('admin')) {
+        setCurrentPage('admin');
+      } else if (path.includes('trustees') || hash.includes('trustees')) {
         setCurrentPage('trustees');
       } else if (path.includes('trust') || hash.includes('trust')) {
         setCurrentPage('trust');
@@ -143,7 +153,9 @@ export default function App() {
 
   const handleNavigate = (page) => {
     setCurrentPage(page);
-    if (page === 'trust') {
+    if (page === 'admin') {
+      window.history.pushState({ page: 'admin' }, '', '/admin');
+    } else if (page === 'trust') {
       window.history.pushState({ page: 'trust' }, '', '/trust');
     } else if (page === 'trustees') {
       window.history.pushState({ page: 'trustees' }, '', '/trustees');
@@ -191,6 +203,15 @@ export default function App() {
       }
     }
   };
+
+  if (currentPage === 'admin') {
+    return (
+      <AdminPanel
+        onNavigate={handleNavigate}
+        onContentUpdated={(updated) => setHomeContent(updated)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-[#901C25] selection:text-white">
@@ -279,12 +300,14 @@ export default function App() {
           <>
             {/* Hero Slider */}
             <HeroSlider
+              content={homeContent?.hero}
               onNavigate={handleNavigate}
               onOpenDonation={() => handleOpenDonation('General Seva')}
             />
 
             {/* About Us Section */}
             <AboutUs
+              content={homeContent?.about}
               onNavigate={handleNavigate}
               onOpenDonation={() => handleOpenDonation('About Us Support')}
               onOpenVolunteer={() => setVolunteerModalOpen(true)}
@@ -301,6 +324,7 @@ export default function App() {
 
             {/* Volunteer & Impact Metrics */}
             <VolunteerSection
+              content={homeContent?.stats}
               onNavigate={handleNavigate}
               onOpenVolunteer={() => setVolunteerModalOpen(true)}
             />

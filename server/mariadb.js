@@ -340,6 +340,32 @@ class DatabaseManager {
     return record;
   }
 
+  async getContactMessages() {
+    if (this.isMariaDBConnected && this.pool) {
+      try {
+        const [rows] = await this.pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC');
+        return rows;
+      } catch (e) {
+        console.error('DB error getting messages:', e.message);
+      }
+    }
+    return [...this.localStore.contactMessages].reverse();
+  }
+
+  async deleteContactMessage(id) {
+    const numId = parseInt(id);
+    if (this.isMariaDBConnected && this.pool) {
+      try {
+        await this.pool.query('DELETE FROM contact_messages WHERE id = ?', [numId]);
+        return true;
+      } catch (e) {
+        console.error('DB error deleting message:', e.message);
+      }
+    }
+    this.localStore.contactMessages = this.localStore.contactMessages.filter(m => m.id !== numId);
+    return true;
+  }
+
   async createSubscriber(email) {
     if (!email) return false;
     if (this.isMariaDBConnected && this.pool) {

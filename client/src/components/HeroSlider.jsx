@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, ArrowRight, Sparkles } from 'lucide-react';
 
-export default function HeroSlider({ onNavigate, onOpenDonation }) {
+export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slides = [
+  const defaultSlides = [
     {
       id: 1,
       image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-17.jpg',
@@ -32,6 +32,10 @@ export default function HeroSlider({ onNavigate, onOpenDonation }) {
       secondaryTarget: 'trustees'
     }
   ];
+
+  const slides = (content && content.slides && content.slides.length > 0)
+    ? content.slides
+    : defaultSlides;
 
   useEffect(() => {
     const timer = setInterval(() => {

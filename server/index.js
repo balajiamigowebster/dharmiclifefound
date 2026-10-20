@@ -2,10 +2,37 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const db = require('./mariadb');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+const HOMEPAGE_FILE = path.join(__dirname, 'data', 'homepageContent.json');
+
+// Helper to get homepage content
+function getHomepageContent() {
+  try {
+    if (fs.existsSync(HOMEPAGE_FILE)) {
+      return JSON.parse(fs.readFileSync(HOMEPAGE_FILE, 'utf-8'));
+    }
+  } catch (err) {
+    console.error('Error reading homepage content:', err.message);
+  }
+  return null;
+}
+
+// Helper to save homepage content
+function saveHomepageContent(data) {
+  try {
+    fs.mkdirSync(path.dirname(HOMEPAGE_FILE), { recursive: true });
+    fs.writeFileSync(HOMEPAGE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    console.error('Error saving homepage content:', err.message);
+    return false;
+  }
+}
 
 // Middleware
 app.use(cors());
@@ -212,6 +239,66 @@ app.post('/api/newsletter', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to subscribe' });
+  }
+});
+
+// Admin Login
+app.post('/api/admin/login', (req, res) => {
+  const { password } = req.body;
+  const adminPass = process.env.ADMIN_PASSWORD || 'admin123';
+  if (password === adminPass) {
+    res.json({
+      success: true,
+      token: 'admin-token-' + Date.now(),
+      message: 'Admin authentication successful'
+    });
+  } else {
+    res.status(401).json({ success: false, error: 'Invalid admin credentials' });
+  }
+});
+
+// GET Homepage Content
+app.get('/api/homepage', (req, res) => {
+  const content = getHomepageContent();
+  if (content) {
+    res.json(content);
+  } else {
+    res.status(404).json({ error: 'Homepage content not found' });
+  }
+});
+
+// PUT Homepage Content (Admin update)
+app.put('/api/homepage', (req, res) => {
+  const data = req.body;
+  if (!data || typeof data !== 'object') {
+    return res.status(400).json({ error: 'Invalid content data' });
+  }
+  const ok = saveHomepageContent(data);
+  if (ok) {
+    res.json({ success: true, message: 'Homepage content updated successfully', content: data });
+  } else {
+    res.status(500).json({ error: 'Failed to write homepage content' });
+  }
+});
+
+// GET Contact Inquiries for Admin
+app.get('/api/admin/messages', async (req, res) => {
+  try {
+    const messages = await db.getContactMessages();
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve messages' });
+  }
+});
+
+// DELETE Contact Inquiry
+app.delete('/api/admin/messages/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.deleteContactMessage(id);
+    res.json({ success: true, message: 'Message removed' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete message' });
   }
 });
 
