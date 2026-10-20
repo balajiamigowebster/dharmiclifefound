@@ -14,7 +14,7 @@ async function push() {
     process.exit(1);
   }
 
-  console.log('Pushing main branch to https://github.com/balajiamigowebster/dharmiclife.git ...');
+  console.log('Pushing main branch to https://github.com/balajiamigowebster/dharmiclifefound.git ...');
 
   try {
     const pushResult = await git.push({
@@ -30,7 +30,7 @@ async function push() {
       })
     });
 
-    console.log('[Success] Successfully pushed to https://github.com/balajiamigowebster/dharmiclife.git!');
+    console.log('[Success] Successfully pushed to https://github.com/balajiamigowebster/dharmiclifefound.git!');
     console.log(pushResult);
   } catch (error) {
     console.error('[Error] Push failed:', error.message);
