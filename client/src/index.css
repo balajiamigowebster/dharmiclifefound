@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom Nav underline effect */
+.nav-link {
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2.5px;
+  background-color: #901C25;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Dropdown link animation */
+.dropdown-item {
+  position: relative;
+  z-index: 1;
+  transition: all 0.25s ease;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #E48A2D;
+  transition: width 0.25s ease;
+  z-index: -1;
+}
+
+.dropdown-item:hover::before {
+  width: 100%;
+}
+
+.dropdown-item:hover {
+  color: #ffffff !important;
+  padding-left: 20px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #901C25;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #73161d;
+}

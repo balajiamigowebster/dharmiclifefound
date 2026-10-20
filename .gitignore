@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Production build outputs
+dist/
+client/dist/
+
+# Logs & temp files
+*.log
+*.tmp*
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+
+# Vite / cache
+.vite/
