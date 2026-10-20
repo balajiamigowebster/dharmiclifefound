@@ -9,6 +9,7 @@
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm run dev:server\" \"npm run dev:client\"",
     "build:client": "npm run build --prefix client",
     "build": "npm run build:client",
+    "git:push": "node scripts/git-push.js",
     "start": "node server/index.js",
     "db:init": "node server/init-mariadb.js"
   },
