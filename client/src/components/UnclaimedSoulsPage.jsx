@@ -282,13 +282,25 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
                     )}
                   </div>
                 ) : (
-                  /* Standard Image Carousel / Grid layout */
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  /* Standard Image Grid - Responsive to fill card evenly without empty space */
+                  <div className={`grid gap-6 ${
+                    drive.images.length === 1
+                      ? 'grid-cols-1 max-w-2xl mx-auto'
+                      : drive.images.length === 2
+                      ? 'grid-cols-1 sm:grid-cols-2'
+                      : drive.images.length === 3
+                      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+                  }`}>
                     {drive.images.map((img, idx) => (
                       <div
                         key={idx}
                         onClick={() => setLightboxImage(img)}
-                        className="relative h-64 sm:h-72 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
+                        className={`relative w-full rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group ${
+                          drive.images.length <= 2
+                            ? 'h-72 sm:h-80 md:h-96 lg:h-[400px]'
+                            : 'h-64 sm:h-72 md:h-80'
+                        }`}
                       >
                         <img
                           src={img}
