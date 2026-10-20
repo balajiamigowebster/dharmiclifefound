@@ -19,8 +19,10 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['Cinzel', 'Georgia', 'serif'],
-        sans: ['Inter', 'Outfit', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        quote: ['"Playfair Display"', 'Georgia', 'serif'],
       }
     },
   },
