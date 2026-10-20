@@ -201,20 +201,19 @@ export default function SpreadingDharmicWayPage({ onNavigate }) {
               {/* Media Content */}
               <div className="p-6">
                 
-                {/* When class has video: 2-column layout */}
+                {/* When class has video: 2-column layout - Evenly Aligned */}
                 {hasVideo ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                    
-                    {/* Left: Photos */}
-                    <div className="grid grid-cols-1 gap-4">
-                      {item.images.slice(0, 1).map((img, idx) => (
+                  <div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                      
+                      {/* Left: Photos - Exact matching height */}
+                      <div className="w-full">
                         <div
-                          key={idx}
-                          onClick={() => setLightboxImage(img)}
-                          className="relative h-72 sm:h-80 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
+                          onClick={() => setLightboxImage(item.images[0])}
+                          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
                         >
                           <img
-                            src={img}
+                            src={item.images[0]}
                             alt={`${item.title} photo`}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
@@ -227,23 +226,51 @@ export default function SpreadingDharmicWayPage({ onNavigate }) {
                             </span>
                           </div>
                         </div>
-                      ))}
+                      </div>
+
+                      {/* Right: Authentic HTML5 Video Player - Exact matching height */}
+                      <div className="w-full">
+                        <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+                          <video
+                            src={item.videos[0]}
+                            controls
+                            preload="metadata"
+                            controlsList="nodownload"
+                            className="w-full h-full object-contain"
+                            poster={item.images[0] || '/images/act-dharmic.jpg'}
+                          >
+                            Your browser does not support HTML5 video.
+                          </video>
+                        </div>
+                      </div>
+
                     </div>
 
-                    {/* Right: Authentic HTML5 Video Player */}
-                    <div className="rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner aspect-[4/3] sm:aspect-video flex items-center justify-center">
-                      <video
-                        src={item.videos[0]}
-                        controls
-                        preload="metadata"
-                        controlsList="nodownload"
-                        className="w-full h-full object-contain"
-                        poster={item.images[0] || '/images/act-dharmic.jpg'}
-                      >
-                        Your browser does not support HTML5 video.
-                      </video>
-                    </div>
-
+                    {/* Additional thumbs below media grid if multiple */}
+                    {item.images.length > 1 && (
+                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
+                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+                          <ImageIcon size={14} className="text-[#901C25]" />
+                          <span>Photos ({item.images.length}):</span>
+                        </span>
+                        <div className="flex items-center gap-2 overflow-x-auto py-1">
+                          {item.images.map((thumb, tIdx) => (
+                            <div
+                              key={tIdx}
+                              onClick={() => setLightboxImage(thumb)}
+                              className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:border-[#901C25] hover:opacity-100 opacity-80 transition"
+                            >
+                              <img
+                                src={thumb}
+                                alt=""
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   /* Standard Image Grid / Collage */

@@ -16,6 +16,127 @@ import {
 } from 'lucide-react';
 import { annadhanamDrives } from '../data/annadhanamDrives';
 
+function AnnadhanamDriveCard({ drive, onOpenLightbox }) {
+  const hasVideo = drive.videos && drive.videos.length > 0;
+  const hasImages = drive.images && drive.images.length > 0;
+  const firstImage = hasImages ? drive.images[0] : '/images/act-annadhanam.jpg';
+  const firstVideo = hasVideo ? drive.videos[0] : null;
+
+  const [activeImage, setActiveImage] = useState(firstImage);
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+      {/* Drive Title Bar */}
+      <div className="bg-[#FAF8F5] border-b border-gray-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <h3 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug">
+          {drive.title}
+        </h3>
+        <div className="flex items-center gap-3 shrink-0">
+          {hasVideo && (
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">
+              <Film size={12} />
+              <span>Video</span>
+            </span>
+          )}
+          {hasImages && (
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+              <ImageIcon size={12} />
+              <span>{drive.images.length} {drive.images.length === 1 ? 'Photo' : 'Photos'}</span>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Two-Column Responsive Media Container - Evenly Aligned */}
+      <div className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          
+          {/* Left Column: Image / Gallery - Exact matching height */}
+          <div className="w-full">
+            <div
+              onClick={() => onOpenLightbox(activeImage)}
+              className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
+            >
+              <img
+                src={activeImage}
+                alt={drive.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                onError={(e) => { e.target.src = '/images/act-annadhanam.jpg'; }}
+              />
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="px-4 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+                  <ImageIcon size={14} />
+                  <span>View Full Photo</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Authentic Video Player - Exact matching height */}
+          <div className="w-full">
+            {firstVideo ? (
+              <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+                <video
+                  src={firstVideo}
+                  controls
+                  preload="metadata"
+                  muted
+                  controlsList="nodownload"
+                  className="w-full h-full object-contain"
+                  poster={activeImage}
+                >
+                  Your browser does not support HTML5 video.
+                </video>
+              </div>
+            ) : (
+              <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl bg-stone-50 border border-dashed border-stone-300 flex flex-col items-center justify-center text-center p-6 text-gray-500">
+                <Film size={36} className="text-gray-300 mb-2" />
+                <p className="text-sm font-medium">Drive documented with photography</p>
+                <p className="text-xs text-gray-400 mt-1">Rajiv Gandhi Government Hospital, Puducherry</p>
+              </div>
+            )}
+          </div>
+
+        </div>
+
+        {/* Secondary thumbs if multiple photos */}
+        {drive.images && drive.images.length > 1 && (
+          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+              <ImageIcon size={14} className="text-[#901C25]" />
+              <span>Photos ({drive.images.length}):</span>
+            </span>
+            <div className="flex items-center gap-2 overflow-x-auto py-1">
+              {drive.images.map((thumb, tIdx) => (
+                <button
+                  key={tIdx}
+                  type="button"
+                  onClick={() => setActiveImage(thumb)}
+                  className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
+                    activeImage === thumb
+                      ? 'border-[#901C25] ring-2 ring-[#901C25]/40 scale-105 shadow-sm'
+                      : 'border-gray-200 opacity-70 hover:opacity-100 hover:border-gray-400'
+                  }`}
+                  title={`Photo ${tIdx + 1}`}
+                >
+                  <img
+                    src={thumb}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+    </div>
+  );
+}
+
 export default function AnnadhanamPage({ onNavigate }) {
   const [selectedYear, setSelectedYear] = useState('All');
   const [lightboxImage, setLightboxImage] = useState(null);
@@ -166,115 +287,13 @@ export default function AnnadhanamPage({ onNavigate }) {
 
       {/* 4. 81 Drives List - Exact Two-Column Video & Image Design */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        {displayedDrives.map((drive) => {
-          const hasVideo = drive.videos && drive.videos.length > 0;
-          const hasImages = drive.images && drive.images.length > 0;
-          const firstImage = hasImages ? drive.images[0] : '/images/act-annadhanam.jpg';
-          const firstVideo = hasVideo ? drive.videos[0] : null;
-
-          return (
-            <div
-              key={drive.id}
-              className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
-            >
-              {/* Drive Title Bar */}
-              <div className="bg-[#FAF8F5] border-b border-gray-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h3 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug">
-                  {drive.title}
-                </h3>
-                <div className="flex items-center gap-3 shrink-0">
-                  {hasVideo && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">
-                      <Film size={12} />
-                      <span>Video</span>
-                    </span>
-                  )}
-                  {hasImages && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
-                      <ImageIcon size={12} />
-                      <span>{drive.images.length} {drive.images.length === 1 ? 'Photo' : 'Photos'}</span>
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Two-Column Responsive Media Container */}
-              <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                  
-                  {/* Left Column: Image / Gallery */}
-                  <div className="space-y-3">
-                    <div
-                      onClick={() => setLightboxImage(firstImage)}
-                      className="relative h-72 sm:h-80 w-full rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
-                    >
-                      <img
-                        src={firstImage}
-                        alt={drive.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                        onError={(e) => { e.target.src = '/images/act-annadhanam.jpg'; }}
-                      />
-                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="px-4 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                          <ImageIcon size={14} />
-                          <span>View Full Photo</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Secondary thumbs if multiple */}
-                    {drive.images.length > 1 && (
-                      <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                        {drive.images.slice(1, 5).map((thumb, tIdx) => (
-                          <div
-                            key={tIdx}
-                            onClick={() => setLightboxImage(thumb)}
-                            className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:opacity-80"
-                          >
-                            <img
-                              src={thumb}
-                              alt=""
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Right Column: Authentic Video Player */}
-                  <div>
-                    {firstVideo ? (
-                      <div className="rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner aspect-[4/3] sm:aspect-video flex items-center justify-center">
-                        <video
-                          src={firstVideo}
-                          controls
-                          preload="metadata"
-                          muted
-                          controlsList="nodownload"
-                          className="w-full h-full object-contain"
-                          poster={firstImage}
-                        >
-                          Your browser does not support HTML5 video.
-                        </video>
-                      </div>
-                    ) : (
-                      <div className="h-72 sm:h-80 rounded-xl bg-stone-50 border border-dashed border-stone-300 flex flex-col items-center justify-center text-center p-6 text-gray-500">
-                        <Film size={36} className="text-gray-300 mb-2" />
-                        <p className="text-sm font-medium">Drive documented with photography</p>
-                        <p className="text-xs text-gray-400 mt-1">Rajiv Gandhi Government Hospital, Puducherry</p>
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-          );
-        })}
+        {displayedDrives.map((drive) => (
+          <AnnadhanamDriveCard
+            key={drive.id}
+            drive={drive}
+            onOpenLightbox={(img) => setLightboxImage(img)}
+          />
+        ))}
 
         {/* Load More Button */}
         {visibleCount < filteredDrives.length && (

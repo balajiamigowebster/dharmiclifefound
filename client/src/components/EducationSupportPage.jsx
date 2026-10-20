@@ -190,38 +190,63 @@ export default function EducationSupportPage({ onNavigate }) {
               {/* Media Content */}
               <div className="p-6">
                 
-                {/* When drive has video: 2-column layout */}
+                {/* When drive has video: 2-column layout - Evenly Aligned */}
                 {hasVideo ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                    
-                    {/* Left: Photos */}
-                    <div className="space-y-3">
-                      <div
-                        onClick={() => setLightboxImage(drive.images[0])}
-                        className="relative h-64 sm:h-72 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
-                      >
-                        <img
-                          src={drive.images[0]}
-                          alt={drive.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => { e.target.src = '/images/act-education.jpg'; }}
-                        />
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="px-3 py-1 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow">
-                            View Photo
-                          </span>
+                  <div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                      
+                      {/* Left: Photos - Exact matching height */}
+                      <div className="w-full">
+                        <div
+                          onClick={() => setLightboxImage(drive.images[0])}
+                          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
+                        >
+                          <img
+                            src={drive.images[0]}
+                            alt={drive.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            onError={(e) => { e.target.src = '/images/act-education.jpg'; }}
+                          />
+                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="px-3 py-1 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow">
+                              View Photo
+                            </span>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Additional thumbs */}
-                      {drive.images.length > 1 && (
-                        <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                          {drive.images.slice(1).map((thumb, tIdx) => (
+                      {/* Right: Authentic HTML5 Video Player - Exact matching height */}
+                      <div className="w-full">
+                        <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+                          <video
+                            src={drive.videos[0]}
+                            controls
+                            preload="metadata"
+                            controlsList="nodownload"
+                            className="w-full h-full object-contain"
+                            poster={drive.images[0] || '/images/act-education.jpg'}
+                          >
+                            Your browser does not support HTML5 video.
+                          </video>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Additional thumbs below media grid */}
+                    {drive.images.length > 1 && (
+                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
+                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+                          <ImageIcon size={14} className="text-[#901C25]" />
+                          <span>Photos ({drive.images.length}):</span>
+                        </span>
+                        <div className="flex items-center gap-2 overflow-x-auto py-1">
+                          {drive.images.map((thumb, tIdx) => (
                             <div
                               key={tIdx}
                               onClick={() => setLightboxImage(thumb)}
-                              className="relative w-20 h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:opacity-80"
+                              className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:border-[#901C25] hover:opacity-100 opacity-80 transition"
                             >
                               <img
                                 src={thumb}
@@ -232,23 +257,8 @@ export default function EducationSupportPage({ onNavigate }) {
                             </div>
                           ))}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Right: Authentic HTML5 Video Player */}
-                    <div className="rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner aspect-[4/3] sm:aspect-video flex items-center justify-center">
-                      <video
-                        src={drive.videos[0]}
-                        controls
-                        preload="metadata"
-                        controlsList="nodownload"
-                        className="w-full h-full object-contain"
-                        poster={drive.images[0] || '/images/act-education.jpg'}
-                      >
-                        Your browser does not support HTML5 video.
-                      </video>
-                    </div>
-
+                      </div>
+                    )}
                   </div>
                 ) : (
                   /* Standard Image Grid */
