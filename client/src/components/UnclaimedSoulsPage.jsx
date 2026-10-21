@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Home,
   ChevronRight,
@@ -13,19 +13,34 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { unclaimedSoulsDrives } from '../data/unclaimedSoulsDrives';
+import { fetchActivityItems } from '../api';
+import ActivityMediaViewer from './ActivityMediaViewer';
 
 export default function UnclaimedSoulsPage({ onNavigate }) {
   const [selectedYear, setSelectedYear] = useState('All');
   const [lightboxImage, setLightboxImage] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(12);
+  const [dbItems, setDbItems] = useState([]);
+
+  useEffect(() => {
+    async function loadData() {
+      const items = await fetchActivityItems('unclaimed-souls');
+      if (items && items.length > 0) {
+        setDbItems(items);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Old historical uploads first, new uploads shown in last
+  const allDrivesList = useMemo(() => {
+    return [...unclaimedSoulsDrives, ...dbItems];
+  }, [dbItems]);
 
   // Filter drives by year
   const filteredDrives = useMemo(() => {
-    if (selectedYear === 'All') return unclaimedSoulsDrives;
-    return unclaimedSoulsDrives.filter(d => d.title.includes(selectedYear));
-  }, [selectedYear]);
-
-  const displayedDrives = filteredDrives.slice(0, visibleCount);
+    if (selectedYear === 'All') return allDrivesList;
+    return allDrivesList.filter(d => (d.title || '').includes(selectedYear));
+  }, [selectedYear, allDrivesList]);
 
   return (
     <div className="bg-white min-h-screen animate-fadeIn font-sans text-gray-800">
@@ -149,10 +164,7 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
             {['All', '2026', '2025', '2024', '2023', '2022'].map((year) => (
               <button
                 key={year}
-                onClick={() => {
-                  setSelectedYear(year);
-                  setVisibleCount(12);
-                }}
+                onClick={() => setSelectedYear(year)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow-sm ${
                   selectedYear === year
                     ? 'bg-[#901C25] text-white shadow'
@@ -168,7 +180,7 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
 
       {/* 4. 67 Drives List - Responsive Media Container with Videos & Documents */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        {displayedDrives.map((drive) => {
+        {filteredDrives.map((drive) => {
           const hasVideo = drive.videos && drive.videos.length > 0;
           const hasImages = drive.images && drive.images.length > 0;
 
@@ -208,135 +220,22 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
                 </div>
               </div>
 
-              {/* Media Content */}
+              {/* Media Content: Interactive Main Image Slider with Left/Right Arrows */}
               <div className="p-6">
-                
-                {/* When drive has video: 2-column layout - Evenly Aligned */}
-                {hasVideo ? (
-                  <div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                      
-                      {/* Left: Photos - Exact matching height */}
-                      <div className="w-full">
-                        <div
-                          onClick={() => setLightboxImage(drive.images[0])}
-                          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
-                        >
-                          <img
-                            src={drive.images[0]}
-                            alt={`${drive.title} photo`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            onError={(e) => { e.target.src = '/images/act-cremation.jpg'; }}
-                          />
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow">
-                              View Record
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Authentic HTML5 Video Player - Exact matching height */}
-                      <div className="w-full">
-                        <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
-                          <video
-                            src={drive.videos[0]}
-                            controls
-                            preload="metadata"
-                            controlsList="nodownload"
-                            className="w-full h-full object-contain"
-                            poster={drive.images[0] || '/images/act-cremation.jpg'}
-                          >
-                            Your browser does not support HTML5 video.
-                          </video>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* Additional thumbs below media grid */}
-                    {drive.images.length > 1 && (
-                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
-                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                          <ImageIcon size={14} className="text-[#901C25]" />
-                          <span>Photos ({drive.images.length}):</span>
-                        </span>
-                        <div className="flex items-center gap-2 overflow-x-auto py-1">
-                          {drive.images.map((thumb, tIdx) => (
-                            <div
-                              key={tIdx}
-                              onClick={() => setLightboxImage(thumb)}
-                              className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:border-[#901C25] hover:opacity-100 opacity-80 transition"
-                            >
-                              <img
-                                src={thumb}
-                                alt=""
-                                className="w-full h-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  /* Standard Image Grid - Responsive to fill card evenly without empty space */
-                  <div className={`grid gap-6 ${
-                    drive.images.length === 1
-                      ? 'grid-cols-1 max-w-2xl mx-auto'
-                      : drive.images.length === 2
-                      ? 'grid-cols-1 sm:grid-cols-2'
-                      : drive.images.length === 3
-                      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-                  }`}>
-                    {drive.images.map((img, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => setLightboxImage(img)}
-                        className={`relative w-full rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group ${
-                          drive.images.length <= 2
-                            ? 'h-72 sm:h-80 md:h-96 lg:h-[400px]'
-                            : 'h-64 sm:h-72 md:h-80'
-                        }`}
-                      >
-                        <img
-                          src={img}
-                          alt={`${drive.title} - Record ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => { e.target.src = '/images/act-cremation.jpg'; }}
-                        />
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="px-4 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                            <ImageIcon size={14} />
-                            <span>View Full Record</span>
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+                <ActivityMediaViewer
+                  images={drive.images}
+                  videos={drive.videos}
+                  title={drive.title}
+                  defaultFallback="/images/act-cremation.jpg"
+                  onOpenLightbox={(imgs, idx) => setLightboxImage(imgs[idx])}
+                />
               </div>
 
             </div>
           );
         })}
 
-        {/* Load More Button */}
-        {visibleCount < filteredDrives.length && (
-          <div className="text-center pt-8 pb-4">
-            <button
-              onClick={() => setVisibleCount((prev) => prev + 12)}
-              className="px-8 py-3.5 bg-[#901C25] hover:bg-[#73161d] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition transform active:scale-95"
-            >
-              Load More Cases ({filteredDrives.length - visibleCount} Remaining)
-            </button>
-          </div>
-        )}
+        {/* All items displayed directly on scroll */}
       </div>
 
       {/* 5. Full-Screen Lightbox Modal */}

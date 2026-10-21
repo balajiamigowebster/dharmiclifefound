@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Home,
   ChevronRight,
@@ -13,9 +13,25 @@ import {
   Compass
 } from 'lucide-react';
 import { dharmicLifeClasses } from '../data/dharmicLifeClasses';
+import { fetchActivityItems } from '../api';
+import ActivityMediaViewer from './ActivityMediaViewer';
 
 export default function SpreadingDharmicWayPage({ onNavigate }) {
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [dbItems, setDbItems] = useState([]);
+
+  useEffect(() => {
+    async function loadData() {
+      const items = await fetchActivityItems('spreading-the-dharmic-way-of-life');
+      if (items && items.length > 0) {
+        setDbItems(items);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Old historical uploads first, new uploads shown in last
+  const allSessions = [...dharmicLifeClasses, ...dbItems];
 
   return (
     <div className="bg-white min-h-screen animate-fadeIn font-sans text-gray-800">
@@ -151,14 +167,14 @@ export default function SpreadingDharmicWayPage({ onNavigate }) {
             <span>Documented Training Sessions</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-bold font-serif text-gray-900 mt-1">
-            Conducted Classes &amp; Educational Workshops ({dharmicLifeClasses.length} Sessions)
+            Conducted Classes &amp; Educational Workshops ({allSessions.length} Sessions)
           </h3>
         </div>
       </div>
 
       {/* 4. 13 Classes List - Responsive Media Container with Videos & Photo Collages */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        {dharmicLifeClasses.map((item) => {
+        {allSessions.map((item, index) => {
           const hasVideo = item.videos && item.videos.length > 0;
           const hasImages = item.images && item.images.length > 0;
 
@@ -198,113 +214,15 @@ export default function SpreadingDharmicWayPage({ onNavigate }) {
                 </div>
               </div>
 
-              {/* Media Content */}
+              {/* Media Content: Interactive Main Image Slider with Left/Right Arrows */}
               <div className="p-6">
-                
-                {/* When class has video: 2-column layout - Evenly Aligned */}
-                {hasVideo ? (
-                  <div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                      
-                      {/* Left: Photos - Exact matching height */}
-                      <div className="w-full">
-                        <div
-                          onClick={() => setLightboxImage(item.images[0])}
-                          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
-                        >
-                          <img
-                            src={item.images[0]}
-                            alt={`${item.title} photo`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            onError={(e) => { e.target.src = '/images/act-dharmic.jpg'; }}
-                          />
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="px-4 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                              <ImageIcon size={14} />
-                              <span>View Class Record</span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Authentic HTML5 Video Player - Exact matching height */}
-                      <div className="w-full">
-                        <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
-                          <video
-                            src={item.videos[0]}
-                            controls
-                            preload="metadata"
-                            controlsList="nodownload"
-                            className="w-full h-full object-contain"
-                            poster={item.images[0] || '/images/act-dharmic.jpg'}
-                          >
-                            Your browser does not support HTML5 video.
-                          </video>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* Additional thumbs below media grid if multiple */}
-                    {item.images.length > 1 && (
-                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
-                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                          <ImageIcon size={14} className="text-[#901C25]" />
-                          <span>Photos ({item.images.length}):</span>
-                        </span>
-                        <div className="flex items-center gap-2 overflow-x-auto py-1">
-                          {item.images.map((thumb, tIdx) => (
-                            <div
-                              key={tIdx}
-                              onClick={() => setLightboxImage(thumb)}
-                              className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:border-[#901C25] hover:opacity-100 opacity-80 transition"
-                            >
-                              <img
-                                src={thumb}
-                                alt=""
-                                className="w-full h-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  /* Standard Image Grid / Collage */
-                  <div className={`grid gap-4 ${
-                    item.images.length === 1
-                      ? 'grid-cols-1 max-w-xl mx-auto'
-                      : item.images.length === 2
-                      ? 'grid-cols-1 sm:grid-cols-2'
-                      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                  }`}>
-                    {item.images.map((img, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => setLightboxImage(img)}
-                        className="relative h-60 sm:h-72 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
-                      >
-                        <img
-                          src={img}
-                          alt={`${item.title} - ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => { e.target.src = '/images/act-dharmic.jpg'; }}
-                        />
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="px-4 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                            <ImageIcon size={14} />
-                            <span>View Full Slide</span>
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+                <ActivityMediaViewer
+                  images={item.images}
+                  videos={item.videos}
+                  title={item.title}
+                  defaultFallback="/images/act-dharmic.jpg"
+                  onOpenLightbox={(imgs, idx) => setLightboxImage(imgs[idx])}
+                />
               </div>
 
             </div>

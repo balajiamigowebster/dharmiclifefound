@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   Lock,
+  User,
+  KeyRound,
+  ShieldCheck,
   Eye,
   EyeOff,
   Save,
@@ -19,8 +22,10 @@ import {
   Sparkles,
   Image as ImageIcon,
   Calendar,
-  HeartHandshake
+  HeartHandshake,
+  FolderTree
 } from 'lucide-react';
+import ActivitiesAdminManager from './ActivitiesAdminManager';
 import {
   fetchHomepageContent,
   updateHomepageContent,
@@ -40,6 +45,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     }
     return false;
   });
+  const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
@@ -49,6 +55,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const search = window.location.search;
+      if (search.includes('tab=activitiesManager')) return 'activitiesManager';
       if (search.includes('tab=about')) return 'about';
       if (search.includes('tab=coreActivities')) return 'coreActivities';
       if (search.includes('tab=stats')) return 'stats';
@@ -90,14 +97,14 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     setAuthError('');
     setLoggingIn(true);
     try {
-      const res = await adminLogin(password);
+      const res = await adminLogin({ username, password });
       if (res && res.success) {
         localStorage.setItem('dlf_admin_token', res.token || 'auth-token');
         setIsAuthenticated(true);
         const msgs = await fetchAdminMessages();
         setMessages(msgs);
       } else {
-        setAuthError(res.error || 'Incorrect admin password. (Default: admin123)');
+        setAuthError(res.error || 'Incorrect admin credentials.');
       }
     } catch (err) {
       setAuthError('Connection error during login');
@@ -339,27 +346,61 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
   // ----------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-          <div className="bg-[#901C25] text-white p-8 text-center relative">
-            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mx-auto mb-3 border border-white/20">
-              <Lock size={28} className="text-[#E48A2D]" />
+      <div className="min-h-screen bg-gradient-to-br from-[#1c1917] via-[#2c1316] to-[#120d0e] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+        {/* Ambient background glow & decorative circles */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#901C25]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#E48A2D]/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-md w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden relative z-10 transition-all">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-[#901C25] via-[#a3222d] to-[#74151c] text-white p-8 text-center relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/5 rounded-full blur-xl" />
+            <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-[#E48A2D]/20 rounded-full blur-xl" />
+
+            <div className="relative z-10">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mx-auto mb-3.5 border border-white/20 shadow-inner">
+                <Lock size={30} className="text-[#E48A2D]" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-serif tracking-tight">Admin Portal</h2>
+              <p className="text-white/80 text-xs sm:text-sm mt-1.5 font-medium">
+                Dharmic Life Foundation Content Management
+              </p>
             </div>
-            <h2 className="text-2xl font-bold font-serif">Admin Portal</h2>
-            <p className="text-white/80 text-xs mt-1">Dharmic Life Foundation Content Management</p>
           </div>
 
-          <form onSubmit={handleLogin} className="p-8 space-y-6">
+          {/* Form */}
+          <form onSubmit={handleLogin} className="p-7 sm:p-8 space-y-5">
             {authError && (
-              <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
-                <AlertCircle size={16} className="shrink-0" />
-                <span>{authError}</span>
+              <div className="p-3.5 bg-red-50/90 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2.5 animate-shake">
+                <AlertCircle size={16} className="shrink-0 text-red-600" />
+                <span className="font-medium">{authError}</span>
               </div>
             )}
 
+            {/* Username Input */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Admin Password
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <User size={14} className="text-[#901C25]" />
+                <span>Admin Username</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter admin username..."
+                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] focus:border-transparent text-sm bg-stone-50/50 hover:bg-white transition"
+                />
+                <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <KeyRound size={14} className="text-[#901C25]" />
+                <span>Admin Password</span>
               </label>
               <div className="relative">
                 <input
@@ -368,42 +409,45 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password..."
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm pr-11"
+                  className="w-full pl-11 pr-11 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] focus:border-transparent text-sm bg-stone-50/50 hover:bg-white transition"
                 />
+                <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                  title={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              <p className="text-[11px] text-gray-400 mt-1.5 flex items-center gap-1">
-                <Sparkles size={11} className="text-[#E48A2D]" />
-                <span>Default system password is <strong>admin123</strong></span>
-              </p>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loggingIn}
-              className="w-full py-3.5 bg-[#901C25] hover:bg-[#73161d] text-white font-bold rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-gradient-to-r from-[#901C25] to-[#a8222e] hover:from-[#7a171f] hover:to-[#901C25] text-white font-bold rounded-xl text-sm transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 transform active:scale-[0.99]"
             >
               {loggingIn ? (
                 <>
                   <RefreshCw size={16} className="animate-spin" />
-                  <span>Verifying...</span>
+                  <span>Verifying Credentials...</span>
                 </>
               ) : (
-                <span>Access Admin Panel</span>
+                <>
+                  <ShieldCheck size={18} />
+                  <span>Sign In to Admin Panel</span>
+                </>
               )}
             </button>
 
-            <div className="pt-2 text-center">
+            {/* Return link */}
+            <div className="pt-2 text-center border-t border-gray-100">
               <button
                 type="button"
                 onClick={() => onNavigate && onNavigate('home')}
-                className="text-xs text-gray-500 hover:text-[#901C25] transition"
+                className="text-xs text-gray-500 hover:text-[#901C25] transition inline-flex items-center gap-1 font-medium"
               >
                 ← Return to Public Website
               </button>
@@ -578,6 +622,23 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               <Settings size={16} />
               <span>7. Header & Footer Info</span>
             </button>
+
+            <div className="pt-2 border-t border-gray-100 mt-2">
+              <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Activities & Media
+              </div>
+              <button
+                onClick={() => setActiveTab('activitiesManager')}
+                className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 ${
+                  activeTab === 'activitiesManager'
+                    ? 'bg-[#901C25] text-white shadow-sm'
+                    : 'text-gray-700 hover:bg-stone-50'
+                }`}
+              >
+                <FolderTree size={16} />
+                <span>Activities</span>
+              </button>
+            </div>
 
             <div className="pt-2 border-t border-gray-100 mt-2">
               <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
@@ -1885,6 +1946,13 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB: ACTIVITIES & MEDIA MANAGER */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'activitiesManager' && (
+              <ActivitiesAdminManager />
             )}
 
             {/* Bottom Save Bar */}

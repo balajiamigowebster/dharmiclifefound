@@ -3,7 +3,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 const db = require('./mariadb');
+const { sequelize, AdminUser } = require('./models');
+const mediaRoutes = require('./routes/mediaRoutes');
+const activityItemsRoutes = require('./routes/activityItemsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -34,19 +38,70 @@ function saveHomepageContent(data) {
   }
 }
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// CORS Configuration for Local & Live Production (Vercel & cPanel amigowebster.in)
+const allowedOrigins = [
+  'https://client-e1mu.vercel.app',
+  'https://amigowebster.in',
+  'http://amigowebster.in',
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000'
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.indexOf(origin) !== -1 ||
+      origin.endsWith('.vercel.app') ||
+      origin.includes('amigowebster.in')
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Allow all in production or fallback gracefully
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Strip '/dharmiclife' prefix if cPanel passes the full URL path to Node.js
+app.use((req, res, next) => {
+  if (req.url.startsWith('/dharmiclife/')) {
+    req.url = req.url.replace('/dharmiclife', '');
+  } else if (req.url === '/dharmiclife') {
+    req.url = '/';
+  }
+  next();
+});
 
 // Serve static images if requested through backend as well
 app.use('/images', express.static(path.join(__dirname, '..', 'client', 'public', 'images')));
 
-// API Routes
+// Serve uploaded files (images and videos) statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/dharmiclife/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Health & DB status
-app.get('/api/health', (req, res) => {
+// Media Routes (Upload & Media Management)
+app.use('/api/media', mediaRoutes);
+app.use('/dharmiclife/api/media', mediaRoutes);
+
+// Activity Items Routes (Sub-categories items with images and videos linked to DB)
+app.use('/api/activity-items', activityItemsRoutes);
+app.use('/dharmiclife/api/activity-items', activityItemsRoutes);
+
+// Root & Health status
+app.get(['/', '/dharmiclife', '/api/health', '/dharmiclife/api/health'], (req, res) => {
   res.json({
     status: 'ok',
+    message: 'Dharmic Life Foundation Backend is Live',
+    applicationUrl: 'https://amigowebster.in/dharmiclife/',
     timestamp: new Date().toISOString(),
     database: db.getStatus()
   });
@@ -242,18 +297,62 @@ app.post('/api/newsletter', async (req, res) => {
   }
 });
 
-// Admin Login
-app.post('/api/admin/login', (req, res) => {
-  const { password } = req.body;
-  const adminPass = process.env.ADMIN_PASSWORD || 'admin123';
-  if (password === adminPass) {
-    res.json({
+// Admin Login (using DB AdminUser with bcrypt hashed password)
+app.post('/api/admin/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!password) {
+      return res.status(400).json({ success: false, error: 'Password is required' });
+    }
+
+    const inputUser = (username || 'admin').trim();
+
+    // Find admin user in DB table
+    let admin = await AdminUser.findOne({ where: { username: inputUser } });
+
+    // Fallback search for any admin if username was omitted
+    if (!admin && !username) {
+      admin = await AdminUser.findOne();
+    }
+
+    if (!admin) {
+      // Check against .env as fallback if DB table is initializing
+      const envUser = process.env.ADMIN_USERNAME || 'admin';
+      const envPass = process.env.ADMIN_PASSWORD || 'admin123';
+      if (inputUser === envUser && password === envPass) {
+        return res.json({
+          success: true,
+          token: 'admin-token-' + Date.now(),
+          user: { username: envUser, role: 'admin' },
+          message: 'Admin authentication successful'
+        });
+      }
+      return res.status(401).json({ success: false, error: 'Invalid username or password' });
+    }
+
+    // Verify bcrypt hash
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      // Also allow direct match if it was stored as plain text originally
+      if (password === admin.password) {
+        // Upgrade to hash automatically
+        const newHash = await bcrypt.hash(password, 10);
+        admin.password = newHash;
+        await admin.save();
+      } else {
+        return res.status(401).json({ success: false, error: 'Invalid username or password' });
+      }
+    }
+
+    return res.json({
       success: true,
       token: 'admin-token-' + Date.now(),
+      user: { username: admin.username, role: admin.role },
       message: 'Admin authentication successful'
     });
-  } else {
-    res.status(401).json({ success: false, error: 'Invalid admin credentials' });
+  } catch (err) {
+    console.error('Login error:', err);
+    return res.status(500).json({ success: false, error: 'Authentication failed due to server error' });
   }
 });
 
@@ -302,7 +401,80 @@ app.delete('/api/admin/messages/:id', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Dharmic Life Foundation API Server running on http://localhost:${PORT}`);
+// Global 404 Handler for undefined API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'API route not found', path: req.originalUrl });
 });
+
+// Global Error Handling Middleware (catches Multer file size errors, validation errors, etc.)
+app.use((err, req, res, next) => {
+  console.error('[Server Error Handler]:', err);
+  if (err.name === 'MulterError') {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ success: false, error: 'File size too large. Maximum allowed size is 100MB.' });
+    }
+    return res.status(400).json({ success: false, error: `Upload error: ${err.message}` });
+  }
+  const statusCode = err.status || err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    error: err.message || 'Internal server error occurred'
+  });
+});
+
+// Prevent process from crashing on unexpected asynchronous rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Unhandled Rejection at Promise]:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[Uncaught Exception]:', err);
+});
+
+// Start server & sync database models
+async function startServer() {
+  try {
+    // Authenticate and sync Sequelize models (creates media, activity_items, and admin_users table in dharmic-db)
+    await sequelize.authenticate();
+    console.log('[Sequelize] Connection established successfully.');
+    await sequelize.sync({ alter: true });
+    console.log('[Sequelize] Database models synchronized with "dharmic-db".');
+
+    // Seed or update Admin User in DB table from .env credentials with bcrypt hash
+    const envAdminUser = (process.env.ADMIN_USERNAME || 'admin').trim();
+    const envAdminPass = (process.env.ADMIN_PASSWORD || 'admin123').trim();
+
+    try {
+      let existingAdmin = await AdminUser.findOne({ where: { username: envAdminUser } });
+      if (!existingAdmin) {
+        const hashedPassword = await bcrypt.hash(envAdminPass, 10);
+        await AdminUser.create({
+          username: envAdminUser,
+          password: hashedPassword,
+          email: 'admin@dharmiclife.org',
+          role: 'superadmin'
+        });
+        console.log(`[AdminUser] Created initial admin user "${envAdminUser}" with bcrypt hashed password in DB table.`);
+      } else {
+        const matches = await bcrypt.compare(envAdminPass, existingAdmin.password);
+        if (!matches) {
+          existingAdmin.password = await bcrypt.hash(envAdminPass, 10);
+          await existingAdmin.save();
+          console.log(`[AdminUser] Updated admin "${envAdminUser}" password hash in DB from .env.`);
+        }
+      }
+    } catch (adminErr) {
+      console.warn('[AdminUser] Note on admin sync:', adminErr.message);
+    }
+  } catch (err) {
+    console.error('[Sequelize Warning] Database connection failed or not yet reachable:', err.message);
+    console.log('[Fallback] Starting HTTP server regardless so health checks & public endpoints remain online.');
+  }
+
+  // Always listen so cPanel Passenger/Node.js selector doesn't terminate the process if DB is temporarily connecting
+  app.listen(PORT, () => {
+    console.log(`🚀 Dharmic Life Foundation API Server running on port ${PORT}`);
+  });
+}
+
+startServer();

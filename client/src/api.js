@@ -1,7 +1,8 @@
 import { defaultHomeContent } from './data/defaultHomeContent';
+import { API_BASE_URL, getMediaUrl } from './config';
 
 // API Client for Dharmic Life Foundation
-const API_BASE = '/api';
+const API_BASE = API_BASE_URL;
 
 export async function fetchSiteInfo() {
   try {
@@ -236,16 +237,21 @@ export async function updateHomepageContent(content) {
   return { success: true, message: 'Saved to local storage', content };
 }
 
-export async function adminLogin(password) {
+export async function adminLogin(credentials) {
   try {
+    const payload = typeof credentials === 'string' 
+      ? { password: credentials } 
+      : { username: credentials.username, password: credentials.password };
+
     const res = await fetch(`${API_BASE}/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
+      body: JSON.stringify(payload)
     });
     return await res.json();
   } catch (err) {
-    if (password === 'admin123' || password === 'admin@dharmic') {
+    const pwd = typeof credentials === 'string' ? credentials : credentials.password;
+    if (pwd === 'admin123' || pwd === 'admin@dharmic') {
       return { success: true, token: 'local-token-' + Date.now() };
     }
     return { success: false, error: 'Could not connect to authentication server' };
@@ -272,4 +278,112 @@ export async function deleteAdminMessage(id) {
     console.warn('Fallback delete message:', err.message);
   }
   return { success: true };
+}
+
+// Activity Items (Sub-categories items with images and videos)
+export async function fetchActivityItems(categorySlug) {
+  try {
+    const url = categorySlug ? `${API_BASE}/activity-items/category/${categorySlug}` : `${API_BASE}/activity-items`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const json = await res.json();
+      const items = json.data || [];
+      return items.map((item) => ({
+        ...item,
+        images: Array.isArray(item.images) ? item.images.map(getMediaUrl) : [],
+        videos: Array.isArray(item.videos) ? item.videos.map(getMediaUrl) : []
+      }));
+    }
+  } catch (err) {
+    console.warn('Failed to fetch activity items:', err.message);
+  }
+  return [];
+}
+
+export function createActivityItem(formData, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_BASE}/activity-items`);
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          onProgress(percentComplete);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText);
+        resolve(json);
+      } catch (e) {
+        resolve({ success: false, message: xhr.responseText || 'Invalid response from server' });
+      }
+    };
+
+    xhr.onerror = () => {
+      resolve({ success: false, message: 'Network error during upload' });
+    };
+
+    xhr.send(formData);
+  });
+}
+
+export function updateActivityItem(id, formData, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', `${API_BASE}/activity-items/${id}`);
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          onProgress(percentComplete);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText);
+        resolve(json);
+      } catch (e) {
+        resolve({ success: false, message: xhr.responseText || 'Invalid response from server' });
+      }
+    };
+
+    xhr.onerror = () => {
+      resolve({ success: false, message: 'Network error during upload' });
+    };
+
+    xhr.send(formData);
+  });
+}
+
+export async function deleteActivityItem(id) {
+  try {
+    const res = await fetch(`${API_BASE}/activity-items/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to delete activity item:', err);
+    return { success: false, message: err.message };
+  }
+}
+
+export async function syncCategoryItems(categorySlug, items) {
+  try {
+    const res = await fetch(`${API_BASE}/activity-items/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ categorySlug, items })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to sync category items:', err);
+    return { success: false, message: err.message };
+  }
 }

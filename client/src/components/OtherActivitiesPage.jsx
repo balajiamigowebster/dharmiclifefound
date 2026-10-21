@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Home,
   ChevronRight,
@@ -16,11 +16,27 @@ import {
   Coins
 } from 'lucide-react';
 import { otherActivitiesDrives } from '../data/otherActivitiesDrives';
+import { fetchActivityItems } from '../api';
+import ActivityMediaViewer from './ActivityMediaViewer';
 
 export default function OtherActivitiesPage({ onNavigate }) {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [currentGalleryImages, setCurrentGalleryImages] = useState([]);
+  const [dbItems, setDbItems] = useState([]);
+
+  useEffect(() => {
+    async function loadData() {
+      const items = await fetchActivityItems('other-additional-activities');
+      if (items && items.length > 0) {
+        setDbItems(items);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Old historical uploads first, new uploads shown in last
+  const allDrives = [...otherActivitiesDrives, ...dbItems];
 
   const openLightbox = (images, index) => {
     setCurrentGalleryImages(images);
@@ -158,9 +174,25 @@ export default function OtherActivitiesPage({ onNavigate }) {
 
       {/* 4. Documented Relief Drives */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        {otherActivitiesDrives.map((drive) => {
-          const hasVideo = drive.videos && drive.videos.length > 0;
-          const hasImages = drive.images && drive.images.length > 0;
+        {allDrives.map((drive) => {
+          let driveImages = [];
+          if (Array.isArray(drive.images)) {
+            driveImages = drive.images;
+          } else if (typeof drive.images === 'string') {
+            try { driveImages = JSON.parse(drive.images); } catch (e) { driveImages = [drive.images]; }
+          }
+          if (!Array.isArray(driveImages)) driveImages = [];
+
+          let driveVideos = [];
+          if (Array.isArray(drive.videos)) {
+            driveVideos = drive.videos;
+          } else if (typeof drive.videos === 'string') {
+            try { driveVideos = JSON.parse(drive.videos); } catch (e) { driveVideos = [drive.videos]; }
+          }
+          if (!Array.isArray(driveVideos)) driveVideos = [];
+
+          const hasVideo = driveVideos.length > 0;
+          const hasImages = driveImages.length > 0;
 
           return (
             <div
@@ -188,7 +220,7 @@ export default function OtherActivitiesPage({ onNavigate }) {
                   {hasImages && (
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
                       <ImageIcon size={12} />
-                      <span>{drive.images.length} Photos</span>
+                      <span>{driveImages.length} Photos</span>
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
@@ -202,107 +234,15 @@ export default function OtherActivitiesPage({ onNavigate }) {
                 </div>
               </div>
 
-              {/* Media Content */}
+              {/* Media Content: Interactive Main Image Slider with Left/Right Arrows */}
               <div className="p-6">
-                
-                {/* 2-column layout: Left Images, Right Video - Evenly Aligned */}
-                {hasVideo ? (
-                  <div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                      
-                      {/* Left: Photos - Exact matching height */}
-                      <div className="w-full">
-                        <div
-                          onClick={() => openLightbox(drive.images, 0)}
-                          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
-                        >
-                          <img
-                            src={drive.images[0]}
-                            alt={drive.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            onError={(e) => { e.target.src = '/images/act-other.jpg'; }}
-                          />
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                              <ImageIcon size={13} />
-                              <span>View Full Photo ({drive.images.length})</span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Authentic HTML5 Video Player - Exact matching height */}
-                      <div className="w-full">
-                        <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
-                          <video
-                            src={drive.videos[0]}
-                            controls
-                            preload="metadata"
-                            controlsList="nodownload"
-                            className="w-full h-full object-contain"
-                            poster={drive.images[0] || '/images/act-other.jpg'}
-                          >
-                            Your browser does not support HTML5 video.
-                          </video>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* Additional thumbs below media grid */}
-                    {drive.images.length > 1 && (
-                      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
-                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                          <ImageIcon size={14} className="text-[#901C25]" />
-                          <span>Photos ({drive.images.length}):</span>
-                        </span>
-                        <div className="flex items-center gap-2 overflow-x-auto py-1">
-                          {drive.images.map((thumb, tIdx) => (
-                            <div
-                              key={tIdx}
-                              onClick={() => openLightbox(drive.images, tIdx)}
-                              className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 cursor-pointer hover:border-[#901C25] hover:opacity-100 opacity-80 transition"
-                            >
-                              <img
-                                src={thumb}
-                                alt=""
-                                className="w-full h-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  /* Standard Image Grid for Wayanad Relief (2 side-by-side images) */
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {drive.images.map((img, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => openLightbox(drive.images, idx)}
-                        className="relative h-72 sm:h-80 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm cursor-pointer group"
-                      >
-                        <img
-                          src={img}
-                          alt={`${drive.tagline} - ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => { e.target.src = '/images/act-other.jpg'; }}
-                        />
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                            <ImageIcon size={13} />
-                            <span>View Full Image</span>
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+                <ActivityMediaViewer
+                  images={driveImages}
+                  videos={driveVideos}
+                  title={drive.title}
+                  defaultFallback="/images/act-other.jpg"
+                  onOpenLightbox={(imgs, idx) => openLightbox(imgs, idx)}
+                />
               </div>
 
             </div>
