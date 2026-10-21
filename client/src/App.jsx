@@ -253,6 +253,7 @@ export default function App() {
           <GalleryPage
             onNavigate={handleNavigate}
             onOpenDonation={(cause) => handleOpenDonation(cause || 'Gallery Support')}
+            galleryItems={homeContent?.gallerySection?.items}
           />
         ) : currentPage === 'events' ? (
           <EventPage

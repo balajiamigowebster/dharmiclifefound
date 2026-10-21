@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, X, ZoomIn } from 'lucide-react';
+import { getMediaUrl } from '../config';
 
 export default function GallerySection({ content, gallery = [] }) {
   const [activePhoto, setActivePhoto] = useState(null);
@@ -19,12 +20,17 @@ export default function GallerySection({ content, gallery = [] }) {
     content?.subtitle ||
     'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.';
 
-  const photos =
+  const rawPhotos =
     content?.items && content.items.length > 0
       ? content.items
       : gallery.length > 0
       ? gallery
       : fallbackPhotos;
+
+  const photos = rawPhotos.map((item) => ({
+    ...item,
+    image: getMediaUrl(item.image)
+  }));
 
   return (
     <section id="gallery" className="py-20 bg-stone-50">

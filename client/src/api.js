@@ -387,3 +387,38 @@ export async function syncCategoryItems(categorySlug, items) {
     return { success: false, message: err.message };
   }
 }
+
+export function uploadMediaSingle(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_BASE}/media/upload`);
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText);
+        resolve(json);
+      } catch (e) {
+        resolve({ success: false, message: xhr.responseText || 'Invalid server response' });
+      }
+    };
+
+    xhr.onerror = () => {
+      resolve({ success: false, message: 'Network error during media upload' });
+    };
+
+    xhr.send(formData);
+  });
+}
+

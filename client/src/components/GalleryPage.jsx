@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Home, ChevronRight, ZoomIn, X, ChevronLeft, ArrowRight, Heart } from 'lucide-react';
+import { getMediaUrl } from '../config';
 
-export default function GalleryPage({ onNavigate, onOpenDonation }) {
+export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: customItems }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
@@ -14,8 +15,8 @@ export default function GalleryPage({ onNavigate, onOpenDonation }) {
     { id: 'diwali', name: 'Diwali Sweets & Clothes' }
   ];
 
-  // Comprehensive gallery collection representing all albums
-  const galleryItems = [
+  // Comprehensive fallback gallery collection representing all albums
+  const fallbackGalleryItems = [
     // Aarthi Relief Fund
     { id: 1, category: 'aarthi', title: 'Aarthi Relief Fund - Medical Assistance', image: '/images/gallery-1.jpg' },
     { id: 2, category: 'aarthi', title: 'Emergency Aid Disbursement', image: '/images/gallery-4.jpg' },
@@ -47,6 +48,13 @@ export default function GalleryPage({ onNavigate, onOpenDonation }) {
     { id: 20, category: 'diwali', title: 'Spreading Smiles Across Families', image: '/images/hero-2.jpg' },
     { id: 21, category: 'diwali', title: 'Diwali Celebration with Homeless Families', image: '/images/about.jpg' }
   ];
+
+  const rawItems = Array.isArray(customItems) && customItems.length > 0 ? customItems : fallbackGalleryItems;
+  const galleryItems = rawItems.map((item) => ({
+    ...item,
+    image: getMediaUrl(item.image)
+  }));
+
 
   const filteredItems = activeCategory === 'all'
     ? galleryItems

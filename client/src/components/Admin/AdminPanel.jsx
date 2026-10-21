@@ -23,7 +23,9 @@ import {
   Image as ImageIcon,
   Calendar,
   HeartHandshake,
-  FolderTree
+  FolderTree,
+  Upload,
+  Loader2
 } from 'lucide-react';
 import ActivitiesAdminManager from './ActivitiesAdminManager';
 import {
@@ -31,8 +33,10 @@ import {
   updateHomepageContent,
   adminLogin,
   fetchAdminMessages,
-  deleteAdminMessage
+  deleteAdminMessage,
+  uploadMediaSingle
 } from '../../api';
+import { getMediaUrl } from '../../config';
 import { defaultHomeContent } from '../../data/defaultHomeContent';
 
 export default function AdminPanel({ onNavigate, onContentUpdated }) {
@@ -300,6 +304,11 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     });
   };
 
+  // State for uploading gallery image files
+  const [galleryUploadingIdx, setGalleryUploadingIdx] = useState(null);
+  const [galleryUploadProgress, setGalleryUploadProgress] = useState(0);
+  const [galleryUploadError, setGalleryUploadError] = useState('');
+
   // ----------------------------------------------------
   // GALLERY SECTION HELPERS
   // ----------------------------------------------------
@@ -310,6 +319,32 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
       ...content,
       gallerySection: { ...content.gallerySection, items }
     });
+  };
+
+  const handleUploadGalleryFile = async (idx, file) => {
+    if (!file) return;
+    setGalleryUploadingIdx(idx);
+    setGalleryUploadProgress(0);
+    setGalleryUploadError('');
+
+    try {
+      const res = await uploadMediaSingle(file, (percent) => {
+        setGalleryUploadProgress(percent);
+      });
+
+      if (res && res.success && res.data?.url) {
+        handleUpdateGalleryItem(idx, 'image', res.data.url);
+      } else {
+        setGalleryUploadError(res.message || 'Image upload failed. Please try again.');
+      }
+    } catch (err) {
+      setGalleryUploadError('Network error uploading image.');
+    } finally {
+      setTimeout(() => {
+        setGalleryUploadingIdx(null);
+        setGalleryUploadProgress(0);
+      }, 500);
+    }
   };
 
   const handleAddGalleryItem = () => {
@@ -1619,16 +1654,21 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             {/* ---------------------------------------------------- */}
             {activeTab === 'gallerySection' && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-200">
                   <div>
-                    <h2 className="text-xl font-bold font-serif text-gray-900">6. Gallery Section (Home Page)</h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xl font-bold font-serif text-gray-900">6. Gallery Photos Manager</h2>
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-100 text-[#901C25]">
+                        {(content.gallerySection?.items || []).length} Photos
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-500 mt-0.5">
-                      Maintain the "Our Seva in Pictures" heading and photo grid on the Home Page.
+                      Manage all gallery photos shown across the Home Page and the Gallery Page (/gallery).
                     </p>
                   </div>
                   <button
                     onClick={handleAddGalleryItem}
-                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                    className="px-4 py-2 bg-[#901C25] hover:bg-[#73161d] text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-sm self-start sm:self-auto"
                   >
                     <Plus size={14} />
                     <span>Add Gallery Photo</span>
@@ -1638,7 +1678,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                 {/* Section Header Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-gray-200">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag</label>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag (Home Page)</label>
                     <input
                       type="text"
                       value={content.gallerySection?.badge || ''}
@@ -1652,7 +1692,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Title</label>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Title (Home Page)</label>
                     <input
                       type="text"
                       value={content.gallerySection?.title || ''}
@@ -1666,7 +1706,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Subtitle</label>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Subtitle (Home Page)</label>
                     <input
                       type="text"
                       value={content.gallerySection?.subtitle || ''}
@@ -1682,19 +1722,32 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                 </div>
 
                 {/* Gallery Items Grid */}
+                {galleryUploadError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center justify-between">
+                    <span>{galleryUploadError}</span>
+                    <button onClick={() => setGalleryUploadError('')} className="font-bold ml-2">×</button>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {(content.gallerySection?.items || []).map((item, idx) => (
                     <div
                       key={item.id || idx}
-                      className="border border-gray-200 rounded-xl p-4 bg-stone-50/50 space-y-3"
+                      className="border border-gray-200 rounded-xl p-4 bg-stone-50/50 space-y-3 shadow-xs"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#901C25] text-white">
-                          Photo #{idx + 1}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#901C25] text-white">
+                            Photo #{idx + 1}
+                          </span>
+                          {item.category && (
+                            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                              {item.category}
+                            </span>
+                          )}
+                        </div>
                         <button
                           onClick={() => handleDeleteGalleryItem(idx)}
-                          className="text-gray-400 hover:text-red-700 p-1 transition"
+                          className="text-gray-400 hover:text-red-700 p-1.5 transition rounded-lg hover:bg-red-50"
                           title="Delete Photo"
                         >
                           <Trash2 size={15} />
@@ -1702,33 +1755,110 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                       </div>
 
                       {item.image && (
-                        <div className="h-32 w-full rounded-lg overflow-hidden bg-gray-200 border border-gray-200">
+                        <div className="relative h-36 w-full rounded-lg overflow-hidden bg-gray-200 border border-gray-200 group">
                           <img
-                            src={item.image}
+                            src={getMediaUrl(item.image)}
                             alt={item.title}
                             className="w-full h-full object-cover"
                             onError={(e) => { e.target.src = '/images/about.jpg'; }}
                           />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <span className="text-white text-[11px] font-medium bg-black/60 px-2 py-1 rounded">
+                              Current Photo Preview
+                            </span>
+                          </div>
                         </div>
                       )}
 
-                      <div>
-                        <label className="block text-[11px] font-bold text-gray-700 mb-1">Caption / Title</label>
-                        <input
-                          type="text"
-                          value={item.title || ''}
-                          onChange={(e) => handleUpdateGalleryItem(idx, 'title', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-bold text-gray-700 mb-1">Caption / Title</label>
+                          <input
+                            type="text"
+                            value={item.title || ''}
+                            onChange={(e) => handleUpdateGalleryItem(idx, 'title', e.target.value)}
+                            placeholder="e.g. Daily Annadhanam Camp"
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-[#901C25]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-bold text-gray-700 mb-1">Category / Album</label>
+                          <select
+                            value={item.category || 'all'}
+                            onChange={(e) => handleUpdateGalleryItem(idx, 'category', e.target.value)}
+                            className="w-full px-2.5 py-2 rounded-lg border border-gray-300 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-[#901C25]"
+                          >
+                            <option value="all">General / All</option>
+                            <option value="aarthi">Aarthi Relief Fund</option>
+                            <option value="clothes">Clothes Distribution</option>
+                            <option value="annadhanam">Annadhanam</option>
+                            <option value="award">Dharma Shri Award</option>
+                            <option value="diwali">Diwali Sweets & Clothes</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Upload Photo File */}
+                      <div className="bg-white p-3 rounded-lg border border-stone-200 space-y-2">
+                        <label className="block text-[11px] font-bold text-gray-800">
+                          Upload Photo File (Recommended)
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <label
+                            className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold cursor-pointer border border-dashed transition ${
+                              galleryUploadingIdx === idx
+                                ? 'bg-amber-50 border-amber-300 text-amber-800 cursor-not-allowed'
+                                : 'bg-red-50/50 hover:bg-red-50 border-red-200 text-[#901C25]'
+                            }`}
+                          >
+                            {galleryUploadingIdx === idx ? (
+                              <>
+                                <Loader2 size={14} className="animate-spin text-[#901C25]" />
+                                <span>Uploading ({galleryUploadProgress}%)...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Upload size={14} />
+                                <span>Choose Image to Upload</span>
+                              </>
+                            )}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              disabled={galleryUploadingIdx === idx}
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleUploadGalleryFile(idx, e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+                        {galleryUploadingIdx === idx && (
+                          <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                            <div
+                              className="bg-[#901C25] h-1.5 transition-all duration-200"
+                              style={{ width: `${Math.max(galleryUploadProgress, 5)}%` }}
+                            />
+                          </div>
+                        )}
+                        <p className="text-[10px] text-gray-400">
+                          Saves to <code className="text-[#901C25] bg-stone-100 px-1 py-0.5 rounded">/uploads/images</code> securely on the server.
+                        </p>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-bold text-gray-700 mb-1">Image URL</label>
+                        <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                          Or Direct Image URL / Path
+                        </label>
                         <input
                           type="text"
                           value={item.image || ''}
                           onChange={(e) => handleUpdateGalleryItem(idx, 'image', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          placeholder="https://... or /uploads/images/..."
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-[#901C25]"
                         />
                       </div>
                     </div>
