@@ -46,6 +46,8 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate, content 
               <img
                 src={sectionImage}
                 alt="Community volunteers serving meals"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-[440px] sm:h-[500px] object-cover hover:scale-105 transition-transform duration-700"
                 onError={(e) => { e.target.src = '/images/about.jpg'; }}
               />

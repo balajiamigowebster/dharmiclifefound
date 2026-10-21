@@ -40,6 +40,8 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
                 <img
                   src={image}
                   alt="Dharmic Life Foundation Service"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-[480px] sm:h-[540px] object-cover hover:scale-105 transition-transform duration-700"
                   onError={(e) => { e.target.src = '/images/about.jpg'; }}
                 />

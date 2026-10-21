@@ -110,6 +110,8 @@ export default function EventsSection({ content, events = [], onNavigate }) {
                 <img
                   src={ev.image}
                   alt={ev.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => { e.target.src = '/images/about.jpg'; }}
                 />

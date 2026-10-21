@@ -71,6 +71,8 @@ export default function BlogSection({ posts = [] }) {
                 <img
                   src={post.image}
                   alt={post.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute top-4 left-4 bg-[#901C25] text-white px-3 py-1.5 rounded-lg shadow text-xs font-bold flex items-center gap-1.5">

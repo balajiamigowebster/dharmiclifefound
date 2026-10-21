@@ -62,6 +62,8 @@ export default function GallerySection({ content, gallery = [] }) {
               <img
                 src={item.image}
                 alt={item.title || 'Dharmic Life Gallery'}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               {/* Overlay on hover */}

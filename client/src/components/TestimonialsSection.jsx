@@ -73,6 +73,8 @@ export default function TestimonialsSection({ testimonials = [] }) {
                 <img
                   src={current.avatar}
                   alt={current.author_name}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>

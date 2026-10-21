@@ -143,7 +143,7 @@ export default function ActivityMediaViewer({
             <video
               src={vidList[0]}
               controls
-              preload="metadata"
+              preload="none"
               controlsList="nodownload"
               className="w-full h-full object-contain"
               poster={hasImages ? imgList[0] : defaultFallback}
@@ -202,27 +202,32 @@ export default function ActivityMediaViewer({
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={handleLeftPrev}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-            title="Previous Photo"
-          >
-            <ChevronLeft size={20} />
-          </button>
+          {/* Left / Right Navigation Arrows (Show only if more than 2 images exist) */}
+          {imgList.length > 2 && (
+            <>
+              <button
+                type="button"
+                onClick={handleLeftPrev}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                title="Previous Photo"
+              >
+                <ChevronLeft size={20} />
+              </button>
 
-          <button
-            type="button"
-            onClick={handleLeftNext}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-            title="Next Photo"
-          >
-            <ChevronRight size={20} />
-          </button>
+              <button
+                type="button"
+                onClick={handleLeftNext}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                title="Next Photo"
+              >
+                <ChevronRight size={20} />
+              </button>
 
-          <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-            {leftIndex + 1} / {imgList.length}
-          </div>
+              <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
+                {leftIndex + 1} / {imgList.length}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -247,27 +252,32 @@ export default function ActivityMediaViewer({
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={handleRightPrev}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-            title="Previous Photo"
-          >
-            <ChevronLeft size={20} />
-          </button>
+          {/* Left / Right Navigation Arrows (Show only if more than 2 images exist) */}
+          {imgList.length > 2 && (
+            <>
+              <button
+                type="button"
+                onClick={handleRightPrev}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                title="Previous Photo"
+              >
+                <ChevronLeft size={20} />
+              </button>
 
-          <button
-            type="button"
-            onClick={handleRightNext}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-            title="Next Photo"
-          >
-            <ChevronRight size={20} />
-          </button>
+              <button
+                type="button"
+                onClick={handleRightNext}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                title="Next Photo"
+              >
+                <ChevronRight size={20} />
+              </button>
 
-          <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-            {rightIndex + 1} / {imgList.length}
-          </div>
+              <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
+                {rightIndex + 1} / {imgList.length}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

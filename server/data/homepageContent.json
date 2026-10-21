@@ -190,27 +190,120 @@
     "title": "Our Seva in Pictures",
     "subtitle": "Witness our on-ground compassion across streets, government schools, communities, and crematoriums.",
     "items": [
-      { "id": 1, "category": "aarthi", "title": "Aarthi Relief Fund - Medical Assistance", "image": "/images/gallery-1.jpg" },
-      { "id": 2, "category": "aarthi", "title": "Emergency Aid Disbursement", "image": "/images/gallery-4.jpg" },
-      { "id": 3, "category": "aarthi", "title": "Community Medical Support Camp", "image": "/images/event-1.jpg" },
-      { "id": 4, "category": "aarthi", "title": "Relief Provisions Distribution", "image": "/images/gallery-6.jpg" },
-      { "id": 5, "category": "clothes", "title": "Dressing with Dignity - Clothes Drive", "image": "/images/event-5.jpg" },
-      { "id": 6, "category": "clothes", "title": "Warm Clothing Distribution for Elders", "image": "/images/gallery-2.jpg" },
-      { "id": 7, "category": "clothes", "title": "Winter Blanket & Dress Support", "image": "/images/volunteer-bg.jpg" },
-      { "id": 8, "category": "clothes", "title": "Street Dweller Care & Essentials", "image": "/images/act-homeless.jpg" },
-      { "id": 9, "category": "annadhanam", "title": "Mega Annadhanam Camp Pondicherry", "image": "/images/act-annadhanam.jpg" },
-      { "id": 10, "category": "annadhanam", "title": "Nutritious Hot Meals for Needy", "image": "/images/event-2.jpg" },
-      { "id": 11, "category": "annadhanam", "title": "Daily Food Seva for Destitute", "image": "/images/gallery-3.jpg" },
-      { "id": 12, "category": "annadhanam", "title": "Prasadam Distribution Drive", "image": "/images/hero-1.jpg" },
-      { "id": 13, "category": "award", "title": "Dharma Shri Award Ceremony", "image": "/images/event-4.jpg" },
-      { "id": 14, "category": "award", "title": "Honoring Exemplary Social Guardians", "image": "/images/team-1.jpg" },
-      { "id": 15, "category": "award", "title": "Sacred Vedic Honors & Felicitation", "image": "/images/act-dharmic.jpg" },
-      { "id": 16, "category": "award", "title": "Srowtha Rathana Award Gathering", "image": "/images/team-3.jpg" },
-      { "id": 17, "category": "diwali", "title": "Diwali Festive Sweets Distribution", "image": "/images/gallery-5.jpg" },
-      { "id": 18, "category": "diwali", "title": "Bringing Festive Joy to Children", "image": "/images/event-3.jpg" },
-      { "id": 19, "category": "diwali", "title": "Festive Attire & Gift Hampers", "image": "/images/act-women.jpg" },
-      { "id": 20, "category": "diwali", "title": "Spreading Smiles Across Families", "image": "/images/hero-2.jpg" },
-      { "id": 21, "category": "diwali", "title": "Diwali Celebration with Homeless Families", "image": "/images/about.jpg" }
+      {
+        "id": 1,
+        "category": "aarthi",
+        "title": "Aarthi Relief Fund - Medical Assistance",
+        "image": "/images/gallery-1.jpg"
+      },
+      {
+        "id": 2,
+        "category": "aarthi",
+        "title": "Emergency Aid Disbursement",
+        "image": "/images/gallery-4.jpg"
+      },
+      {
+        "id": 3,
+        "category": "aarthi",
+        "title": "Community Medical Support Camp",
+        "image": "/images/event-1.jpg"
+      },
+      {
+        "id": 4,
+        "category": "aarthi",
+        "title": "Relief Provisions Distribution",
+        "image": "/images/gallery-6.jpg"
+      },
+      {
+        "id": 5,
+        "category": "clothes",
+        "title": "Dressing with Dignity - Clothes Drive",
+        "image": "/images/event-5.jpg"
+      },
+      {
+        "id": 6,
+        "category": "clothes",
+        "title": "Warm Clothing Distribution for Elders",
+        "image": "/images/gallery-2.jpg"
+      },
+      {
+        "id": 7,
+        "category": "clothes",
+        "title": "Winter Blanket & Dress Support",
+        "image": "/images/volunteer-bg.jpg"
+      },
+      {
+        "id": 8,
+        "category": "clothes",
+        "title": "Street Dweller Care & Essentials",
+        "image": "/images/act-homeless.jpg"
+      },
+      {
+        "id": 9,
+        "category": "annadhanam",
+        "title": "Mega Annadhanam Camp Pondicherry",
+        "image": "/images/act-annadhanam.jpg"
+      },
+      {
+        "id": 10,
+        "category": "annadhanam",
+        "title": "Nutritious Hot Meals for Needy",
+        "image": "/images/event-2.jpg"
+      },
+      {
+        "id": 11,
+        "category": "annadhanam",
+        "title": "Daily Food Seva for Destitute",
+        "image": "/images/gallery-3.jpg"
+      },
+      {
+        "id": 12,
+        "category": "annadhanam",
+        "title": "Prasadam Distribution Drive",
+        "image": "/images/hero-1.jpg"
+      },
+      {
+        "id": 13,
+        "category": "award",
+        "title": "Dharma Shri Award Ceremony",
+        "image": "/images/event-4.jpg"
+      },
+      {
+        "id": 15,
+        "category": "award",
+        "title": "Sacred Vedic Honors & Felicitation",
+        "image": "/images/act-dharmic.jpg"
+      },
+      {
+        "id": 17,
+        "category": "diwali",
+        "title": "Diwali Festive Sweets Distribution",
+        "image": "/images/gallery-5.jpg"
+      },
+      {
+        "id": 18,
+        "category": "diwali",
+        "title": "Bringing Festive Joy to Children",
+        "image": "/images/event-3.jpg"
+      },
+      {
+        "id": 19,
+        "category": "diwali",
+        "title": "Festive Attire & Gift Hampers",
+        "image": "/images/act-women.jpg"
+      },
+      {
+        "id": 20,
+        "category": "diwali",
+        "title": "Spreading Smiles Across Families",
+        "image": "/images/hero-2.jpg"
+      },
+      {
+        "id": 21,
+        "category": "diwali",
+        "title": "Diwali Celebration with Homeless Families",
+        "image": "/images/about.jpg"
+      }
     ]
   },
   "siteInfo": {
