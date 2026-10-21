@@ -20,11 +20,16 @@ export const BACKEND_URL = (() => {
 // Full API URL prefix
 export const API_BASE_URL = `${BACKEND_URL}/api`;
 
-// Helper to resolve media URLs (images and videos in /uploads)
+// Helper to resolve media URLs (images and videos in /uploads or uploaded to backend)
+// Note: Static assets in client/public like /images/... are served directly by frontend/Vercel
 export function getMediaUrl(url) {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
+  }
+  // Client public folder assets (e.g. /images/gallery-1.jpg) should remain relative to the frontend domain!
+  if (url.startsWith('/images/') || url.startsWith('images/')) {
+    return url.startsWith('/') ? url : `/${url}`;
   }
   const cleanPath = url.startsWith('/') ? url : `/${url}`;
   return `${BACKEND_URL}${cleanPath}`;
