@@ -131,8 +131,8 @@ export default function Header({
         <div className="flex items-center justify-between lg:justify-center">
           
           {/* Desktop Left Nav Menu (Balanced 50% flex-1 column) */}
-          <nav className="hidden lg:flex flex-1 items-center justify-end mr-6 xl:mr-10">
-            <ul className="flex items-center space-x-6 xl:space-x-8">
+          <nav className="hidden lg:flex flex-1 items-center justify-end mr-4 xl:mr-7">
+            <ul className="flex items-center space-x-5 xl:space-x-7 whitespace-nowrap">
               <li>
                 <a
                   href="/"
@@ -140,7 +140,7 @@ export default function Header({
                     e.preventDefault();
                     handleNavClick('home');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap transition ${
                     currentPage === 'home' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
@@ -160,7 +160,7 @@ export default function Header({
                     e.preventDefault();
                     handleNavClick('trust');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link flex items-center gap-1 transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap flex items-center gap-1 transition ${
                     currentPage === 'trust' || currentPage === 'trustees' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
@@ -214,7 +214,7 @@ export default function Header({
                     e.preventDefault();
                     handleNavClick('activities');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link flex items-center gap-1 transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap flex items-center gap-1 transition ${
                     currentPage === 'activities' || activitySlugs.includes(currentPage) ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
@@ -253,7 +253,7 @@ export default function Header({
               >
                 <button
                   onClick={() => handleNavClick('events')}
-                  className="text-[#901C25] font-bold text-[15px] xl:text-[15.5px] nav-link flex items-center gap-1 transition"
+                  className="text-[#901C25] font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap flex items-center gap-1 transition"
                 >
                   <span>Awards</span>
                   <ChevronDown size={14} className="opacity-70 transition-transform group-hover:rotate-180" />
@@ -309,72 +309,72 @@ export default function Header({
           </div>
 
           {/* Desktop Right Nav Menu (Balanced 50% flex-1 column) */}
-          <nav className="hidden lg:flex flex-1 items-center justify-start ml-6 xl:ml-10">
-            <ul className="flex items-center space-x-6 xl:space-x-8">
-              <li>
+          <nav className="hidden lg:flex flex-1 items-center justify-start ml-4 xl:ml-7">
+            <ul className="flex items-center space-x-3.5 xl:space-x-5 whitespace-nowrap">
+              <li className="flex-shrink-0">
                 <a
                   href="/event-page"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick('events');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap transition ${
                     currentPage === 'events' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
                   Upcoming Events
                 </a>
               </li>
-              <li>
+              <li className="flex-shrink-0">
                 <a
                   href="/gallery"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick('gallery');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap transition ${
                     currentPage === 'gallery' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
                   Gallery
                 </a>
               </li>
-              <li>
+              <li className="flex-shrink-0">
                 <a
                   href="/testimonials"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick('testimonials');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap transition ${
                     currentPage === 'testimonials' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
                   Testimonials
                 </a>
               </li>
-              <li>
+              <li className="flex-shrink-0">
                 <a
                   href="/contact"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick('contact');
                   }}
-                  className={`font-bold text-[15px] xl:text-[15.5px] nav-link transition ${
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap transition ${
                     currentPage === 'contact' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
                   }`}
                 >
                   Contact
                 </a>
               </li>
-              <li>
+              <li className="flex-shrink-0">
                 <a
                   href="/admin"
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick('admin');
                   }}
-                  className={`font-bold text-[13px] xl:text-[13.5px] px-2.5 py-1 rounded-md border border-[#901C25]/25 hover:bg-[#901C25] hover:text-white transition flex items-center gap-1.5 ${
+                  className={`font-bold text-[13px] xl:text-[13.5px] px-2.5 py-1 rounded-md border border-[#901C25]/25 hover:bg-[#901C25] hover:text-white whitespace-nowrap transition flex items-center gap-1.5 ${
                     currentPage === 'admin' ? 'bg-[#901C25] text-white shadow-sm' : 'text-[#901C25] hover:border-[#901C25]'
                   }`}
                   title="Admin Portal"

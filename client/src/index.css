@@ -28,6 +28,7 @@
 /* Custom Nav underline effect */
 .nav-link {
   position: relative;
+  white-space: nowrap;
   transition: color 0.25s ease;
 }
 
