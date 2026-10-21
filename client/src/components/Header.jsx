@@ -90,6 +90,12 @@ export default function Header({
       return;
     }
 
+    if (targetId === 'srowtha-rathana-award' || targetId === 'dharma-shri-award') {
+      if (onNavigate) onNavigate(targetId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (targetId === 'activities') {
       if (onNavigate) onNavigate('activities');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -252,37 +258,45 @@ export default function Header({
                 onMouseLeave={() => setAwardsDropdown(false)}
               >
                 <button
-                  onClick={() => handleNavClick('events')}
-                  className="text-[#901C25] font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap flex items-center gap-1 transition"
+                  onClick={() => handleNavClick('srowtha-rathana-award')}
+                  className={`font-bold text-[14.5px] xl:text-[15px] nav-link whitespace-nowrap flex items-center gap-1 transition ${
+                    currentPage === 'srowtha-rathana-award' || currentPage === 'dharma-shri-award' ? 'text-[#901C25] active font-extrabold' : 'text-[#901C25]'
+                  }`}
                 >
                   <span>Awards</span>
                   <ChevronDown size={14} className="opacity-70 transition-transform group-hover:rotate-180" />
                 </button>
                 
-                <div className={`absolute top-full left-1/2 -translate-x-1/2 w-52 bg-white shadow-xl rounded-md border border-gray-100 py-1 z-50 transition-all duration-200 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 ${
+                <div className={`absolute top-full left-1/2 -translate-x-1/2 w-64 bg-white shadow-xl rounded-md border border-gray-100 py-1 z-50 transition-all duration-200 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 ${
                   awardsDropdown
                     ? 'opacity-100 visible pointer-events-auto'
                     : 'opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto'
                 }`}>
                   <a
-                    href="/event-page"
+                    href="/srowtha-rathana-award"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleNavClick('events');
+                      handleNavClick('srowtha-rathana-award');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-[#901C25] font-medium dropdown-item border-b border-gray-50 block transition hover:bg-stone-50"
+                    className={`w-full text-left px-4 py-2.5 text-sm font-medium dropdown-item border-b border-gray-50 flex items-center justify-between block transition hover:bg-stone-50 ${
+                      currentPage === 'srowtha-rathana-award' ? 'text-[#E48A2D] font-bold bg-amber-50/50' : 'text-[#901C25]'
+                    }`}
                   >
-                    Srowtha Rathana Award
+                    <span>Srowtha Rathana Award</span>
+                    {currentPage === 'srowtha-rathana-award' && <span className="w-1.5 h-1.5 rounded-full bg-[#E48A2D]"></span>}
                   </a>
                   <a
-                    href="/event-page"
+                    href="/dharma-shri-award"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleNavClick('events');
+                      handleNavClick('dharma-shri-award');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-[#901C25] font-medium dropdown-item block transition hover:bg-stone-50"
+                    className={`w-full text-left px-4 py-2.5 text-sm font-medium dropdown-item flex items-center justify-between block transition hover:bg-stone-50 ${
+                      currentPage === 'dharma-shri-award' ? 'text-[#E48A2D] font-bold bg-amber-50/50' : 'text-[#901C25]'
+                    }`}
                   >
-                    Dharma Shri Award
+                    <span>Dharma Shri Award</span>
+                    {currentPage === 'dharma-shri-award' && <span className="w-1.5 h-1.5 rounded-full bg-[#E48A2D]"></span>}
                   </a>
                 </div>
               </li>
@@ -464,6 +478,31 @@ export default function Header({
                 - {a.name}
               </button>
             ))}
+          </div>
+
+          <button
+            onClick={() => handleNavClick('srowtha-rathana-award')}
+            className="w-full text-left py-2 px-3 text-[#901C25] font-bold rounded hover:bg-red-50"
+          >
+            Awards
+          </button>
+          <div className="pl-4 space-y-1">
+            <button
+              onClick={() => handleNavClick('srowtha-rathana-award')}
+              className={`w-full text-left py-1 text-sm ${
+                currentPage === 'srowtha-rathana-award' ? 'text-[#E48A2D] font-bold' : 'text-gray-700 hover:text-[#901C25]'
+              }`}
+            >
+              - Srowtha Rathana Award
+            </button>
+            <button
+              onClick={() => handleNavClick('dharma-shri-award')}
+              className={`w-full text-left py-1 text-sm ${
+                currentPage === 'dharma-shri-award' ? 'text-[#E48A2D] font-bold' : 'text-gray-700 hover:text-[#901C25]'
+              }`}
+            >
+              - Dharma Shri Award
+            </button>
           </div>
 
           <button

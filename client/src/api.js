@@ -422,3 +422,109 @@ export function uploadMediaSingle(file, onProgress) {
   });
 }
 
+// ---------------------------------------------
+// AWARD ITEMS API (Srowtha Rathana & Dharma Shri Awards)
+// ---------------------------------------------
+
+export async function fetchAwardItems(awardType) {
+  try {
+    const url = awardType
+      ? `${API_BASE}/award-items/type/${awardType}`
+      : `${API_BASE}/award-items`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    return json.data || [];
+  } catch (err) {
+    console.warn(`Failed to fetch award items (${awardType}):`, err.message);
+    return null;
+  }
+}
+
+export function saveAwardItem(itemData, files = {}, isUpdate = false, itemId = null, onProgress = null) {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+
+    Object.keys(itemData).forEach((key) => {
+      const val = itemData[key];
+      if (val !== undefined && val !== null) {
+        if (key === 'existingImages' || key === 'existingVideos') {
+          formData.append(key, JSON.stringify(val));
+        } else {
+          formData.append(key, val);
+        }
+      }
+    });
+
+    if (files.imageFiles && files.imageFiles.length > 0) {
+      Array.from(files.imageFiles).forEach((file) => {
+        formData.append('imageFiles', file);
+      });
+    }
+
+    if (files.videoFiles && files.videoFiles.length > 0) {
+      Array.from(files.videoFiles).forEach((file) => {
+        formData.append('videoFiles', file);
+      });
+    }
+
+    const xhr = new XMLHttpRequest();
+    const method = isUpdate && itemId ? 'PUT' : 'POST';
+    const endpoint = isUpdate && itemId
+      ? `${API_BASE}/award-items/${itemId}`
+      : `${API_BASE}/award-items`;
+
+    xhr.open(method, endpoint);
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText);
+        resolve(json);
+      } catch (e) {
+        resolve({ success: false, message: xhr.responseText || 'Server returned invalid response' });
+      }
+    };
+
+    xhr.onerror = () => {
+      resolve({ success: false, message: 'Network request error' });
+    };
+
+    xhr.send(formData);
+  });
+}
+
+export async function deleteAwardItem(id) {
+  try {
+    const res = await fetch(`${API_BASE}/award-items/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to delete award item:', err);
+    return { success: false, message: err.message };
+  }
+}
+
+export async function syncAwardItems(awardType, items) {
+  try {
+    const res = await fetch(`${API_BASE}/award-items/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ awardType, items })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to sync award items:', err);
+    return { success: false, message: err.message };
+  }
+}
+

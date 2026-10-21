@@ -26,6 +26,8 @@ import EducationSupportPage from './components/EducationSupportPage';
 import WomenEmpowermentPage from './components/WomenEmpowermentPage';
 import CaringForHomelessPage from './components/CaringForHomelessPage';
 import OtherActivitiesPage from './components/OtherActivitiesPage';
+import SrowthaRathanaAwardPage from './components/SrowthaRathanaAwardPage';
+import DharmaShriAwardPage from './components/DharmaShriAwardPage';
 
 // Modals
 import DonationModal from './components/Modals/DonationModal';
@@ -78,6 +80,8 @@ export default function App() {
       if (path.includes('contact') || hash.includes('contact')) return 'contact';
       if (path.includes('testimonials') || hash.includes('testimonials')) return 'testimonials';
       if (path.includes('gallery') || hash.includes('gallery')) return 'gallery';
+      if (path.includes('srowtha') || hash.includes('srowtha')) return 'srowtha-rathana-award';
+      if (path.includes('dharma-shri') || hash.includes('dharma-shri')) return 'dharma-shri-award';
       if (path.includes('event') || hash.includes('event')) return 'events';
       if (path === '/activities' || path === '/activities/' || hash.includes('activities')) return 'activities';
 
@@ -134,6 +138,10 @@ export default function App() {
         setCurrentPage('testimonials');
       } else if (path.includes('gallery') || hash.includes('gallery')) {
         setCurrentPage('gallery');
+      } else if (path.includes('srowtha') || hash.includes('srowtha')) {
+        setCurrentPage('srowtha-rathana-award');
+      } else if (path.includes('dharma-shri') || hash.includes('dharma-shri')) {
+        setCurrentPage('dharma-shri-award');
       } else if (path.includes('event') || hash.includes('event')) {
         setCurrentPage('events');
       } else if (path === '/activities' || path === '/activities/' || hash.includes('activities')) {
@@ -167,6 +175,10 @@ export default function App() {
       window.history.pushState({ page: 'gallery' }, '', '/gallery');
     } else if (page === 'events') {
       window.history.pushState({ page: 'events' }, '', '/event-page');
+    } else if (page === 'srowtha-rathana-award') {
+      window.history.pushState({ page: 'srowtha-rathana-award' }, '', '/srowtha-rathana-award');
+    } else if (page === 'dharma-shri-award') {
+      window.history.pushState({ page: 'dharma-shri-award' }, '', '/dharma-shri-award');
     } else if (page === 'activities') {
       window.history.pushState({ page: 'activities' }, '', '/activities');
     } else if (activitySlugs.includes(page)) {
@@ -259,6 +271,10 @@ export default function App() {
           <EventPage
             onNavigate={handleNavigate}
           />
+        ) : currentPage === 'srowtha-rathana-award' ? (
+          <SrowthaRathanaAwardPage onNavigate={handleNavigate} />
+        ) : currentPage === 'dharma-shri-award' ? (
+          <DharmaShriAwardPage onNavigate={handleNavigate} />
         ) : currentPage === 'activities' ? (
           <ActivitiesPage
             onNavigate={handleNavigate}

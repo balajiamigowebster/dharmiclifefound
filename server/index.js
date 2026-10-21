@@ -8,6 +8,7 @@ const db = require('./mariadb');
 const { sequelize, AdminUser } = require('./models');
 const mediaRoutes = require('./routes/mediaRoutes');
 const activityItemsRoutes = require('./routes/activityItemsRoutes');
+const awardItemsRoutes = require('./routes/awardItemsRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -95,6 +96,10 @@ app.use('/dharmiclife/api/media', mediaRoutes);
 // Activity Items Routes (Sub-categories items with images and videos linked to DB)
 app.use('/api/activity-items', activityItemsRoutes);
 app.use('/dharmiclife/api/activity-items', activityItemsRoutes);
+
+// Award Items Routes (Awards with images and tributes linked to DB)
+app.use('/api/award-items', awardItemsRoutes);
+app.use('/dharmiclife/api/award-items', awardItemsRoutes);
 
 // Root & Health status
 app.get(['/', '/dharmiclife', '/api/health', '/dharmiclife/api/health'], (req, res) => {

@@ -25,9 +25,11 @@ import {
   HeartHandshake,
   FolderTree,
   Upload,
-  Loader2
+  Loader2,
+  Award
 } from 'lucide-react';
 import ActivitiesAdminManager from './ActivitiesAdminManager';
+import AwardsAdminManager from './AwardsAdminManager';
 import {
   fetchHomepageContent,
   updateHomepageContent,
@@ -59,6 +61,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const search = window.location.search;
+      if (search.includes('tab=awardsManager')) return 'awardsManager';
       if (search.includes('tab=activitiesManager')) return 'activitiesManager';
       if (search.includes('tab=about')) return 'about';
       if (search.includes('tab=coreActivities')) return 'coreActivities';
@@ -660,7 +663,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
 
             <div className="pt-2 border-t border-gray-100 mt-2">
               <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                Activities & Media
+                Activities & Awards
               </div>
               <button
                 onClick={() => setActiveTab('activitiesManager')}
@@ -672,6 +675,17 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               >
                 <FolderTree size={16} />
                 <span>Activities</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('awardsManager')}
+                className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 mt-1 ${
+                  activeTab === 'awardsManager'
+                    ? 'bg-[#901C25] text-white shadow-sm'
+                    : 'text-gray-700 hover:bg-stone-50'
+                }`}
+              >
+                <Award size={16} />
+                <span>Awards</span>
               </button>
             </div>
 
@@ -2083,6 +2097,13 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             {/* ---------------------------------------------------- */}
             {activeTab === 'activitiesManager' && (
               <ActivitiesAdminManager />
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB: AWARDS MANAGER (DB Table: award_items) */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'awardsManager' && (
+              <AwardsAdminManager />
             )}
 
             {/* Bottom Save Bar */}
