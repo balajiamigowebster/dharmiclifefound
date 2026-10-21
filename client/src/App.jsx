@@ -216,7 +216,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-[#901C25] selection:text-white">
       {/* Top Header Information Bar */}
-      <TopBar />
+      <TopBar siteInfo={homeContent?.siteInfo} />
 
       {/* Main Unified Header */}
       <Header
@@ -315,12 +315,11 @@ export default function App() {
 
             {/* Our Core Activities */}
             <CoreActivities
+              content={homeContent?.coreActivities}
               activities={activities}
               onSelectActivity={handleSelectActivity}
               onNavigate={handleNavigate}
             />
-
-
 
             {/* Volunteer & Impact Metrics */}
             <VolunteerSection
@@ -331,6 +330,7 @@ export default function App() {
 
             {/* Dharmic Impact Across the Map / Events */}
             <EventsSection
+              content={homeContent?.eventsSection}
               events={events}
               onNavigate={handleNavigate}
               onOpenDonation={() => handleOpenDonation('Community Event & Rites Fund')}
@@ -338,6 +338,7 @@ export default function App() {
 
             {/* Visual Gallery Grid with Lightbox */}
             <GallerySection
+              content={homeContent?.gallerySection}
               gallery={gallery}
             />
           </>
@@ -346,6 +347,7 @@ export default function App() {
 
       {/* Footer */}
       <Footer
+        siteInfo={homeContent?.siteInfo}
         onNavigate={handleNavigate}
         onOpenContact={() => setContactModalOpen(true)}
       />

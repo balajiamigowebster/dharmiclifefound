@@ -18,8 +18,8 @@ import {
   RefreshCw,
   Sparkles,
   Image as ImageIcon,
-  ArrowRight,
-  ChevronRight
+  Calendar,
+  HeartHandshake
 } from 'lucide-react';
 import {
   fetchHomepageContent,
@@ -45,12 +45,15 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
   const [authError, setAuthError] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
 
-  // Active tab: 'hero' | 'about' | 'stats' | 'messages' | 'siteInfo'
+  // Active tab: 'hero' | 'about' | 'coreActivities' | 'stats' | 'eventsSection' | 'gallerySection' | 'siteInfo' | 'messages'
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const search = window.location.search;
       if (search.includes('tab=about')) return 'about';
+      if (search.includes('tab=coreActivities')) return 'coreActivities';
       if (search.includes('tab=stats')) return 'stats';
+      if (search.includes('tab=eventsSection')) return 'eventsSection';
+      if (search.includes('tab=gallerySection')) return 'gallerySection';
       if (search.includes('tab=messages')) return 'messages';
       if (search.includes('tab=siteInfo')) return 'siteInfo';
     }
@@ -142,7 +145,9 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     }
   };
 
-  // Slide helpers
+  // ----------------------------------------------------
+  // HERO SLIDE HELPERS
+  // ----------------------------------------------------
   const handleUpdateSlide = (index, field, value) => {
     const updatedSlides = [...(content.hero?.slides || [])];
     updatedSlides[index] = { ...updatedSlides[index], [field]: value };
@@ -184,13 +189,140 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     });
   };
 
-  // Highlight bullet points in About Us
+  // ----------------------------------------------------
+  // ABOUT US HIGHLIGHT HELPERS
+  // ----------------------------------------------------
   const handleHighlightChange = (idx, val) => {
     const updated = [...(content.about?.highlights || [])];
     updated[idx] = val;
     setContent({
       ...content,
       about: { ...content.about, highlights: updated }
+    });
+  };
+
+  const handleAddHighlight = () => {
+    setContent({
+      ...content,
+      about: {
+        ...content.about,
+        highlights: [...(content.about?.highlights || []), 'New highlight point']
+      }
+    });
+  };
+
+  const handleDeleteHighlight = (idx) => {
+    const updated = (content.about?.highlights || []).filter((_, i) => i !== idx);
+    setContent({
+      ...content,
+      about: { ...content.about, highlights: updated }
+    });
+  };
+
+  // ----------------------------------------------------
+  // CORE ACTIVITIES HELPERS
+  // ----------------------------------------------------
+  const handleUpdateActivityItem = (idx, field, val) => {
+    const items = [...(content.coreActivities?.items || [])];
+    items[idx] = { ...items[idx], [field]: val };
+    setContent({
+      ...content,
+      coreActivities: { ...content.coreActivities, items }
+    });
+  };
+
+  const handleAddActivityItem = () => {
+    const items = [...(content.coreActivities?.items || [])];
+    items.push({
+      id: Date.now(),
+      slug: 'other-additional-activities',
+      title: 'New Core Activity',
+      description: 'Describe this community seva initiative and its impact.',
+      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/12-5.jpg',
+      badge: 'Community Seva'
+    });
+    setContent({
+      ...content,
+      coreActivities: { ...content.coreActivities, items }
+    });
+  };
+
+  const handleDeleteActivityItem = (idx) => {
+    const items = (content.coreActivities?.items || []).filter((_, i) => i !== idx);
+    setContent({
+      ...content,
+      coreActivities: { ...content.coreActivities, items }
+    });
+  };
+
+  // ----------------------------------------------------
+  // EVENTS SECTION HELPERS
+  // ----------------------------------------------------
+  const handleUpdateEventItem = (idx, field, val) => {
+    const items = [...(content.eventsSection?.items || [])];
+    items[idx] = { ...items[idx], [field]: val };
+    setContent({
+      ...content,
+      eventsSection: { ...content.eventsSection, items }
+    });
+  };
+
+  const handleAddEventItem = () => {
+    const items = [...(content.eventsSection?.items || [])];
+    items.push({
+      id: Date.now(),
+      title: 'New Seva Event',
+      event_date: '21 Oct, 2026',
+      location: 'Pondicherry',
+      summary: 'Brief summary of this community seva drive or event.',
+      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/photo-2.jpg',
+      category: 'Annadhanam',
+      route: 'events'
+    });
+    setContent({
+      ...content,
+      eventsSection: { ...content.eventsSection, items }
+    });
+  };
+
+  const handleDeleteEventItem = (idx) => {
+    const items = (content.eventsSection?.items || []).filter((_, i) => i !== idx);
+    setContent({
+      ...content,
+      eventsSection: { ...content.eventsSection, items }
+    });
+  };
+
+  // ----------------------------------------------------
+  // GALLERY SECTION HELPERS
+  // ----------------------------------------------------
+  const handleUpdateGalleryItem = (idx, field, val) => {
+    const items = [...(content.gallerySection?.items || [])];
+    items[idx] = { ...items[idx], [field]: val };
+    setContent({
+      ...content,
+      gallerySection: { ...content.gallerySection, items }
+    });
+  };
+
+  const handleAddGalleryItem = () => {
+    const items = [...(content.gallerySection?.items || [])];
+    items.push({
+      id: Date.now(),
+      title: 'New Seva Moment',
+      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/21-3-580x580.jpg'
+    });
+    setContent({
+      ...content,
+      gallerySection: { ...content.gallerySection, items }
+    });
+  };
+
+  const handleDeleteGalleryItem = (idx) => {
+    const items = (content.gallerySection?.items || []).filter((_, i) => i !== idx);
+    setContent({
+      ...content,
+      gallerySection: { ...content.gallerySection, items }
     });
   };
 
@@ -209,7 +341,6 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     return (
       <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-          {/* Header */}
           <div className="bg-[#901C25] text-white p-8 text-center relative">
             <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mx-auto mb-3 border border-white/20">
               <Lock size={28} className="text-[#E48A2D]" />
@@ -218,7 +349,6 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             <p className="text-white/80 text-xs mt-1">Dharmic Life Foundation Content Management</p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleLogin} className="p-8 space-y-6">
             {authError && (
               <div className="p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
@@ -293,19 +423,16 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
       {/* Top Bar */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          
-          {/* Logo & Title */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#901C25] text-white flex items-center justify-center font-bold text-sm shadow">
               DLF
             </div>
             <div>
-              <h1 className="text-base font-bold text-gray-900 leading-none">Content Manager</h1>
-              <span className="text-[11px] text-gray-500">Dharmic Life Foundation</span>
+              <h1 className="text-base font-bold text-gray-900 leading-none">Home Page Content Manager</h1>
+              <span className="text-[11px] text-gray-500">Maintain all sections of Dharmic Life Foundation Home Page</span>
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => onNavigate && onNavigate('home')}
@@ -363,7 +490,11 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
           {/* Left Navigation Tabs */}
-          <div className="md:col-span-3 bg-white rounded-2xl border border-gray-200 p-3 shadow-sm space-y-1">
+          <div className="md:col-span-3 bg-white rounded-2xl border border-gray-200 p-3 shadow-sm space-y-1 sticky top-24">
+            <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              Home Page Sections
+            </div>
+
             <button
               onClick={() => setActiveTab('hero')}
               className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 ${
@@ -373,7 +504,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               }`}
             >
               <Layout size={16} />
-              <span>Hero Banner & Slides</span>
+              <span>1. Hero Banner & Slides</span>
             </button>
 
             <button
@@ -385,7 +516,19 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               }`}
             >
               <Info size={16} />
-              <span>About Us Section</span>
+              <span>2. About Us Section</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('coreActivities')}
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 ${
+                activeTab === 'coreActivities'
+                  ? 'bg-[#901C25] text-white shadow-sm'
+                  : 'text-gray-700 hover:bg-stone-50'
+              }`}
+            >
+              <HeartHandshake size={16} />
+              <span>3. Core Activities</span>
             </button>
 
             <button
@@ -397,28 +540,31 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               }`}
             >
               <BarChart3 size={16} />
-              <span>Impact Numbers</span>
+              <span>4. Volunteer & Impact</span>
             </button>
 
             <button
-              onClick={() => setActiveTab('messages')}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center justify-between ${
-                activeTab === 'messages'
+              onClick={() => setActiveTab('eventsSection')}
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 ${
+                activeTab === 'eventsSection'
                   ? 'bg-[#901C25] text-white shadow-sm'
                   : 'text-gray-700 hover:bg-stone-50'
               }`}
             >
-              <span className="flex items-center gap-3">
-                <Mail size={16} />
-                <span>Contact Inquiries</span>
-              </span>
-              {messages.length > 0 && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  activeTab === 'messages' ? 'bg-white text-[#901C25]' : 'bg-red-100 text-red-700'
-                }`}>
-                  {messages.length}
-                </span>
-              )}
+              <Calendar size={16} />
+              <span>5. Events Section</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('gallerySection')}
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 ${
+                activeTab === 'gallerySection'
+                  ? 'bg-[#901C25] text-white shadow-sm'
+                  : 'text-gray-700 hover:bg-stone-50'
+              }`}
+            >
+              <ImageIcon size={16} />
+              <span>6. Gallery Section</span>
             </button>
 
             <button
@@ -430,16 +576,42 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               }`}
             >
               <Settings size={16} />
-              <span>Contact & Social Links</span>
+              <span>7. Header & Footer Info</span>
             </button>
 
-            <div className="pt-4 border-t border-gray-100 mt-4">
+            <div className="pt-2 border-t border-gray-100 mt-2">
+              <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Submissions
+              </div>
+              <button
+                onClick={() => setActiveTab('messages')}
+                className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center justify-between ${
+                  activeTab === 'messages'
+                    ? 'bg-[#901C25] text-white shadow-sm'
+                    : 'text-gray-700 hover:bg-stone-50'
+                }`}
+              >
+                <span className="flex items-center gap-3">
+                  <Mail size={16} />
+                  <span>Contact Inquiries</span>
+                </span>
+                {messages.length > 0 && (
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    activeTab === 'messages' ? 'bg-white text-[#901C25]' : 'bg-red-100 text-red-700'
+                  }`}>
+                    {messages.length}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            <div className="pt-3 border-t border-gray-100 mt-2">
               <button
                 onClick={handleResetDefaults}
                 className="w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium text-gray-500 hover:text-amber-800 hover:bg-amber-50 transition flex items-center gap-2"
               >
                 <RefreshCw size={13} />
-                <span>Reset to Defaults</span>
+                <span>Reset All to Defaults</span>
               </button>
             </div>
           </div>
@@ -454,9 +626,9 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               <div className="space-y-8">
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                   <div>
-                    <h2 className="text-xl font-bold font-serif text-gray-900">Hero Slider Slides</h2>
+                    <h2 className="text-xl font-bold font-serif text-gray-900">1. Hero Slider Slides</h2>
                     <p className="text-xs text-gray-500 mt-0.5">
-                      Maintain the main full-width banners, titles, and call-to-action buttons.
+                      Maintain the main full-width banners, titles, descriptions, and call-to-action buttons.
                     </p>
                   </div>
                   <button
@@ -552,7 +724,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-gray-700 mb-1">
                             Background Image URL
@@ -575,9 +747,19 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none bg-white"
                           />
                         </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">
+                            Secondary Button Text
+                          </label>
+                          <input
+                            type="text"
+                            value={slide.secondaryText || ''}
+                            onChange={(e) => handleUpdateSlide(idx, 'secondaryText', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none bg-white"
+                          />
+                        </div>
                       </div>
 
-                      {/* Image Preview */}
                       {slide.image && (
                         <div className="mt-2 relative h-40 rounded-lg overflow-hidden border border-gray-200 bg-stone-900 group">
                           <img
@@ -603,9 +785,9 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             {activeTab === 'about' && (
               <div className="space-y-6">
                 <div className="pb-4 border-b border-gray-200">
-                  <h2 className="text-xl font-bold font-serif text-gray-900">About Us Section</h2>
+                  <h2 className="text-xl font-bold font-serif text-gray-900">2. About Us Section</h2>
                   <p className="text-xs text-gray-500 mt-0.5">
-                    Maintain the core philosophy narrative, featured highlights, and photo.
+                    Maintain the core philosophy narrative, featured highlights, buttons, and photo.
                   </p>
                 </div>
 
@@ -670,7 +852,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1">Featured Photo URL</label>
                     <input
@@ -699,12 +881,66 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                       className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
                     />
                   </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Floating Badge Subtitle</label>
+                    <input
+                      type="text"
+                      value={content.about?.experienceBadgeSub || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          about: { ...content.about, experienceBadgeSub: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Primary Button Text</label>
+                    <input
+                      type="text"
+                      value={content.about?.primaryBtnText || 'Discover More'}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          about: { ...content.about, primaryBtnText: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Secondary Button Text</label>
+                    <input
+                      type="text"
+                      value={content.about?.secondaryBtnText || 'Our Trustees'}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          about: { ...content.about, secondaryBtnText: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-2">
-                    Key Highlights (The 4 Pillar Bullet Points)
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-xs font-bold text-gray-700">
+                      Key Highlights (Pillar Bullet Points)
+                    </label>
+                    <button
+                      onClick={handleAddHighlight}
+                      className="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs font-bold rounded-lg transition flex items-center gap-1"
+                    >
+                      <Plus size={13} />
+                      <span>Add Bullet</span>
+                    </button>
+                  </div>
                   <div className="space-y-2.5">
                     {(content.about?.highlights || []).map((h, hIdx) => (
                       <div key={hIdx} className="flex items-center gap-2">
@@ -717,6 +953,13 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                           onChange={(e) => handleHighlightChange(hIdx, e.target.value)}
                           className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
                         />
+                        <button
+                          onClick={() => handleDeleteHighlight(hIdx)}
+                          className="text-gray-400 hover:text-red-700 p-1.5 transition"
+                          title="Delete Bullet"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -725,33 +968,270 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* TAB 3: IMPACT NUMBERS / STATS */}
+            {/* TAB 3: CORE ACTIVITIES */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'coreActivities' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <div>
+                    <h2 className="text-xl font-bold font-serif text-gray-900">3. Our Core Activities Section</h2>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Maintain the section heading and all activity cards displayed on the Home Page.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleAddActivityItem}
+                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                  >
+                    <Plus size={14} />
+                    <span>Add Activity Card</span>
+                  </button>
+                </div>
+
+                {/* Section Header Fields */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag / Badge</label>
+                    <input
+                      type="text"
+                      value={content.coreActivities?.badge || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          coreActivities: { ...content.coreActivities, badge: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Main Title</label>
+                    <input
+                      type="text"
+                      value={content.coreActivities?.title || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          coreActivities: { ...content.coreActivities, title: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Subtitle</label>
+                    <textarea
+                      rows={2}
+                      value={content.coreActivities?.subtitle || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          coreActivities: { ...content.coreActivities, subtitle: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Activity Cards List */}
+                <div className="space-y-4">
+                  {(content.coreActivities?.items || []).map((act, idx) => (
+                    <div
+                      key={act.id || idx}
+                      className="border border-gray-200 rounded-xl p-5 bg-stone-50/50 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold px-2.5 py-1 rounded bg-[#901C25] text-white">
+                          Activity #{idx + 1}
+                        </span>
+                        <button
+                          onClick={() => handleDeleteActivityItem(idx)}
+                          className="text-gray-400 hover:text-red-700 p-1 transition"
+                          title="Delete Activity"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Activity Title</label>
+                          <input
+                            type="text"
+                            value={act.title || ''}
+                            onChange={(e) => handleUpdateActivityItem(idx, 'title', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Top Badge Tag</label>
+                          <input
+                            type="text"
+                            value={act.badge || ''}
+                            onChange={(e) => handleUpdateActivityItem(idx, 'badge', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Description</label>
+                        <textarea
+                          rows={2}
+                          value={act.description || ''}
+                          onChange={(e) => handleUpdateActivityItem(idx, 'description', e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Image URL</label>
+                          <input
+                            type="text"
+                            value={act.image || ''}
+                            onChange={(e) => handleUpdateActivityItem(idx, 'image', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Target Page Slug</label>
+                          <input
+                            type="text"
+                            value={act.slug || ''}
+                            onChange={(e) => handleUpdateActivityItem(idx, 'slug', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 4: VOLUNTEER & IMPACT NUMBERS / STATS */}
             {/* ---------------------------------------------------- */}
             {activeTab === 'stats' && (
               <div className="space-y-6">
                 <div className="pb-4 border-b border-gray-200">
-                  <h2 className="text-xl font-bold font-serif text-gray-900">Impact Numbers & Statistics</h2>
+                  <h2 className="text-xl font-bold font-serif text-gray-900">4. Volunteer & Impact Section</h2>
                   <p className="text-xs text-gray-500 mt-0.5">
-                    Update the key milestones and counts shown across the homepage and volunteer section.
+                    Update the Volunteer section narrative, featured photo, milestones, and progress bar percentages.
                   </p>
                 </div>
 
+                {/* Volunteer Section Text & Image */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag</label>
+                    <input
+                      type="text"
+                      value={content.stats?.sectionBadge || 'Get involved now'}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          stats: { ...content.stats, sectionBadge: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Heading</label>
+                    <input
+                      type="text"
+                      value={content.stats?.sectionTitle || 'Only Possible because of Friends Like You'}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          stats: { ...content.stats, sectionTitle: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Description</label>
+                    <textarea
+                      rows={3}
+                      value={content.stats?.sectionDescription || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          stats: { ...content.stats, sectionDescription: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Featured Photo URL</label>
+                    <input
+                      type="text"
+                      value={content.stats?.sectionImage || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          stats: { ...content.stats, sectionImage: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Volunteer Overlay Card Subtitle</label>
+                    <input
+                      type="text"
+                      value={content.stats?.volunteerCardSubtitle || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          stats: { ...content.stats, volunteerCardSubtitle: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* 4 Impact Metrics */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="p-4 border border-gray-200 rounded-xl bg-stone-50/50 space-y-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-[#901C25]">Stat #1: Annadhanam</span>
-                    <div>
-                      <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
-                      <input
-                        type="text"
-                        value={content.stats?.mealsServed || ''}
-                        onChange={(e) =>
-                          setContent({
-                            ...content,
-                            stats: { ...content.stats, mealsServed: e.target.value }
-                          })
-                        }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
+                        <input
+                          type="text"
+                          value={content.stats?.mealsServed || ''}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, mealsServed: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Progress Bar %</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={content.stats?.mealsProgress ?? 95}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, mealsProgress: Number(e.target.value) }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
                     </div>
                     <div>
                       <label className="block text-[11px] text-gray-600 mb-1">Label</label>
@@ -764,26 +1244,44 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             stats: { ...content.stats, mealsLabel: e.target.value }
                           })
                         }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
                       />
                     </div>
                   </div>
 
                   <div className="p-4 border border-gray-200 rounded-xl bg-stone-50/50 space-y-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-[#901C25]">Stat #2: Cremation</span>
-                    <div>
-                      <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
-                      <input
-                        type="text"
-                        value={content.stats?.soulsHonored || ''}
-                        onChange={(e) =>
-                          setContent({
-                            ...content,
-                            stats: { ...content.stats, soulsHonored: e.target.value }
-                          })
-                        }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
+                        <input
+                          type="text"
+                          value={content.stats?.soulsHonored || ''}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, soulsHonored: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Progress Bar %</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={content.stats?.soulsProgress ?? 90}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, soulsProgress: Number(e.target.value) }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
                     </div>
                     <div>
                       <label className="block text-[11px] text-gray-600 mb-1">Label</label>
@@ -796,26 +1294,44 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             stats: { ...content.stats, soulsLabel: e.target.value }
                           })
                         }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
                       />
                     </div>
                   </div>
 
                   <div className="p-4 border border-gray-200 rounded-xl bg-stone-50/50 space-y-3">
                     <span className="text-xs font-bold uppercase tracking-wider text-[#901C25]">Stat #3: Education</span>
-                    <div>
-                      <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
-                      <input
-                        type="text"
-                        value={content.stats?.studentsSupported || ''}
-                        onChange={(e) =>
-                          setContent({
-                            ...content,
-                            stats: { ...content.stats, studentsSupported: e.target.value }
-                          })
-                        }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Number / Metric</label>
+                        <input
+                          type="text"
+                          value={content.stats?.studentsSupported || ''}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, studentsSupported: e.target.value }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-gray-600 mb-1">Progress Bar %</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={content.stats?.studentsProgress ?? 80}
+                          onChange={(e) =>
+                            setContent({
+                              ...content,
+                              stats: { ...content.stats, studentsProgress: Number(e.target.value) }
+                            })
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
+                        />
+                      </div>
                     </div>
                     <div>
                       <label className="block text-[11px] text-gray-600 mb-1">Label</label>
@@ -828,7 +1344,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             stats: { ...content.stats, studentsLabel: e.target.value }
                           })
                         }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
                       />
                     </div>
                   </div>
@@ -846,7 +1362,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             stats: { ...content.stats, volunteersActive: e.target.value }
                           })
                         }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-bold bg-white"
                       />
                     </div>
                     <div>
@@ -860,7 +1376,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                             stats: { ...content.stats, volunteersLabel: e.target.value }
                           })
                         }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
                       />
                     </div>
                   </div>
@@ -869,7 +1385,433 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             )}
 
             {/* ---------------------------------------------------- */}
-            {/* TAB 4: CONTACT INQUIRIES INBOX */}
+            {/* TAB 5: EVENTS SECTION (HOME PAGE) */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'eventsSection' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <div>
+                    <h2 className="text-xl font-bold font-serif text-gray-900">5. Events Section (Home Page)</h2>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Maintain the "Dharmic Impact Across the Map" section header and featured event cards.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleAddEventItem}
+                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                  >
+                    <Plus size={14} />
+                    <span>Add Event Card</span>
+                  </button>
+                </div>
+
+                {/* Section Header Fields */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag</label>
+                    <input
+                      type="text"
+                      value={content.eventsSection?.badge || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          eventsSection: { ...content.eventsSection, badge: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Title</label>
+                    <input
+                      type="text"
+                      value={content.eventsSection?.title || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          eventsSection: { ...content.eventsSection, title: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Bottom Button Text</label>
+                    <input
+                      type="text"
+                      value={content.eventsSection?.ctaText || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          eventsSection: { ...content.eventsSection, ctaText: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-3">
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Subtitle</label>
+                    <textarea
+                      rows={2}
+                      value={content.eventsSection?.subtitle || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          eventsSection: { ...content.eventsSection, subtitle: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Event Items */}
+                <div className="space-y-4">
+                  {(content.eventsSection?.items || []).map((ev, idx) => (
+                    <div
+                      key={ev.id || idx}
+                      className="border border-gray-200 rounded-xl p-5 bg-stone-50/50 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold px-2.5 py-1 rounded bg-[#901C25] text-white">
+                          Event #{idx + 1}
+                        </span>
+                        <button
+                          onClick={() => handleDeleteEventItem(idx)}
+                          className="text-gray-400 hover:text-red-700 p-1 transition"
+                          title="Delete Event"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Event Title</label>
+                          <input
+                            type="text"
+                            value={ev.title || ''}
+                            onChange={(e) => handleUpdateEventItem(idx, 'title', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-bold text-gray-700 mb-1">Date</label>
+                            <input
+                              type="text"
+                              value={ev.event_date || ''}
+                              onChange={(e) => handleUpdateEventItem(idx, 'event_date', e.target.value)}
+                              className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-gray-700 mb-1">Category</label>
+                            <input
+                              type="text"
+                              value={ev.category || ''}
+                              onChange={(e) => handleUpdateEventItem(idx, 'category', e.target.value)}
+                              className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Location</label>
+                          <input
+                            type="text"
+                            value={ev.location || ''}
+                            onChange={(e) => handleUpdateEventItem(idx, 'location', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 mb-1">Image URL</label>
+                          <input
+                            type="text"
+                            value={ev.image || ''}
+                            onChange={(e) => handleUpdateEventItem(idx, 'image', e.target.value)}
+                            className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Summary</label>
+                        <textarea
+                          rows={2}
+                          value={ev.summary || ''}
+                          onChange={(e) => handleUpdateEventItem(idx, 'summary', e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 6: GALLERY SECTION (HOME PAGE) */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'gallerySection' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <div>
+                    <h2 className="text-xl font-bold font-serif text-gray-900">6. Gallery Section (Home Page)</h2>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Maintain the "Our Seva in Pictures" heading and photo grid on the Home Page.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleAddGalleryItem}
+                    className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                  >
+                    <Plus size={14} />
+                    <span>Add Gallery Photo</span>
+                  </button>
+                </div>
+
+                {/* Section Header Fields */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Tag</label>
+                    <input
+                      type="text"
+                      value={content.gallerySection?.badge || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          gallerySection: { ...content.gallerySection, badge: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Title</label>
+                    <input
+                      type="text"
+                      value={content.gallerySection?.title || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          gallerySection: { ...content.gallerySection, title: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Section Subtitle</label>
+                    <input
+                      type="text"
+                      value={content.gallerySection?.subtitle || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          gallerySection: { ...content.gallerySection, subtitle: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Gallery Items Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {(content.gallerySection?.items || []).map((item, idx) => (
+                    <div
+                      key={item.id || idx}
+                      className="border border-gray-200 rounded-xl p-4 bg-stone-50/50 space-y-3"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold px-2 py-0.5 rounded bg-[#901C25] text-white">
+                          Photo #{idx + 1}
+                        </span>
+                        <button
+                          onClick={() => handleDeleteGalleryItem(idx)}
+                          className="text-gray-400 hover:text-red-700 p-1 transition"
+                          title="Delete Photo"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+
+                      {item.image && (
+                        <div className="h-32 w-full rounded-lg overflow-hidden bg-gray-200 border border-gray-200">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.target.src = '/images/about.jpg'; }}
+                          />
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-700 mb-1">Caption / Title</label>
+                        <input
+                          type="text"
+                          value={item.title || ''}
+                          onChange={(e) => handleUpdateGalleryItem(idx, 'title', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-700 mb-1">Image URL</label>
+                        <input
+                          type="text"
+                          value={item.image || ''}
+                          onChange={(e) => handleUpdateGalleryItem(idx, 'image', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs bg-white"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 7: HEADER, FOOTER & SOCIAL INFO */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'siteInfo' && (
+              <div className="space-y-6">
+                <div className="pb-4 border-b border-gray-200">
+                  <h2 className="text-xl font-bold font-serif text-gray-900">7. Header Top Bar, Footer & Social Links</h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Maintain official email, phone, location, footer summary, and social media links across the header & footer.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Official Email</label>
+                    <input
+                      type="email"
+                      value={content.siteInfo?.email || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, email: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Contact Phone</label>
+                    <input
+                      type="text"
+                      value={content.siteInfo?.phone || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, phone: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">Physical Address (Top Bar & Footer)</label>
+                  <input
+                    type="text"
+                    value={content.siteInfo?.address || ''}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        siteInfo: { ...content.siteInfo, address: e.target.value }
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">Footer About Text</label>
+                  <textarea
+                    rows={3}
+                    value={content.siteInfo?.footerAboutText || ''}
+                    onChange={(e) =>
+                      setContent({
+                        ...content,
+                        siteInfo: { ...content.siteInfo, footerAboutText: e.target.value }
+                      })
+                    }
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Facebook URL</label>
+                    <input
+                      type="text"
+                      value={content.siteInfo?.facebook || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, facebook: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Instagram URL</label>
+                    <input
+                      type="text"
+                      value={content.siteInfo?.instagram || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, instagram: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Twitter (X) URL</label>
+                    <input
+                      type="text"
+                      value={content.siteInfo?.twitter || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, twitter: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">WhatsApp Link</label>
+                    <input
+                      type="text"
+                      value={content.siteInfo?.whatsapp || ''}
+                      onChange={(e) =>
+                        setContent({
+                          ...content,
+                          siteInfo: { ...content.siteInfo, whatsapp: e.target.value }
+                        })
+                      }
+                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 8: CONTACT INQUIRIES INBOX */}
             {/* ---------------------------------------------------- */}
             {activeTab === 'messages' && (
               <div className="space-y-6">
@@ -942,111 +1884,6 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                     ))}
                   </div>
                 )}
-              </div>
-            )}
-
-            {/* ---------------------------------------------------- */}
-            {/* TAB 5: SITE & CONTACT INFO */}
-            {/* ---------------------------------------------------- */}
-            {activeTab === 'siteInfo' && (
-              <div className="space-y-6">
-                <div className="pb-4 border-b border-gray-200">
-                  <h2 className="text-xl font-bold font-serif text-gray-900">Official Contact & Social Channels</h2>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    Maintain official emails, phone numbers, and social media handles.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Official Email</label>
-                    <input
-                      type="email"
-                      value={content.siteInfo?.email || ''}
-                      onChange={(e) =>
-                        setContent({
-                          ...content,
-                          siteInfo: { ...content.siteInfo, email: e.target.value }
-                        })
-                      }
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Contact Phone</label>
-                    <input
-                      type="text"
-                      value={content.siteInfo?.phone || ''}
-                      onChange={(e) =>
-                        setContent({
-                          ...content,
-                          siteInfo: { ...content.siteInfo, phone: e.target.value }
-                        })
-                      }
-                      className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1">Physical Address</label>
-                  <input
-                    type="text"
-                    value={content.siteInfo?.address || ''}
-                    onChange={(e) =>
-                      setContent({
-                        ...content,
-                        siteInfo: { ...content.siteInfo, address: e.target.value }
-                      })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Facebook URL</label>
-                    <input
-                      type="text"
-                      value={content.siteInfo?.facebook || ''}
-                      onChange={(e) =>
-                        setContent({
-                          ...content,
-                          siteInfo: { ...content.siteInfo, facebook: e.target.value }
-                        })
-                      }
-                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Instagram URL</label>
-                    <input
-                      type="text"
-                      value={content.siteInfo?.instagram || ''}
-                      onChange={(e) =>
-                        setContent({
-                          ...content,
-                          siteInfo: { ...content.siteInfo, instagram: e.target.value }
-                        })
-                      }
-                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Twitter (X) URL</label>
-                    <input
-                      type="text"
-                      value={content.siteInfo?.twitter || ''}
-                      onChange={(e) =>
-                        setContent({
-                          ...content,
-                          siteInfo: { ...content.siteInfo, twitter: e.target.value }
-                        })
-                      }
-                      className="w-full px-3.5 py-2 rounded-lg border border-gray-300 text-xs"
-                    />
-                  </div>
-                </div>
               </div>
             )}
 

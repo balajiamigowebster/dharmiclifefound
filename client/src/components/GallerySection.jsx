@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, X, ZoomIn } from 'lucide-react';
 
-export default function GallerySection({ gallery = [] }) {
+export default function GallerySection({ content, gallery = [] }) {
   const [activePhoto, setActivePhoto] = useState(null);
 
   const fallbackPhotos = [
@@ -13,7 +13,18 @@ export default function GallerySection({ gallery = [] }) {
     { id: 6, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/5-9-580x580.jpg', title: 'Dedicated Volunteer Relief Team' }
   ];
 
-  const photos = gallery.length > 0 ? gallery : fallbackPhotos;
+  const sectionBadge = content?.badge || 'Moments of Grace';
+  const sectionTitle = content?.title || 'Our Seva in Pictures';
+  const sectionSubtitle =
+    content?.subtitle ||
+    'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.';
+
+  const photos =
+    content?.items && content.items.length > 0
+      ? content.items
+      : gallery.length > 0
+      ? gallery
+      : fallbackPhotos;
 
   return (
     <section id="gallery" className="py-20 bg-stone-50">
@@ -23,22 +34,22 @@ export default function GallerySection({ gallery = [] }) {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-            <span>Moments of Grace</span>
+            <span>{sectionBadge}</span>
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-            Our Seva in Pictures
+            {sectionTitle}
           </h2>
           <p className="mt-3 text-gray-600 text-base">
-            Witness our on-ground compassion across streets, government schools, communities, and crematoriums.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-          {photos.map((item) => (
+          {photos.map((item, idx) => (
             <div
-              key={item.id}
+              key={item.id || idx}
               onClick={() => setActivePhoto(item)}
               className="relative group rounded-2xl overflow-hidden aspect-square bg-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
             >

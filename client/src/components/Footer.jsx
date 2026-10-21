@@ -2,10 +2,19 @@ import React, { useState } from 'react';
 import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { submitNewsletter } from '../api';
 
-export default function Footer({ onOpenContact, onNavigate }) {
+export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const officialEmail = siteInfo?.email || 'dharmiclifestyle@gmail.com';
+  const officialAddress = siteInfo?.address || 'Pondicherry, India';
+  const footerAboutText =
+    siteInfo?.footerAboutText ||
+    'Dharmic Life Foundation is a charitable Trust dedicated to feeding the hungry, supporting homeless communities, and spreading kindness through social service.';
+  const facebookUrl = siteInfo?.facebook || 'https://facebook.com';
+  const instagramUrl = siteInfo?.instagram || 'https://instagram.com';
+  const whatsappUrl = siteInfo?.whatsapp || 'https://wa.me/919876543210';
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -45,7 +54,7 @@ export default function Footer({ onOpenContact, onNavigate }) {
               />
             </div>
             <p className="text-gray-300 text-sm leading-relaxed pr-4">
-              Dharmic Life Foundation is a charitable Trust dedicated to feeding the hungry, supporting homeless communities, and spreading kindness through social service.
+              {footerAboutText}
             </p>
           </div>
 
@@ -58,15 +67,15 @@ export default function Footer({ onOpenContact, onNavigate }) {
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2.5">
                 <MapPin size={17} className="text-[#E48A2D] shrink-0 mt-0.5" />
-                <span>Pondicherry, India</span>
+                <span>{officialAddress}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail size={17} className="text-[#E48A2D] shrink-0" />
                 <a
-                  href="mailto:dharmiclifestyle@gmail.com"
+                  href={`mailto:${officialEmail}`}
                   className="hover:text-[#E48A2D] transition truncate"
                 >
-                  dharmiclifestyle@gmail.com
+                  {officialEmail}
                 </a>
               </li>
             </ul>
@@ -243,7 +252,7 @@ export default function Footer({ onOpenContact, onNavigate }) {
 
           <div className="flex items-center gap-4 text-white">
             <a
-              href="https://wa.me/919876543210"
+              href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-full bg-white/5 hover:bg-[#25D366] hover:text-white transition"
@@ -252,7 +261,7 @@ export default function Footer({ onOpenContact, onNavigate }) {
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
             </a>
             <a
-              href="https://facebook.com"
+              href={facebookUrl}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-full bg-white/5 hover:bg-[#1877F2] hover:text-white transition"
@@ -261,7 +270,7 @@ export default function Footer({ onOpenContact, onNavigate }) {
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95C18.05 21.45 22 17.19 22 12z"/></svg>
             </a>
             <a
-              href="https://instagram.com"
+              href={instagramUrl}
               target="_blank"
               rel="noreferrer"
               className="p-2 rounded-full bg-white/5 hover:bg-[#E4405F] hover:text-white transition"

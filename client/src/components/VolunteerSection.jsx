@@ -2,10 +2,37 @@ import React from 'react';
 import { Users, Droplets, GraduationCap, Coins, ArrowRight, Heart } from 'lucide-react';
 
 export default function VolunteerSection({ onOpenVolunteer, onNavigate, content }) {
+  const sectionBadge = content?.sectionBadge || 'Get involved now';
+  const sectionTitle = content?.sectionTitle || 'Only Possible because of Friends Like You';
+  const sectionDescription =
+    content?.sectionDescription ||
+    'Dharmic Life Foundation believes that transformative social impact happens when compassionate hearts unite. Every meal served, every destitute soul cremated with Vedic respect, and every student sponsored is powered by dedicated patrons and community volunteers.';
+  const sectionImage =
+    content?.sectionImage ||
+    'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-12.jpg';
+  const volunteerCardSubtitle =
+    content?.volunteerCardSubtitle ||
+    'Uniting across districts with unconditional empathy.';
+
   const metrics = [
-    { label: content?.mealsLabel || 'Daily Meals Served & Food Relief', value: 95, icon: Coins, count: content?.mealsServed || '85,000+' },
-    { label: content?.studentsLabel || 'Education & Child Support', value: 80, icon: GraduationCap, count: content?.studentsSupported || '650+' },
-    { label: content?.soulsLabel || 'Unclaimed Souls Vedic Cremation', value: 90, icon: Droplets, count: content?.soulsHonored || '420+' },
+    {
+      label: content?.mealsLabel || 'Daily Meals Served & Food Relief',
+      value: Number(content?.mealsProgress) || 95,
+      icon: Coins,
+      count: content?.mealsServed || '85,000+'
+    },
+    {
+      label: content?.studentsLabel || 'Education & Child Support',
+      value: Number(content?.studentsProgress) || 80,
+      icon: GraduationCap,
+      count: content?.studentsSupported || '650+'
+    },
+    {
+      label: content?.soulsLabel || 'Unclaimed Souls Vedic Cremation',
+      value: Number(content?.soulsProgress) || 90,
+      icon: Droplets,
+      count: content?.soulsHonored || '420+'
+    }
   ];
 
   return (
@@ -17,7 +44,7 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate, content 
           <div className="lg:col-span-6 relative">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
               <img
-                src="https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-12.jpg"
+                src={sectionImage}
                 alt="Community volunteers serving meals"
                 className="w-full h-[440px] sm:h-[500px] object-cover hover:scale-105 transition-transform duration-700"
                 onError={(e) => { e.target.src = '/images/about.jpg'; }}
@@ -34,7 +61,7 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate, content 
                     <h4 className="font-bold text-gray-900 font-serif">
                       {content?.volunteersActive || '120+'} {content?.volunteersLabel || 'Active Volunteers'}
                     </h4>
-                    <p className="text-xs text-gray-500">Uniting across districts with unconditional empathy.</p>
+                    <p className="text-xs text-gray-500">{volunteerCardSubtitle}</p>
                   </div>
                 </div>
                 <button
@@ -53,15 +80,15 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate, content 
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
                 <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-                <span>Get involved now</span>
+                <span>{sectionBadge}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-                Only Possible because of Friends Like You
+                {sectionTitle}
               </h2>
             </div>
 
             <p className="text-gray-600 text-base leading-relaxed">
-              Dharmic Life Foundation believes that transformative social impact happens when compassionate hearts unite. Every meal served, every destitute soul cremated with Vedic respect, and every student sponsored is powered by dedicated patrons and community volunteers.
+              {sectionDescription}
             </p>
 
             {/* Impact Metric Progress Bars */}
@@ -72,13 +99,18 @@ export default function VolunteerSection({ onOpenVolunteer, onNavigate, content 
                     <span className="flex items-center gap-2">
                       <item.icon size={15} className="text-[#901C25]" />
                       <span>{item.label}</span>
+                      {item.count && (
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-[#901C25]">
+                          {item.count}
+                        </span>
+                      )}
                     </span>
                     <span className="font-bold text-[#E48A2D]">{item.value}%</span>
                   </div>
                   <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-[#901C25] to-[#E48A2D] rounded-full transition-all duration-1000"
-                      style={{ width: `${item.value}%` }}
+                      style={{ width: `${Math.min(100, Math.max(0, item.value))}%` }}
                     ></div>
                   </div>
                 </div>

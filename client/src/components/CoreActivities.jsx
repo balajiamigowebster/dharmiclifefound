@@ -78,7 +78,28 @@ export const coreActivitiesHomeList = [
   }
 ];
 
-export default function CoreActivities({ onSelectActivity, onNavigate }) {
+const iconMap = {
+  'annadhanam': Utensils,
+  'unclaimed-souls': Flame,
+  'spreading-the-dharmic-way-of-life': BookOpen,
+  'education-support': GraduationCap,
+  'women-empowerment': Heart,
+  'caring-for-homeless-people': HeartHandshake,
+  'other-additional-activities': Sparkles
+};
+
+export default function CoreActivities({ content, onSelectActivity, onNavigate }) {
+  const sectionBadge = content?.badge || 'Our Core Activities';
+  const sectionTitle = content?.title || 'Serving Humanity, Preserving Dharma';
+  const sectionSubtitle =
+    content?.subtitle ||
+    'Every initiative of Dharmic Life Foundation is centered on empathy, direct grassroots impact, and timeless righteous duty.';
+
+  const activityItems =
+    content?.items && content.items.length > 0
+      ? content.items
+      : coreActivitiesHomeList;
+
   const handleClick = (slug) => {
     if (onSelectActivity) {
       onSelectActivity(slug);
@@ -95,26 +116,26 @@ export default function CoreActivities({ onSelectActivity, onNavigate }) {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-            <span>Our Core Activities</span>
+            <span>{sectionBadge}</span>
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-            Serving Humanity, Preserving Dharma
+            {sectionTitle}
           </h2>
           <div className="w-20 h-1 bg-[#901C25] mx-auto mt-4 rounded-full"></div>
           <p className="mt-4 text-gray-600 text-base sm:text-lg">
-            Every initiative of Dharmic Life Foundation is centered on empathy, direct grassroots impact, and timeless righteous duty.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {coreActivitiesHomeList.map((act) => {
-            const IconComponent = act.icon;
+          {activityItems.map((act, idx) => {
+            const IconComponent = act.icon || iconMap[act.slug] || Sparkles;
             return (
               <div
-                key={act.id}
-                onClick={() => handleClick(act.slug)}
+                key={act.id || idx}
+                onClick={() => handleClick(act.slug || 'activities')}
                 className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col cursor-pointer transform hover:-translate-y-1.5"
               >
                 {/* Image Container */}
@@ -157,7 +178,7 @@ export default function CoreActivities({ onSelectActivity, onNavigate }) {
                       <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
                     </span>
                     <span className="text-[11px] font-medium text-gray-400">
-                      0{act.id}
+                      {String(idx + 1).padStart(2, '0')}
                     </span>
                   </div>
                 </div>

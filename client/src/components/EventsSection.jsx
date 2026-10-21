@@ -54,8 +54,20 @@ const fallbackEvents = [
   }
 ];
 
-export default function EventsSection({ events = [], onNavigate }) {
-  const displayEvents = events && events.length > 0 ? events : fallbackEvents;
+export default function EventsSection({ content, events = [], onNavigate }) {
+  const sectionBadge = content?.badge || 'Our events';
+  const sectionTitle = content?.title || 'Dharmic Impact Across the Map';
+  const sectionSubtitle =
+    content?.subtitle ||
+    'Glimpses of our regular community seva drives, cremation rites, educational camps, and public gatherings.';
+  const ctaText = content?.ctaText || 'View All Programmes & Awards';
+
+  const displayEvents =
+    content?.items && content.items.length > 0
+      ? content.items
+      : events && events.length > 0
+      ? events
+      : fallbackEvents;
 
   const handleEventClick = (ev) => {
     if (ev.route && onNavigate) {
@@ -73,23 +85,23 @@ export default function EventsSection({ events = [], onNavigate }) {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-            <span>Our events</span>
+            <span>{sectionBadge}</span>
             <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-            Dharmic Impact Across the Map
+            {sectionTitle}
           </h2>
           <div className="w-20 h-1 bg-[#901C25] mx-auto mt-4 rounded-full"></div>
           <p className="mt-4 text-gray-600 text-base sm:text-lg">
-            Glimpses of our regular community seva drives, cremation rites, educational camps, and public gatherings.
+            {sectionSubtitle}
           </p>
         </div>
 
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayEvents.map((ev) => (
+          {displayEvents.map((ev, idx) => (
             <div
-              key={ev.id}
+              key={ev.id || idx}
               onClick={() => handleEventClick(ev)}
               className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col group cursor-pointer transform hover:-translate-y-1.5"
             >
@@ -150,7 +162,7 @@ export default function EventsSection({ events = [], onNavigate }) {
             onClick={() => onNavigate ? onNavigate('events') : null}
             className="px-8 py-3.5 bg-[#901C25] hover:bg-[#73161d] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-md transition transform active:scale-95 inline-flex items-center gap-2 group"
           >
-            <span>View All Programmes &amp; Awards</span>
+            <span>{ctaText}</span>
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

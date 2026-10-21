@@ -21,6 +21,8 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
   const image = data.image || 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg';
   const experienceBadgeTitle = data.experienceBadgeTitle || '100% Volunteer Driven';
   const experienceBadgeSub = data.experienceBadgeSub || 'Every rupee contributed directly impacts lives on ground in Pondicherry.';
+  const primaryBtnText = data.primaryBtnText || 'Discover More';
+  const secondaryBtnText = data.secondaryBtnText || 'Our Trustees';
 
   return (
     <section id="about" className="py-20 bg-stone-50/60 overflow-hidden">
@@ -105,7 +107,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
                 }}
                 className="px-7 py-3.5 bg-[#901C25] hover:bg-[#73161d] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-lg transition transform active:scale-95 flex items-center gap-2 group"
               >
-                <span>Discover More</span>
+                <span>{primaryBtnText}</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </a>
 
@@ -117,7 +119,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
                 }}
                 className="px-6 py-3.5 bg-stone-100 hover:bg-stone-200 text-gray-800 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition block"
               >
-                Our Trustees
+                {secondaryBtnText}
               </a>
             </div>
 

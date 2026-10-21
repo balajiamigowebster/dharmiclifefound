@@ -139,11 +139,72 @@ export async function submitNewsletter(email) {
   return await res.json();
 }
 
+function mergeHomeContent(data) {
+  if (!data || typeof data !== 'object') return defaultHomeContent;
+  return {
+    ...defaultHomeContent,
+    ...data,
+    hero: {
+      ...defaultHomeContent.hero,
+      ...(data.hero || {}),
+      slides: data.hero?.slides?.length > 0 ? data.hero.slides : defaultHomeContent.hero.slides
+    },
+    about: {
+      ...defaultHomeContent.about,
+      ...(data.about || {}),
+      highlights: data.about?.highlights?.length > 0 ? data.about.highlights : defaultHomeContent.about.highlights
+    },
+    coreActivities: {
+      ...defaultHomeContent.coreActivities,
+      ...(data.coreActivities || {}),
+      items: data.coreActivities?.items?.length > 0 ? data.coreActivities.items : defaultHomeContent.coreActivities.items
+    },
+    stats: {
+      ...defaultHomeContent.stats,
+      ...(data.stats || {})
+    },
+    eventsSection: {
+      ...defaultHomeContent.eventsSection,
+      ...(data.eventsSection || {}),
+      items: data.eventsSection?.items?.length > 0 ? data.eventsSection.items : defaultHomeContent.eventsSection.items
+    },
+    gallerySection: {
+      ...defaultHomeContent.gallerySection,
+      ...(data.gallerySection || {}),
+      items: data.gallerySection?.items?.length > 0 ? data.gallerySection.items : defaultHomeContent.gallerySection.items
+    },
+    siteInfo: {
+      ...defaultHomeContent.siteInfo,
+      ...(data.siteInfo || {})
+    }
+  };
+}
+
 export async function fetchHomepageContent() {
+  // Check localStorage first if modified by admin locally (especially on static Vercel deploy)
+  if (typeof window !== 'undefined') {
+    const cached = localStorage.getItem('dlf_homepage_content');
+    if (cached) {
+      try {
+        const parsed = mergeHomeContent(JSON.parse(cached));
+        // Try syncing from server in background if available, but local overrides when API is unreachable
+        try {
+          const res = await fetch(`${API_BASE}/homepage`);
+          if (res.ok) {
+            const serverData = mergeHomeContent(await res.json());
+            localStorage.setItem('dlf_homepage_content', JSON.stringify(serverData));
+            return serverData;
+          }
+        } catch (err) {}
+        return parsed;
+      } catch (e) {}
+    }
+  }
+
   try {
     const res = await fetch(`${API_BASE}/homepage`);
     if (res.ok) {
-      const data = await res.json();
+      const data = mergeHomeContent(await res.json());
       if (typeof window !== 'undefined') {
         localStorage.setItem('dlf_homepage_content', JSON.stringify(data));
       }
@@ -153,15 +214,6 @@ export async function fetchHomepageContent() {
     console.warn('API fetch homepage fallback:', err.message);
   }
 
-  // Fallback to localStorage if modified in admin, else defaultHomeContent
-  if (typeof window !== 'undefined') {
-    const cached = localStorage.getItem('dlf_homepage_content');
-    if (cached) {
-      try {
-        return JSON.parse(cached);
-      } catch (e) {}
-    }
-  }
   return defaultHomeContent;
 }
 

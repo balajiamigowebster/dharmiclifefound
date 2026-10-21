@@ -33,10 +33,12 @@ export const defaultHomeContent = {
     badge: 'About us',
     title: 'Upholding Dharma through Selfless Service',
     description1: 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.',
-    quote: 'Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.',
+    quote: '“Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.”',
     image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg',
     experienceBadgeTitle: '100% Volunteer Driven',
     experienceBadgeSub: 'Every rupee contributed directly impacts lives on ground in Pondicherry.',
+    primaryBtnText: 'Discover More',
+    secondaryBtnText: 'Our Trustees',
     highlights: [
       'Daily Annadhanam drives nourishing destitute elders and street dwellers',
       'Sacred traditional final cremation ceremonies for unclaimed deceased bodies',
@@ -44,22 +46,167 @@ export const defaultHomeContent = {
       'Women vocational skill development workshops for financial freedom'
     ]
   },
+  coreActivities: {
+    badge: 'Our Core Activities',
+    title: 'Serving Humanity, Preserving Dharma',
+    subtitle: 'Every initiative of Dharmic Life Foundation is centered on empathy, direct grassroots impact, and timeless righteous duty.',
+    items: [
+      {
+        id: 1,
+        slug: 'annadhanam',
+        title: 'Annadhanam (When Hunger ends, Dharma begins)',
+        description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/12-5.jpg',
+        badge: 'Annam Parabrahma'
+      },
+      {
+        id: 2,
+        slug: 'unclaimed-souls',
+        title: 'Honoring the Unclaimed Souls with Dignified Cremation',
+        description: 'We provide honorable final ceremonies for unclaimed bodies, ensuring every individual is treated with dignity, regardless of their circumstances.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/Body-4.jpg',
+        badge: 'Vedic Last Rites'
+      },
+      {
+        id: 3,
+        slug: 'spreading-the-dharmic-way-of-life',
+        title: 'Spreading the Dharmic Way of Life (Traditional life Education for the Public)',
+        description: 'Inspiring lives rooted in Dharma by preserving sacred traditions and nurturing compassion, righteousness, and unity.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/18-2.jpg',
+        badge: 'Life Transformation'
+      },
+      {
+        id: 4,
+        slug: 'education-support',
+        title: 'Educational Support (Investing in Education and Transforming lives)',
+        description: 'Empowering students in government schools and colleges by providing tuition fees, uniforms, and study materials to ensure a bright future.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-14.jpg',
+        badge: 'Vidya Dhanam'
+      },
+      {
+        id: 5,
+        slug: 'women-empowerment',
+        title: 'Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)',
+        description: 'Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-13.jpg',
+        badge: 'Stree Shakti'
+      },
+      {
+        id: 6,
+        slug: 'caring-for-homeless-people',
+        title: 'Compassion Begins with Caring for Homeless People',
+        description: 'Reaching out to homeless individuals with seasonal clothing, warm blankets, hygiene kits, and nourishing food across streets.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/3.jpg',
+        badge: 'Karuna Seva'
+      },
+      {
+        id: 7,
+        slug: 'other-additional-activities',
+        title: 'Other Additional Activities',
+        description: 'Extending emergency disaster relief, victim family support, and humanitarian seva across boundaries wherever need arises.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/08/other-1-768x524.png',
+        badge: 'Humanitarian Seva'
+      }
+    ]
+  },
   stats: {
+    sectionBadge: 'Get involved now',
+    sectionTitle: 'Only Possible because of Friends Like You',
+    sectionDescription: 'Dharmic Life Foundation believes that transformative social impact happens when compassionate hearts unite. Every meal served, every destitute soul cremated with Vedic respect, and every student sponsored is powered by dedicated patrons and community volunteers.',
+    sectionImage: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-12.jpg',
+    volunteerCardSubtitle: 'Uniting across districts with unconditional empathy.',
     mealsServed: '85,000+',
-    mealsLabel: 'Daily Meals Served',
+    mealsLabel: 'Daily Meals Served & Food Relief',
+    mealsProgress: 95,
     soulsHonored: '420+',
-    soulsLabel: 'Unclaimed Souls Honored',
+    soulsLabel: 'Unclaimed Souls Vedic Cremation',
+    soulsProgress: 90,
     studentsSupported: '650+',
-    studentsLabel: 'Students Empowered',
+    studentsLabel: 'Education & Child Support',
+    studentsProgress: 80,
     volunteersActive: '120+',
     volunteersLabel: 'Active Volunteers'
+  },
+  eventsSection: {
+    badge: 'Our events',
+    title: 'Dharmic Impact Across the Map',
+    subtitle: 'Glimpses of our regular community seva drives, cremation rites, educational camps, and public gatherings.',
+    ctaText: 'View All Programmes & Awards',
+    items: [
+      {
+        id: 1,
+        title: 'Honoring the Unclaimed Souls',
+        event_date: '08 Sep, 2023',
+        location: 'Pondicherry Crematorium',
+        summary: 'Solemn traditional cremation rites performed for unclaimed departed individuals with prayers for eternal peace.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/3-5.jpg',
+        category: 'Moksha Seva',
+        route: 'unclaimed-souls'
+      },
+      {
+        id: 2,
+        title: 'Annadhanam',
+        event_date: '11 Sep, 2023',
+        location: 'Pondicherry Community Center',
+        summary: 'Nutritious meal distribution and prasadam served to over 1,200 homeless and underprivileged individuals.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/photo-2.jpg',
+        category: 'Annadhanam',
+        route: 'annadhanam'
+      },
+      {
+        id: 3,
+        title: 'Bridging the Digital Divide: Empowering Students Through Technology',
+        event_date: '11 Aug, 2023',
+        location: 'Government High School, Pondicherry',
+        summary: 'Distribution of digital learning kits, tablets, and educational software to underprivileged students.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2023/01/7.jpg',
+        category: 'Education',
+        route: 'education-support'
+      },
+      {
+        id: 4,
+        title: 'Empowering Motherhood and Honoring Womanhood',
+        event_date: '11 Sep, 2023',
+        location: 'Women Welfare Center',
+        summary: 'Maternal nutrition drive, prenatal wellness kits distribution, and vocational training workshop for mothers.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/9-2.jpg',
+        category: 'Women Empowerment',
+        route: 'women-empowerment'
+      },
+      {
+        id: 5,
+        title: 'Dressing with Dignity: Providing Warmth to the Homeless',
+        event_date: '09 May, 2023',
+        location: 'Beach Road & Bus Terminal Area',
+        summary: 'Distribution of new clothing, warm blankets, and hygiene kits to street dwellers and destitute families.',
+        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2023/01/22.jpg',
+        category: 'Relief',
+        route: 'caring-for-homeless-people'
+      }
+    ]
+  },
+  gallerySection: {
+    badge: 'Moments of Grace',
+    title: 'Our Seva in Pictures',
+    subtitle: 'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.',
+    items: [
+      { id: 1, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/21-3-580x580.jpg', title: 'Community Outreach & Food Distribution' },
+      { id: 2, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/98-580x580.jpg', title: 'Daily Annadhanam Camp in Pondicherry' },
+      { id: 3, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-20-580x580.jpg', title: 'Student Educational Kit Distribution' },
+      { id: 4, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/police-2-580x580.jpg', title: 'Police & Civic Coordination for Rites' },
+      { id: 5, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/18-4-580x580.jpg', title: 'Women Empowerment Tailoring Workshop' },
+      { id: 6, image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/5-9-580x580.jpg', title: 'Dedicated Volunteer Relief Team' }
+    ]
   },
   siteInfo: {
     email: 'dharmiclifestyle@gmail.com',
     phone: '+91 98765 43210',
     address: 'Pondicherry, India',
+    footerAboutText: 'Dharmic Life Foundation is a charitable Trust dedicated to feeding the hungry, supporting homeless communities, and spreading kindness through social service.',
     facebook: 'https://facebook.com',
     instagram: 'https://instagram.com',
-    twitter: 'https://twitter.com'
+    twitter: 'https://twitter.com',
+    pinterest: 'https://pinterest.com',
+    whatsapp: 'https://wa.me/919876543210'
   }
 };
