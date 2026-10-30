@@ -31,7 +31,18 @@ export default function EducationSupportPage({ onNavigate }) {
   }, []);
 
   // Old historical uploads first, new uploads shown in last
-  const allDrives = [...educationSupportDrives, ...dbItems];
+  const allDrives = (() => {
+    if (!dbItems || dbItems.length === 0) return educationSupportDrives;
+    if (dbItems.length >= educationSupportDrives.length) return dbItems;
+    const dbMap = new Map();
+    dbItems.forEach((it) => { if (it.title) dbMap.set(it.title.trim().toLowerCase(), it); });
+    const merged = educationSupportDrives.map((item) => {
+      const m = dbMap.get((item.title || '').trim().toLowerCase());
+      if (m) { dbMap.delete((item.title || '').trim().toLowerCase()); return m; }
+      return item;
+    });
+    return [...merged, ...Array.from(dbMap.values())];
+  })();
 
   return (
     <div className="bg-white min-h-screen animate-fadeIn font-sans text-gray-800">

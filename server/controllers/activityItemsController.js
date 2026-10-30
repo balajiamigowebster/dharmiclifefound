@@ -127,9 +127,24 @@ exports.createItem = async (req, res) => {
 exports.updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const item = await ActivityItem.findByPk(id);
+    let item = await ActivityItem.findByPk(id);
 
-    if (!item) {
+    // If not found by primary key (e.g. static item being updated for the first time), lookup by category and title or auto-create
+    if (!item && req.body.categorySlug && req.body.title) {
+      item = await ActivityItem.findOne({
+        where: { categorySlug: req.body.categorySlug, title: req.body.title }
+      });
+      if (!item) {
+        item = await ActivityItem.create({
+          categorySlug: req.body.categorySlug,
+          title: req.body.title,
+          content: req.body.content || null,
+          images: [],
+          videos: [],
+          orderIndex: parseInt(id, 10) || 1
+        });
+      }
+    } else if (!item) {
       return res.status(404).json({ success: false, message: 'Activity item not found' });
     }
 

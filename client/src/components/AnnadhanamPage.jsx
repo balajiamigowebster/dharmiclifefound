@@ -81,7 +81,16 @@ export default function AnnadhanamPage({ onNavigate }) {
 
   // Old historical uploads first, new uploads shown in last
   const allDrivesList = useMemo(() => {
-    return [...annadhanamDrives, ...dbItems];
+    if (!dbItems || dbItems.length === 0) return annadhanamDrives;
+    if (dbItems.length >= annadhanamDrives.length) return dbItems;
+    const dbMap = new Map();
+    dbItems.forEach((it) => { if (it.title) dbMap.set(it.title.trim().toLowerCase(), it); });
+    const merged = annadhanamDrives.map((item) => {
+      const m = dbMap.get((item.title || '').trim().toLowerCase());
+      if (m) { dbMap.delete((item.title || '').trim().toLowerCase()); return m; }
+      return item;
+    });
+    return [...merged, ...Array.from(dbMap.values())];
   }, [dbItems]);
 
   // Filter drives by year

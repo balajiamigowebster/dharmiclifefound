@@ -34,7 +34,18 @@ export default function CaringForHomelessPage({ onNavigate }) {
     loadData();
   }, []);
 
-  const allDrives = [...homelessDrives, ...dbItems];
+  const allDrives = (() => {
+    if (!dbItems || dbItems.length === 0) return homelessDrives;
+    if (dbItems.length >= homelessDrives.length) return dbItems;
+    const dbMap = new Map();
+    dbItems.forEach((it) => { if (it.title) dbMap.set(it.title.trim().toLowerCase(), it); });
+    const merged = homelessDrives.map((item) => {
+      const m = dbMap.get((item.title || '').trim().toLowerCase());
+      if (m) { dbMap.delete((item.title || '').trim().toLowerCase()); return m; }
+      return item;
+    });
+    return [...merged, ...Array.from(dbMap.values())];
+  })();
 
   const openLightbox = (images, index) => {
     setCurrentGalleryImages(images);

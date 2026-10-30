@@ -31,7 +31,18 @@ export default function SpreadingDharmicWayPage({ onNavigate }) {
   }, []);
 
   // Old historical uploads first, new uploads shown in last
-  const allSessions = [...dharmicLifeClasses, ...dbItems];
+  const allSessions = (() => {
+    if (!dbItems || dbItems.length === 0) return dharmicLifeClasses;
+    if (dbItems.length >= dharmicLifeClasses.length) return dbItems;
+    const dbMap = new Map();
+    dbItems.forEach((it) => { if (it.title) dbMap.set(it.title.trim().toLowerCase(), it); });
+    const merged = dharmicLifeClasses.map((item) => {
+      const m = dbMap.get((item.title || '').trim().toLowerCase());
+      if (m) { dbMap.delete((item.title || '').trim().toLowerCase()); return m; }
+      return item;
+    });
+    return [...merged, ...Array.from(dbMap.values())];
+  })();
 
   return (
     <div className="bg-white min-h-screen animate-fadeIn font-sans text-gray-800">

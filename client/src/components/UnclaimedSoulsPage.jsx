@@ -33,7 +33,16 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
 
   // Old historical uploads first, new uploads shown in last
   const allDrivesList = useMemo(() => {
-    return [...unclaimedSoulsDrives, ...dbItems];
+    if (!dbItems || dbItems.length === 0) return unclaimedSoulsDrives;
+    if (dbItems.length >= unclaimedSoulsDrives.length) return dbItems;
+    const dbMap = new Map();
+    dbItems.forEach((it) => { if (it.title) dbMap.set(it.title.trim().toLowerCase(), it); });
+    const merged = unclaimedSoulsDrives.map((item) => {
+      const m = dbMap.get((item.title || '').trim().toLowerCase());
+      if (m) { dbMap.delete((item.title || '').trim().toLowerCase()); return m; }
+      return item;
+    });
+    return [...merged, ...Array.from(dbMap.values())];
   }, [dbItems]);
 
   // Filter drives by year
