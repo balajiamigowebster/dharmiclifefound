@@ -1,12 +1,8 @@
 // Central Configuration for Dharmic Life Foundation
-// Live Backend URL: https://amigowebster.in/dharmiclife
+export const DIRECT_MEDIA_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclife';
+const LIVE_BACKEND_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclife';
 
-const LIVE_BACKEND_URL = 'https://amigowebster.in/dharmiclife';
-
-// Resolve Backend Base URL:
-// 1. If VITE_API_URL is provided in environment variables, prioritize it.
-// 2. Otherwise in production mode (or on Vercel), default to LIVE_BACKEND_URL.
-// 3. In local development without env, fallback to empty string (uses Vite proxy).
+// Resolve Backend Base URL
 export const BACKEND_URL = (() => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
@@ -21,23 +17,30 @@ export const BACKEND_URL = (() => {
 export const API_BASE_URL = `${BACKEND_URL}/api`;
 
 // Helper to resolve media URLs (images and videos in /uploads or uploaded to backend)
-// Note: Static assets in client/public like /images/... are served directly by frontend/Vercel
 export function getMediaUrl(url) {
   if (!url) return '';
+  // Normalize amigowebster.in to direct server hostname to prevent Vercel 308 redirect loops
+  if (url.includes('amigowebster.in/dharmiclife/uploads/')) {
+    return url.replace('https://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL).replace('http://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL);
+  }
+  if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
+    const clean = url.startsWith('/') ? url : `/${url}`;
+    return `${DIRECT_MEDIA_URL}${clean}`;
+  }
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }
-  // Client public folder assets (e.g. /images/gallery-1.jpg) should remain relative to the frontend domain!
   if (url.startsWith('/images/') || url.startsWith('images/')) {
     return url.startsWith('/') ? url : `/${url}`;
   }
   const cleanPath = url.startsWith('/') ? url : `/${url}`;
-  return `${BACKEND_URL}${cleanPath}`;
+  return `${DIRECT_MEDIA_URL}${cleanPath}`;
 }
 
 export default {
   BACKEND_URL,
   API_BASE_URL,
   LIVE_BACKEND_URL,
+  DIRECT_MEDIA_URL,
   getMediaUrl
 };
