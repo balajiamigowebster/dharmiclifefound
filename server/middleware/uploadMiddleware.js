@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const uploadsDir = path.join(__dirname, '..', 'uploads');
+const uploadsDir = process.env.PUBLIC_UPLOADS_DIR || path.join(__dirname, '..', 'uploads');
 const imagesDir = path.join(uploadsDir, 'images');
 const videosDir = path.join(uploadsDir, 'videos');
 
