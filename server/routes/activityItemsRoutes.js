@@ -18,11 +18,14 @@ router.get('/', activityItemsController.getItemsByCategory);
 // Create item with optional images and videos uploaded securely via middleware
 router.post('/', activityMediaUpload, activityItemsController.createItem);
 
-// Update item with optional images/videos
+// Update item with optional images/videos (supports PUT and POST for LiteSpeed compatibility)
 router.put('/:id', activityMediaUpload, activityItemsController.updateItem);
+router.post('/update/:id', activityMediaUpload, activityItemsController.updateItem);
+router.post('/:id', activityMediaUpload, activityItemsController.updateItem);
 
-// Delete item
+// Delete item (supports DELETE and POST for LiteSpeed compatibility)
 router.delete('/:id', activityItemsController.deleteItem);
+router.post('/delete/:id', activityItemsController.deleteItem);
 
 // Bulk sync items from frontend to DB
 router.post('/sync', activityItemsController.bulkSyncCategory);

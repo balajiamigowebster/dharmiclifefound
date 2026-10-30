@@ -334,7 +334,7 @@ export function createActivityItem(formData, onProgress) {
 export function updateActivityItem(id, formData, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('PUT', `${API_BASE}/activity-items/${id}`);
+    xhr.open('POST', `${API_BASE}/activity-items/update/${id}`);
 
     if (xhr.upload && onProgress) {
       xhr.upload.onprogress = (event) => {
@@ -364,8 +364,8 @@ export function updateActivityItem(id, formData, onProgress) {
 
 export async function deleteActivityItem(id) {
   try {
-    const res = await fetch(`${API_BASE}/activity-items/${id}`, {
-      method: 'DELETE'
+    const res = await fetch(`${API_BASE}/activity-items/delete/${id}`, {
+      method: 'POST'
     });
     return await res.json();
   } catch (err) {
