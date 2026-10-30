@@ -436,16 +436,19 @@ process.on('uncaughtException', (err) => {
   console.error('[Uncaught Exception]:', err);
 });
 
-// Start server & sync database models
-async function startServer() {
+// Start HTTP server immediately so cPanel Passenger and health checks connect instantly
+app.listen(PORT, () => {
+  console.log(`🚀 Dharmic Life Foundation API Server running on port ${PORT}`);
+});
+
+// Sync database models and initialize admin user asynchronously in background
+(async () => {
   try {
-    // Authenticate and sync Sequelize models (creates media, activity_items, and admin_users table in dharmic-db)
     await sequelize.authenticate();
     console.log('[Sequelize] Connection established successfully.');
     await sequelize.sync({ alter: true });
-    console.log('[Sequelize] Database models synchronized with "dharmic-db".');
+    console.log('[Sequelize] Database models synchronized with database.');
 
-    // Seed or update Admin User in DB table from .env credentials with bcrypt hash
     const envAdminUser = (process.env.ADMIN_USERNAME || 'admin').trim();
     const envAdminPass = (process.env.ADMIN_PASSWORD || 'admin123').trim();
 
@@ -473,13 +476,5 @@ async function startServer() {
     }
   } catch (err) {
     console.error('[Sequelize Warning] Database connection failed or not yet reachable:', err.message);
-    console.log('[Fallback] Starting HTTP server regardless so health checks & public endpoints remain online.');
   }
-
-  // Always listen so cPanel Passenger/Node.js selector doesn't terminate the process if DB is temporarily connecting
-  app.listen(PORT, () => {
-    console.log(`🚀 Dharmic Life Foundation API Server running on port ${PORT}`);
-  });
-}
-
-startServer();
+})();
