@@ -18,3 +18,7 @@ client/dist/
 
 # Vite / cache
 .vite/
+
+# Server uploads and archives
+server/uploads/
+*.zip
