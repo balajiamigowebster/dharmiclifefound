@@ -141,13 +141,14 @@ export default function ActivityMediaViewer({
         <div className="w-full">
           <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
             <video
-              src={vidList[0]}
               controls
-              preload="none"
+              playsInline
+              preload="metadata"
               controlsList="nodownload"
               className="w-full h-full object-contain"
               poster={hasImages ? imgList[0] : defaultFallback}
             >
+              <source src={vidList[0]} type="video/mp4" />
               Your browser does not support HTML5 video.
             </video>
           </div>
