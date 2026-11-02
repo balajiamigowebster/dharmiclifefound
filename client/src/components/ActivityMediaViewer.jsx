@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Image as ImageIcon, Play, Film } from 'lucide-react';
 import { getMediaUrl } from '../config';
 
 /**
  * Universal Activity Media Viewer for all Activity Sub-categories
  * - Implements true Lazy Loading:
  *   - IntersectionObserver delays mounting heavy media until scrolled within 300px
- *   - Video player uses preload="none" so videos only buffer when Play is clicked
+ *   - Interactive Video Thumbnail with Play Button: zero black screen, plays instantly on user click
  *   - Images use loading="lazy" and decoding="async"
- * - Prevents network congestion across large datasets (81+ drives)
+ * - 100% HTTPS secure media delivery
  */
 export default function ActivityMediaViewer({
   images = [],
@@ -19,6 +19,7 @@ export default function ActivityMediaViewer({
 }) {
   const containerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   // Lazy loading observer: Only mount media when user scrolls within 300px
   useEffect(() => {
@@ -114,7 +115,7 @@ export default function ActivityMediaViewer({
     );
   }
 
-  // Case 1: Video is available (Left = Image Slider with arrows, Right = Video player)
+  // Case 1: Video is available (Left = Image Slider with arrows, Right = Video with Thumbnail & On-Click Play)
   if (hasVideo) {
     const currentPhoto = hasImages ? imgList[currentIndex] : defaultFallback;
 
@@ -173,21 +174,57 @@ export default function ActivityMediaViewer({
           </div>
         </div>
 
-        {/* Right: Authentic HTML5 Video Player with preload="none" for instant page loading */}
+        {/* Right: Interactive Video Player with Photo Thumbnail & Click-to-Play */}
         <div className="w-full">
-          <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
-            <video
-              key={vidList[0]}
-              src={vidList[0]}
-              controls
-              playsInline
-              preload="none"
-              className="w-full h-full object-contain"
+          {!isPlayingVideo ? (
+            <div
+              onClick={() => setIsPlayingVideo(true)}
+              className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-md cursor-pointer group select-none flex items-center justify-center"
             >
-              <source src={vidList[0]} type="video/mp4" />
-              Your browser does not support HTML5 video.
-            </video>
-          </div>
+              {/* Photo as video thumbnail */}
+              <img
+                src={currentPhoto}
+                alt={`${title} - Video Thumbnail`}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-85 group-hover:opacity-95"
+                loading="lazy"
+                decoding="async"
+                onError={(e) => { e.target.src = defaultFallback; }}
+              />
+
+              {/* Cinematic dark gradient vignette */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/30 group-hover:via-black/20 transition-all pointer-events-none" />
+
+              {/* Big stylish play button & label */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#901C25] text-white flex items-center justify-center shadow-2xl transition transform group-hover:scale-110 group-hover:bg-[#a8222d] border-2 border-white/80">
+                  <Play size={28} className="fill-white translate-x-0.5" />
+                </div>
+                <span className="px-3.5 py-1 bg-black/75 text-white text-xs font-bold rounded-full backdrop-blur-sm shadow border border-white/20 tracking-wide">
+                  Click to Play Video
+                </span>
+              </div>
+
+              {/* Video badge top-left */}
+              <div className="absolute top-3 left-3 bg-[#901C25]/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow pointer-events-none">
+                <Film size={12} />
+                <span>Video Available</span>
+              </div>
+            </div>
+          ) : (
+            <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+              <video
+                key={vidList[0]}
+                src={vidList[0]}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain"
+              >
+                <source src={vidList[0]} type="video/mp4" />
+                Your browser does not support HTML5 video.
+              </video>
+            </div>
+          )}
         </div>
       </div>
     );
