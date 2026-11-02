@@ -48,7 +48,8 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
           <div className="lg:col-span-4 space-y-4">
             <div className="bg-white p-2.5 rounded-xl inline-block shadow-md">
               <img
-                src="/images/logo.jpeg"
+                src={logoImg}
+                onError={(e) => { e.target.onerror = null; e.target.src = 'https://dharmiclifefoundation.com/api/uploads/images/logo.jpeg'; }}
                 alt="Dharmic Life Foundation"
                 className="h-20 w-auto object-contain"
               />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Heart, Lock } from 'lucide-react';
+import logoImg from '../assets/logo.jpeg';
 
 export default function Header({
   currentPage = 'home',
@@ -315,7 +316,8 @@ export default function Header({
               aria-label="Dharmic Life Foundation Home"
             >
               <img
-                src="/images/logo.jpeg"
+                src={logoImg}
+                onError={(e) => { e.target.onerror = null; e.target.src = 'https://dharmiclifefoundation.com/api/uploads/images/logo.jpeg'; }}
                 alt="Dharmic Life Foundation Logo"
                 className="h-20 sm:h-24 lg:h-28 w-auto object-contain transition-transform duration-300 hover:scale-105 drop-shadow-sm"
               />
