@@ -1,5 +1,5 @@
 // Central Configuration for Dharmic Life Foundation
-export const DIRECT_MEDIA_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclife';
+export const DIRECT_MEDIA_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry';
 const LIVE_BACKEND_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclife';
 
 // Resolve Backend Base URL
@@ -19,9 +19,12 @@ export const API_BASE_URL = `${BACKEND_URL}/api`;
 // Helper to resolve media URLs (images and videos in /uploads or uploaded to backend)
 export function getMediaUrl(url) {
   if (!url) return '';
-  // Normalize amigowebster.in to direct server hostname to prevent Vercel 308 redirect loops
-  if (url.includes('amigowebster.in/dharmiclife/uploads/')) {
-    return url.replace('https://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL).replace('http://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL);
+  // Normalize old paths or direct paths
+  if (url.includes('amigowebster.in/dharmiclife/uploads/') || url.includes('/dharmiclife/uploads/')) {
+    return url
+      .replace('https://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
+      .replace('http://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
+      .replace('/dharmiclife/uploads/', `${DIRECT_MEDIA_URL}/uploads/`);
   }
   if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
     const clean = url.startsWith('/') ? url : `/${url}`;
