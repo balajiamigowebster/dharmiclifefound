@@ -55,8 +55,9 @@ export const ACTIVITY_SUBMENUS = [
 
 export default function ActivitiesAdminManager() {
   const [selectedSubmenu, setSelectedSubmenu] = useState(ACTIVITY_SUBMENUS[0].slug);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(() => STATIC_DATA_MAP[ACTIVITY_SUBMENUS[0].slug] || []);
+  const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -72,21 +73,27 @@ export default function ActivitiesAdminManager() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Load items when sub-category changes (fast background load, never blocks UI if data exists)
-  const loadCategoryItems = async (slug, showSpinner = true) => {
-    if (showSpinner) setLoading(true);
-    const data = await fetchActivityItems(slug);
-    if (data && data.length > 0) {
-      setItems(data);
+  // Load items when sub-category changes (instant render + background DB sync)
+  const loadCategoryItems = async (slug) => {
+    setIsRefreshing(true);
+    try {
+      const data = await fetchActivityItems(slug);
+      if (data && data.length > 0) {
+        setItems(data);
+      }
+    } catch (e) {
+      console.warn('Background sync failed:', e);
+    } finally {
+      setIsRefreshing(false);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    // Pre-populate with static items so dashboard is 100% instant (0ms blank time)
+    // Instant switch to category static data (0ms delay)
     const initialStatic = STATIC_DATA_MAP[selectedSubmenu] || [];
     setItems(initialStatic);
-    loadCategoryItems(selectedSubmenu, false);
+    loadCategoryItems(selectedSubmenu);
     resetForm();
   }, [selectedSubmenu]);
 
@@ -430,7 +437,7 @@ export default function ActivitiesAdminManager() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {existingVideos.map((vidUrl, idx) => (
                     <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 bg-black aspect-video flex items-center justify-center">
-                      <video src={vidUrl} controls className="w-full h-full object-contain" />
+                      <video src={vidUrl} controls preload="metadata" className="w-full h-full object-contain" />
                       <button
                         type="button"
                         onClick={() => handleRemoveExistingVideo(idx)}
@@ -534,18 +541,14 @@ export default function ActivitiesAdminManager() {
             <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Documented Entries for {currentCategoryObj.name}
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700">
-              {displayItems.length} items
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-700 flex items-center gap-1.5">
+              <span>{displayItems.length} items</span>
+              {isRefreshing && <RefreshCw size={11} className="animate-spin text-amber-600" title="Syncing with database..." />}
             </span>
-            {items.length === 0 && staticItemsForCurrent.length > 0 && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                Frontend Data (Click "Save to DB" to link)
-              </span>
-            )}
           </div>
         </div>
 
-        {loading ? (
+        {loading && displayItems.length === 0 ? (
           <div className="py-12 text-center text-gray-400 text-xs flex items-center justify-center gap-2">
             <RefreshCw size={16} className="animate-spin" />
             <span>Loading entries from database...</span>

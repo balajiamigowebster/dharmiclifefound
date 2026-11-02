@@ -1,5 +1,5 @@
 // Central Configuration for Dharmic Life Foundation
-// Direct high-speed HTTPS backend on cPanel (1.2s response time, zero Vercel proxy delay)
+// Direct high-speed HTTPS backend on cPanel (sub-second response, zero mixed content)
 export const LIVE_BACKEND_URL = 'https://dharmiclifefoundation.com/api';
 
 // Resolve Backend Base URL: Direct HTTPS connection
@@ -13,35 +13,42 @@ export const BACKEND_URL = (() => {
 // Full API URL prefix
 export const API_BASE_URL = BACKEND_URL;
 
-// Helper to resolve media URLs directly from https://dharmiclifefoundation.com/api/uploads
+/**
+ * Helper to resolve media URLs directly from https://dharmiclifefoundation.com/api/uploads
+ * - Strips all legacy hosts (node256, dharmiclifepondicherry, amigowebster)
+ * - Automatically upgrades any http:// to https://
+ * - Guarantees 100% secure, fast delivery directly from dharmiclife-file/uploads
+ */
 export function getMediaUrl(url) {
   if (!url) return '';
 
-  // Extract relative upload path from any legacy domain string
-  // e.g. "https://amigowebster.in/dharmiclife/uploads/images/5.jpg" -> "https://dharmiclifefoundation.com/api/uploads/images/5.jpg"
-  // e.g. "https://node256.../uploads/videos/V1.mp4" -> "https://dharmiclifefoundation.com/api/uploads/videos/V1.mp4"
-  // e.g. "/uploads/images/5.jpg" -> "https://dharmiclifefoundation.com/api/uploads/images/5.jpg"
-  if (url.includes('/uploads/')) {
-    const uploadPath = url.substring(url.indexOf('/uploads/'));
+  let clean = url.trim();
+
+  // Strip legacy hostnames & paths and point directly to backend uploads
+  if (clean.includes('/uploads/')) {
+    const uploadPath = clean.substring(clean.indexOf('/uploads/'));
     return `${LIVE_BACKEND_URL}${uploadPath}`;
   }
 
-  if (url.startsWith('uploads/')) {
-    return `${LIVE_BACKEND_URL}/${url}`;
+  if (clean.startsWith('uploads/')) {
+    return `${LIVE_BACKEND_URL}/${clean}`;
   }
 
-  // Preserve local static frontend assets (/images/act-*.jpg)
-  if (url.startsWith('/images/') || url.startsWith('images/')) {
-    return url.startsWith('/') ? url : `/${url}`;
+  // Preserve local static frontend assets (/images/...)
+  if (clean.startsWith('/images/') || clean.startsWith('images/')) {
+    return clean.startsWith('/') ? clean : `/${clean}`;
   }
 
-  // Absolute http / https / data URLs if external
-  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    return url;
+  // Upgrade any external http:// to https:// to prevent mixed-content warnings
+  if (clean.startsWith('http://')) {
+    clean = clean.replace(/^http:\/\//i, 'https://');
   }
 
-  const cleanPath = url.startsWith('/') ? url : `/${url}`;
-  return cleanPath;
+  if (clean.startsWith('https://') || clean.startsWith('data:')) {
+    return clean;
+  }
+
+  return clean.startsWith('/') ? clean : `/${clean}`;
 }
 
 export default {

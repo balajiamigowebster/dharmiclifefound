@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Image as ImageIcon, Play, Film } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Image as ImageIcon, Play, Film, X } from 'lucide-react';
 import { getMediaUrl } from '../config';
 
 /**
@@ -212,6 +212,18 @@ export default function ActivityMediaViewer({
             </div>
           ) : (
             <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsPlayingVideo(false);
+                }}
+                className="absolute top-3 right-3 z-20 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-full flex items-center gap-1 shadow-md border border-white/20 transition cursor-pointer"
+                title="Switch back to photo thumbnail"
+              >
+                <X size={12} />
+                <span>Close Video</span>
+              </button>
               <video
                 key={vidList[0]}
                 src={vidList[0]}
