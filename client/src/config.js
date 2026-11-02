@@ -19,28 +19,43 @@ export const API_BASE_URL = BACKEND_URL ? `${BACKEND_URL}` : '/api';
 // Helper to resolve media URLs (images and videos in /uploads or uploaded to backend)
 export function getMediaUrl(url) {
   if (!url) return '';
-  // Normalize old WordPress paths
-  if (url.includes('amigowebster.in/dharmiclife/uploads/') || url.includes('/dharmiclife/uploads/')) {
-    return url
-      .replace('https://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
-      .replace('http://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
-      .replace('/dharmiclife/uploads/', `${DIRECT_MEDIA_URL}/uploads/`);
-  }
+
+  // 1. Normalize node256 cPanel URL (fix renamed folder dharmiclife -> dharmiclifepondicherry)
   if (url.includes('node256.iseencloud.net/~amigoweb/dharmiclife/')) {
-    return url.replace('/dharmiclife/', '/dharmiclifepondicherry/');
+    return url
+      .replace('https://node256.iseencloud.net/~amigoweb/dharmiclife/', 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry/')
+      .replace('http://node256.iseencloud.net/~amigoweb/dharmiclife/', 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry/');
   }
-  // New backend uploads saved in dharmiclife-file/uploads/
+
+  // 2. Normalize old WordPress domain amigowebster.in to direct cPanel URL
+  if (url.includes('amigowebster.in/dharmiclife/')) {
+    return url
+      .replace('https://amigowebster.in/dharmiclife/', 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry/')
+      .replace('http://amigowebster.in/dharmiclife/', 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry/');
+  }
+
+  // 3. Normalize relative old path /dharmiclife/uploads/
+  if (url.startsWith('/dharmiclife/uploads/') || url.startsWith('dharmiclife/uploads/')) {
+    const clean = url.startsWith('/') ? url : `/${url}`;
+    return `https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry${clean.replace('/dharmiclife', '')}`;
+  }
+
+  // 4. New backend uploads saved in dharmiclife-file/uploads/
   if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
     const clean = url.startsWith('/') ? url : `/${url}`;
-    // Proxies through Vercel /uploads/* rewrite or directly to backend
     return BACKEND_URL ? `${BACKEND_URL}${clean}` : clean;
   }
+
+  // 5. Absolute http / https / data URLs (already clean)
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }
+
+  // 6. Local static images
   if (url.startsWith('/images/') || url.startsWith('images/')) {
     return url.startsWith('/') ? url : `/${url}`;
   }
+
   const cleanPath = url.startsWith('/') ? url : `/${url}`;
   return cleanPath;
 }
