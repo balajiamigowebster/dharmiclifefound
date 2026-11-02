@@ -37,6 +37,33 @@ export const AWARDS_MENU_LIST = [
   }
 ];
 
+
+export function cleanCurrency(val, year) {
+  if (!val) return year === '2026' ? '₹15,000' : '₹10,000';
+  let str = String(val).trim();
+  str = str.replace(/^\?\s*0,000$/, '₹10,000');
+  str = str.replace(/^\?\s*5,000$/, '₹15,000');
+  str = str.replace(/\?\s*10,000/g, '₹10,000');
+  str = str.replace(/\?\s*15,000/g, '₹15,000');
+  str = str.replace(/\?\s*(\d)/g, '₹$1');
+  str = str.replace(/^Rs\.?\s*/i, '₹');
+  if (/^\d{1,3}(,\d{3})*(\/-)?$/.test(str)) {
+    str = '₹' + str;
+  }
+  return str;
+}
+
+export function cleanNarrativeText(val) {
+  if (!val) return '';
+  let str = String(val);
+  str = str.replace(/\?\s*0,000/g, '₹10,000');
+  str = str.replace(/\?\s*5,000/g, '₹15,000');
+  str = str.replace(/\?\s*10,000/g, '₹10,000');
+  str = str.replace(/\?\s*15,000/g, '₹15,000');
+  str = str.replace(/\?\s*(\d)/g, '₹$1');
+  return str;
+}
+
 export default function AwardsAdminManager() {
   const [selectedAwardType, setSelectedAwardType] = useState('srowtha-rathana-award');
   const [items, setItems] = useState([]);
@@ -113,9 +140,9 @@ export default function AwardsAdminManager() {
     setSubtitle(item.subtitle || '');
     setRecipient(item.recipient || '');
     setLocation(item.location || '');
-    setCashPrize(item.cashPrize || '');
+    setCashPrize(cleanCurrency(item.cashPrize, item.year));
     setRecognition(item.recognition || '');
-    setContent(item.content || '');
+    setContent(cleanNarrativeText(item.content || ''));
     setTributeText(item.tributeText || '');
     setExistingImages(Array.isArray(item.images) ? item.images : []);
     setSelectedImageFiles([]);
@@ -682,7 +709,7 @@ export default function AwardsAdminManager() {
                       )}
                       {item.cashPrize && (
                         <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
-                          {item.cashPrize}
+                          {cleanCurrency(item.cashPrize, item.year)}
                         </span>
                       )}
                       {item.location && (

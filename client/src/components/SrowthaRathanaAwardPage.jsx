@@ -4,6 +4,33 @@ import { fetchAwardItems, syncAwardItems } from '../api';
 import { defaultSrowthaRathanaAwards } from '../data/awardsData';
 import { getMediaUrl } from '../config';
 
+
+export function cleanCurrency(val, year) {
+  if (!val) return year === '2026' ? '₹15,000' : '₹10,000';
+  let str = String(val).trim();
+  str = str.replace(/^\?\s*0,000$/, '₹10,000');
+  str = str.replace(/^\?\s*5,000$/, '₹15,000');
+  str = str.replace(/\?\s*10,000/g, '₹10,000');
+  str = str.replace(/\?\s*15,000/g, '₹15,000');
+  str = str.replace(/\?\s*(\d)/g, '₹$1');
+  str = str.replace(/^Rs\.?\s*/i, '₹');
+  if (/^\d{1,3}(,\d{3})*(\/-)?$/.test(str)) {
+    str = '₹' + str;
+  }
+  return str;
+}
+
+export function cleanNarrativeText(val) {
+  if (!val) return '';
+  let str = String(val);
+  str = str.replace(/\?\s*0,000/g, '₹10,000');
+  str = str.replace(/\?\s*5,000/g, '₹15,000');
+  str = str.replace(/\?\s*10,000/g, '₹10,000');
+  str = str.replace(/\?\s*15,000/g, '₹15,000');
+  str = str.replace(/\?\s*(\d)/g, '₹$1');
+  return str;
+}
+
 export default function SrowthaRathanaAwardPage({ onNavigate }) {
   const [awards, setAwards] = useState(defaultSrowthaRathanaAwards);
   const [loading, setLoading] = useState(true);
@@ -17,7 +44,12 @@ export default function SrowthaRathanaAwardPage({ onNavigate }) {
         const remoteData = await fetchAwardItems('srowtha-rathana-award');
         if (isMounted) {
           if (remoteData && remoteData.length > 0) {
-            setAwards(remoteData);
+            const cleaned = remoteData.map(it => ({
+              ...it,
+              cashPrize: cleanCurrency(it.cashPrize, it.year),
+              content: cleanNarrativeText(it.content)
+            }));
+            setAwards(cleaned);
           } else {
             // Seed defaults into database if empty
             syncAwardItems('srowtha-rathana-award', defaultSrowthaRathanaAwards)
@@ -200,7 +232,7 @@ export default function SrowthaRathanaAwardPage({ onNavigate }) {
                     </div>
                     <div className="dlf-srowth-fact">
                       <span className="dlf-srowth-fact-label">CASH PRIZE</span>
-                      <strong>{item.cashPrize || '—'}</strong>
+                      <strong>{cleanCurrency(item.cashPrize, item.year)}</strong>
                     </div>
                     <div className="dlf-srowth-fact">
                       <span className="dlf-srowth-fact-label">RECOGNITION</span>
@@ -212,8 +244,8 @@ export default function SrowthaRathanaAwardPage({ onNavigate }) {
                   {item.content && (
                     <div className="dlf-srowth-content">
                       <h4>A Lifetime of Sacred Dedication</h4>
-                      {item.content.split('\n\n').map((para, pIdx) => (
-                        <p key={pIdx}>{para}</p>
+                      {cleanNarrativeText(item.content).split('\n\n').map((para, pIdx) => (
+                        <p key={pIdx}>{cleanNarrativeText(para)}</p>
                       ))}
                     </div>
                   )}
