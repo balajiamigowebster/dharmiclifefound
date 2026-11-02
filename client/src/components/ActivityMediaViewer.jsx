@@ -105,7 +105,7 @@ export default function ActivityMediaViewer({
     return (
       <div
         ref={containerRef}
-        className="w-full h-72 sm:h-80 md:h-96 rounded-xl bg-stone-100 border border-gray-200 animate-pulse flex items-center justify-center text-gray-400 text-xs font-semibold"
+        className="w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl bg-stone-100 border border-gray-200 animate-pulse flex items-center justify-center text-gray-400 text-xs font-semibold"
       >
         <span className="flex items-center gap-2">
           <ImageIcon size={16} />
@@ -125,19 +125,28 @@ export default function ActivityMediaViewer({
         <div className="w-full">
           <div
             onClick={() => onOpenLightbox && onOpenLightbox(imgList, currentIndex)}
-            className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group select-none"
+            className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-200 bg-stone-900 shadow-sm cursor-pointer group select-none flex items-center justify-center"
           >
+            {/* Ambient blurred backdrop */}
+            <img
+              src={currentPhoto}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+            />
+
+            {/* Crisp uncropped photo displaying FULL HEIGHT */}
             <img
               src={currentPhoto}
               alt={`${title} - Photo ${currentIndex + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+              className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-101"
               loading="lazy"
               decoding="async"
               onError={(e) => { e.target.src = defaultFallback; }}
             />
 
             {/* Lightbox hint overlay */}
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 z-20 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
               <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
                 <ImageIcon size={13} />
                 <span>View Full Photo</span>
@@ -150,7 +159,7 @@ export default function ActivityMediaViewer({
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
                   title="Previous Photo"
                 >
                   <ChevronLeft size={20} />
@@ -159,14 +168,14 @@ export default function ActivityMediaViewer({
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
                   title="Next Photo"
                 >
                   <ChevronRight size={20} />
                 </button>
 
                 {/* Photo Counter Pill */}
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
+                <div className="absolute bottom-3 right-3 z-20 bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm shadow">
                   {currentIndex + 1} / {imgList.length}
                 </div>
               </>
@@ -179,23 +188,29 @@ export default function ActivityMediaViewer({
           {!isPlayingVideo ? (
             <div
               onClick={() => setIsPlayingVideo(true)}
-              className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-md cursor-pointer group select-none flex items-center justify-center"
+              className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-300 bg-stone-900 shadow-md cursor-pointer group select-none flex items-center justify-center"
             >
               {/* Photo as video thumbnail */}
               <img
                 src={currentPhoto}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
+              />
+              <img
+                src={currentPhoto}
                 alt={`${title} - Video Thumbnail`}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-85 group-hover:opacity-95"
+                className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-500 group-hover:scale-102"
                 loading="lazy"
                 decoding="async"
                 onError={(e) => { e.target.src = defaultFallback; }}
               />
 
               {/* Cinematic dark gradient vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/30 group-hover:via-black/20 transition-all pointer-events-none" />
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/85 via-black/30 to-black/25 group-hover:via-black/15 transition-all pointer-events-none" />
 
               {/* Big stylish play button & label */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
+              <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 pointer-events-none">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#901C25] text-white flex items-center justify-center shadow-2xl transition transform group-hover:scale-110 group-hover:bg-[#a8222d] border-2 border-white/80">
                   <Play size={28} className="fill-white translate-x-0.5" />
                 </div>
@@ -205,20 +220,20 @@ export default function ActivityMediaViewer({
               </div>
 
               {/* Video badge top-left */}
-              <div className="absolute top-3 left-3 bg-[#901C25]/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow pointer-events-none">
+              <div className="absolute top-3 left-3 z-30 bg-[#901C25]/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow pointer-events-none">
                 <Film size={12} />
                 <span>Video Available</span>
               </div>
             </div>
           ) : (
-            <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
+            <div className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsPlayingVideo(false);
                 }}
-                className="absolute top-3 right-3 z-20 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-full flex items-center gap-1 shadow-md border border-white/20 transition cursor-pointer"
+                className="absolute top-3 right-3 z-30 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-full flex items-center gap-1 shadow-md border border-white/20 transition cursor-pointer"
                 title="Switch back to photo thumbnail"
               >
                 <X size={12} />
@@ -243,24 +258,34 @@ export default function ActivityMediaViewer({
   }
 
   // Case 2: Only Images (No Video)
-  // If 1 image:
+  // If only 1 image: Centered 1-column container displaying FULL HEIGHT
   if (imgList.length <= 1) {
     const singlePhoto = imgList[0] || defaultFallback;
     return (
       <div ref={containerRef} className="max-w-3xl mx-auto animate-fadeIn">
         <div
           onClick={() => onOpenLightbox && onOpenLightbox(imgList, 0)}
-          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
+          className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-200 bg-stone-900 shadow-sm cursor-pointer group flex items-center justify-center select-none"
         >
+          {/* Ambient blurred backdrop */}
+          <img
+            src={singlePhoto}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+          />
+
+          {/* Crisp photo showing FULL HEIGHT without cropping */}
           <img
             src={singlePhoto}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+            className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-101"
             loading="lazy"
             decoding="async"
             onError={(e) => { e.target.src = defaultFallback; }}
           />
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+
+          <div className="absolute inset-0 z-20 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
             <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
               <ImageIcon size={13} />
               <span>View Full Photo</span>
@@ -271,119 +296,127 @@ export default function ActivityMediaViewer({
     );
   }
 
-  // If exactly 2 images: Show 2-column side-by-side grid
-  if (imgList.length === 2) {
-    return (
-      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start animate-fadeIn">
-        {imgList.map((photo, idx) => (
-          <div
-            key={idx}
-            onClick={() => onOpenLightbox && onOpenLightbox(imgList, idx)}
-            className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group select-none"
-          >
-            <img
-              src={photo || defaultFallback}
-              alt={`${title} - Photo ${idx + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
-              loading="lazy"
-              decoding="async"
-              onError={(e) => { e.target.src = defaultFallback; }}
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-              <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-                <ImageIcon size={13} />
-                <span>View Full Photo</span>
-              </span>
-            </div>
-            <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-              {idx + 1} / 2
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  // If 3 or more images: Featured slider with navigation arrows + interactive thumbnail strip underneath
+  // If 2 or more images: ALWAYS display the two-image area (2 columns side-by-side) with FULL HEIGHT
   return (
-    <div ref={containerRef} className="max-w-4xl mx-auto space-y-3 animate-fadeIn select-none">
-      {/* Main Featured Photo */}
-      <div
-        onClick={() => onOpenLightbox && onOpenLightbox(imgList, currentIndex)}
-        className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
-      >
-        <img
-          src={imgList[currentIndex] || defaultFallback}
-          alt={`${title} - Photo ${currentIndex + 1}`}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-101"
-          loading="lazy"
-          decoding="async"
-          onError={(e) => { e.target.src = defaultFallback; }}
-        />
-
-        {/* Lightbox hint overlay */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-          <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-            <ImageIcon size={13} />
-            <span>Click to View Full Photo</span>
-          </span>
-        </div>
-
-        {/* Previous Button */}
-        <button
-          type="button"
-          onClick={handlePrev}
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10 cursor-pointer"
-          title="Previous Photo"
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start animate-fadeIn">
+      {/* Left Column (Left Slider) */}
+      <div className="w-full">
+        <div
+          onClick={() => onOpenLightbox && onOpenLightbox(imgList, leftIndex)}
+          className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-200 bg-stone-900 shadow-sm cursor-pointer group select-none flex items-center justify-center"
         >
-          <ChevronLeft size={22} />
-        </button>
+          {/* Ambient blurred backdrop */}
+          <img
+            src={imgList[leftIndex] || defaultFallback}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+          />
 
-        {/* Next Button */}
-        <button
-          type="button"
-          onClick={handleNext}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10 cursor-pointer"
-          title="Next Photo"
-        >
-          <ChevronRight size={22} />
-        </button>
+          {/* Crisp photo showing FULL HEIGHT without cropping */}
+          <img
+            src={imgList[leftIndex] || defaultFallback}
+            alt={`${title} - Left Photo ${leftIndex + 1}`}
+            className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-101"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => { e.target.src = defaultFallback; }}
+          />
 
-        {/* Photo Counter */}
-        <div className="absolute bottom-3 right-3 bg-black/75 text-white text-xs font-bold px-3 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-          Photo {currentIndex + 1} of {imgList.length}
+          <div className="absolute inset-0 z-20 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+              <ImageIcon size={13} />
+              <span>View Full Photo</span>
+            </span>
+          </div>
+
+          {/* Left Navigation Arrows (Show only if more than 2 images exist) */}
+          {imgList.length > 2 && (
+            <>
+              <button
+                type="button"
+                onClick={handleLeftPrev}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
+                title="Previous Photo"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleLeftNext}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
+                title="Next Photo"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
+
+          <div className="absolute bottom-3 right-3 z-20 bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm shadow">
+            {leftIndex + 1} / {imgList.length}
+          </div>
         </div>
       </div>
 
-      {/* Interactive Thumbnail Strip */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 px-1 scrollbar-thin">
-        {imgList.map((photo, idx) => {
-          const isActive = idx === currentIndex;
-          return (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setCurrentIndex(idx)}
-              className={`relative shrink-0 w-20 h-14 sm:w-24 sm:h-16 rounded-lg overflow-hidden border-2 transition cursor-pointer ${
-                isActive
-                  ? 'border-[#901C25] ring-2 ring-[#901C25]/30 scale-102 shadow'
-                  : 'border-gray-200 opacity-70 hover:opacity-100'
-              }`}
-              title={`View Photo ${idx + 1}`}
-            >
-              <img
-                src={photo || defaultFallback}
-                alt={`thumb-${idx}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <span className="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">
-                #{idx + 1}
-              </span>
-            </button>
-          );
-        })}
+      {/* Right Column (Right Slider) */}
+      <div className="w-full">
+        <div
+          onClick={() => onOpenLightbox && onOpenLightbox(imgList, rightIndex)}
+          className="relative w-full h-80 sm:h-96 md:h-[460px] lg:h-[500px] rounded-xl overflow-hidden border border-gray-200 bg-stone-900 shadow-sm cursor-pointer group select-none flex items-center justify-center"
+        >
+          {/* Ambient blurred backdrop */}
+          <img
+            src={imgList[rightIndex] || defaultFallback}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+          />
+
+          {/* Crisp photo showing FULL HEIGHT without cropping */}
+          <img
+            src={imgList[rightIndex] || defaultFallback}
+            alt={`${title} - Right Photo ${rightIndex + 1}`}
+            className="relative z-10 max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-101"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => { e.target.src = defaultFallback; }}
+          />
+
+          <div className="absolute inset-0 z-20 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+              <ImageIcon size={13} />
+              <span>View Full Photo</span>
+            </span>
+          </div>
+
+          {/* Right Navigation Arrows (Show only if more than 2 images exist) */}
+          {imgList.length > 2 && (
+            <>
+              <button
+                type="button"
+                onClick={handleRightPrev}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
+                title="Previous Photo"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRightNext}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-30 cursor-pointer"
+                title="Next Photo"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
+
+          <div className="absolute bottom-3 right-3 z-20 bg-black/75 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm shadow">
+            {rightIndex + 1} / {imgList.length}
+          </div>
+        </div>
       </div>
     </div>
   );
