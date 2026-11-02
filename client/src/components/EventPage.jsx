@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React, { useState } from 'react';
 import { Home, ChevronRight, ChevronLeft, Calendar, MapPin, Check, ArrowRight, X } from 'lucide-react';
 
@@ -205,17 +206,17 @@ export default function EventPage({ onNavigate }) {
                 {/* Main Image */}
                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-white">
                   <img
-                    src="/images/image-14.png"
+                    src={getMediaUrl("/images/image-14.png")}
                     alt="Our Sacred Mission"
                     className="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700"
-                    onError={(e) => { e.target.src = '/images/about.jpg'; }}
+                    onError={(e) => { e.target.src = getMediaUrl("/images/about.jpg"); }}
                   />
                 </div>
 
                 {/* Decorative Shape 1 */}
                 <div className="absolute -top-6 -left-6 z-0 w-24 h-24 opacity-80 pointer-events-none hidden sm:block">
                   <img
-                    src="/images/image-15.png"
+                    src={getMediaUrl("/images/image-15.png")}
                     alt=""
                     className="w-full h-full object-contain"
                   />
@@ -224,7 +225,7 @@ export default function EventPage({ onNavigate }) {
                 {/* Decorative Shape 2 */}
                 <div className="absolute -bottom-6 -right-6 z-20 w-24 h-24 opacity-90 pointer-events-none hidden sm:block">
                   <img
-                    src="/images/image-16.png"
+                    src={getMediaUrl("/images/image-16.png")}
                     alt=""
                     className="w-full h-full object-contain"
                   />
@@ -348,7 +349,7 @@ export default function EventPage({ onNavigate }) {
                 {/* Image & Date Badge */}
                 <div className="relative h-64 w-full overflow-hidden bg-gray-100">
                   <img
-                    src={ev.image}
+                    src={getMediaUrl(ev.image)}
                     alt={ev.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -413,7 +414,7 @@ export default function EventPage({ onNavigate }) {
                 {/* Image */}
                 <div className="relative h-56 w-full overflow-hidden bg-gray-100">
                   <img
-                    src={ev.image}
+                    src={getMediaUrl(ev.image)}
                     alt={ev.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -536,7 +537,7 @@ export default function EventPage({ onNavigate }) {
 
             <div className="relative h-60 w-full">
               <img
-                src={selectedEventModal.image}
+                src={getMediaUrl(selectedEventModal.image)}
                 alt={selectedEventModal.title}
                 className="w-full h-full object-cover"
               />

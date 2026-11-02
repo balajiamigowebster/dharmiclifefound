@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React from 'react';
 import {
   ArrowRight,
@@ -141,11 +142,11 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                 {/* Image Container */}
                 <div className="relative h-60 w-full overflow-hidden bg-gray-100">
                   <img
-                    src={act.image}
+                    src={getMediaUrl(act.image)}
                     alt={act.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     loading="lazy"
-                    onError={(e) => { e.target.src = '/images/about.jpg'; }}
+                    onError={(e) => { e.target.src = getMediaUrl('/images/about.jpg'); }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
                   

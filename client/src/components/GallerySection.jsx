@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, X, ZoomIn } from 'lucide-react';
-import { getMediaUrl } from '../config';
+import { getMediaUrl, getAppBaseUrl } from '../config';
 
 export default function GallerySection({ content, gallery = [] }) {
   const [activePhoto, setActivePhoto] = useState(null);
@@ -64,6 +64,11 @@ export default function GallerySection({ content, gallery = [] }) {
                 alt={item.title || 'Dharmic Life Gallery'}
                 loading="lazy"
                 decoding="async"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  const filename = (item.image || '').split('/').pop();
+                  if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
+                }}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               {/* Overlay on hover */}
@@ -102,6 +107,11 @@ export default function GallerySection({ content, gallery = [] }) {
             <img
               src={activePhoto.image}
               alt={activePhoto.title}
+              onError={(e) => {
+                e.target.onerror = null;
+                const filename = (activePhoto.image || '').split('/').pop();
+                if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
+              }}
               className="max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl border border-white/10"
             />
             <p className="mt-4 text-white text-base font-serif font-medium text-center">

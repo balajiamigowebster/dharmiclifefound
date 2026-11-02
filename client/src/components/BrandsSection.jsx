@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React from 'react';
 
 export default function BrandsSection() {
@@ -13,7 +14,7 @@ export default function BrandsSection() {
           {brands.map((num) => (
             <div key={num} className="h-10 sm:h-12 flex items-center justify-center p-2 hover:scale-110 transition-transform">
               <img
-                src={`/images/brand-${num}.png`}
+                src={getMediaUrl(`/images/brand-${num}.png`)}
                 alt={`Partner Brand ${num}`}
                 className="max-h-full max-w-full object-contain"
               />

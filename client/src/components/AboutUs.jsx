@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React from 'react';
 import { Heart, Check, Sparkles, ArrowRight } from 'lucide-react';
 
@@ -38,12 +39,12 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
               {/* Main Image */}
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
                 <img
-                  src={image}
+                  src={getMediaUrl(image)}
                   alt="Dharmic Life Foundation Service"
                   loading="lazy"
                   decoding="async"
                   className="w-full h-[480px] sm:h-[540px] object-cover hover:scale-105 transition-transform duration-700"
-                  onError={(e) => { e.target.src = '/images/about.jpg'; }}
+                  onError={(e) => { e.target.src = getMediaUrl('/images/about.jpg'); }}
                 />
                 
                 {/* Floating Experience Badge */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Home, ChevronRight, ZoomIn, X, ChevronLeft, ArrowRight, Heart } from 'lucide-react';
-import { getMediaUrl } from '../config';
+import { getMediaUrl, getAppBaseUrl } from '../config';
 
 export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: customItems }) {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -218,6 +218,11 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
                 alt={item.title}
                 loading="lazy"
                 decoding="async"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  const filename = (item.image || '').split('/').pop();
+                  if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
+                }}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               
@@ -310,6 +315,11 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
             <img
               src={filteredItems[lightboxIndex]?.image}
               alt={filteredItems[lightboxIndex]?.title}
+              onError={(e) => {
+                e.target.onerror = null;
+                const filename = (filteredItems[lightboxIndex]?.image || '').split('/').pop();
+                if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
+              }}
               className="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl border border-white/15"
             />
             

@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React from 'react';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 
@@ -108,12 +109,12 @@ export default function EventsSection({ content, events = [], onNavigate }) {
               {/* Event Image */}
               <div className="relative h-56 w-full overflow-hidden bg-gray-100">
                 <img
-                  src={ev.image}
+                  src={getMediaUrl(ev.image)}
                   alt={ev.title}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  onError={(e) => { e.target.src = '/images/about.jpg'; }}
+                  onError={(e) => { e.target.src = getMediaUrl('/images/about.jpg'); }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
