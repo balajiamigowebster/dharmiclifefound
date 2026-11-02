@@ -14,7 +14,11 @@ import {
   Layers,
   ChevronRight,
   FolderOpen,
-  Database
+  Database,
+  Link,
+  UploadCloud,
+  FilePlus,
+  Film
 } from 'lucide-react';
 import {
   fetchActivityItems,
@@ -70,6 +74,8 @@ export default function ActivitiesAdminManager() {
   const [existingVideos, setExistingVideos] = useState([]);
   const [selectedImageFiles, setSelectedImageFiles] = useState([]);
   const [selectedVideoFiles, setSelectedVideoFiles] = useState([]);
+  const [imageUrlInput, setImageUrlInput] = useState('');
+  const [videoUrlInput, setVideoUrlInput] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -105,6 +111,8 @@ export default function ActivitiesAdminManager() {
     setExistingVideos([]);
     setSelectedImageFiles([]);
     setSelectedVideoFiles([]);
+    setImageUrlInput('');
+    setVideoUrlInput('');
     setShowAddForm(false);
     setUploadProgress(0);
   };
@@ -117,17 +125,59 @@ export default function ActivitiesAdminManager() {
     setExistingVideos(Array.isArray(item.videos) ? [...item.videos] : []);
     setSelectedImageFiles([]);
     setSelectedVideoFiles([]);
+    setImageUrlInput('');
+    setVideoUrlInput('');
     setShowAddForm(true);
     setUploadProgress(0);
     window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
+  // Manage existing images & videos
   const handleRemoveExistingImage = (indexToRemove) => {
-    setExistingImages(existingImages.filter((_, idx) => idx !== indexToRemove));
+    setExistingImages(prev => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const handleRemoveExistingVideo = (indexToRemove) => {
-    setExistingVideos(existingVideos.filter((_, idx) => idx !== indexToRemove));
+    setExistingVideos(prev => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Manage newly selected image files (accumulate multiple selections)
+  const handleAppendImageFiles = (files) => {
+    const list = Array.from(files || []);
+    if (!list.length) return;
+    setSelectedImageFiles(prev => [...prev, ...list]);
+  };
+
+  const handleRemoveSelectedImageFile = (indexToRemove) => {
+    setSelectedImageFiles(prev => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Manage newly selected video files (accumulate multiple selections)
+  const handleAppendVideoFiles = (files) => {
+    const list = Array.from(files || []);
+    if (!list.length) return;
+    setSelectedVideoFiles(prev => [...prev, ...list]);
+  };
+
+  const handleRemoveSelectedVideoFile = (indexToRemove) => {
+    setSelectedVideoFiles(prev => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Add media by direct URL
+  const handleAddImageUrl = (e) => {
+    if (e) e.preventDefault();
+    const trimmed = imageUrlInput.trim();
+    if (!trimmed) return;
+    setExistingImages(prev => [...prev, trimmed]);
+    setImageUrlInput('');
+  };
+
+  const handleAddVideoUrl = (e) => {
+    if (e) e.preventDefault();
+    const trimmed = videoUrlInput.trim();
+    if (!trimmed) return;
+    setExistingVideos(prev => [...prev, trimmed]);
+    setVideoUrlInput('');
   };
 
   const handleSubmit = async (e) => {
@@ -379,100 +429,275 @@ export default function ActivitiesAdminManager() {
               />
             </div>
 
-            {/* Existing Images Gallery Preview (Do not remove old data) */}
-            {existingImages.length > 0 && (
-              <div className="bg-stone-50 p-4 rounded-xl border border-gray-200">
-                <div className="text-xs font-bold text-gray-700 mb-2 flex items-center justify-between">
-                  <span>Current Images ({existingImages.length})</span>
-                  <span className="text-[10px] text-gray-400 font-normal">Click trash to remove if desired</span>
+            {/* 1. IMAGES SECTION */}
+            <div className="space-y-4 pt-2 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2">
+                  <ImageIcon size={15} className="text-[#901C25]" />
+                  <span>Images &amp; Gallery Photos</span>
+                </label>
+                <span className="text-[11px] font-semibold text-gray-500">
+                  Total Photos: {existingImages.length + selectedImageFiles.length}
+                </span>
+              </div>
+
+              {/* Current Images Preview */}
+              {existingImages.length > 0 && (
+                <div className="bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div className="text-xs font-bold text-gray-700 mb-2.5 flex items-center justify-between">
+                    <span>Saved Images ({existingImages.length})</span>
+                    <span className="text-[10px] text-gray-500">Click red trash to remove</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                    {existingImages.map((imgUrl, idx) => (
+                      <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-300 aspect-video bg-gray-100 shadow-sm">
+                        <img src={imgUrl} alt={`saved-${idx}`} className="w-full h-full object-cover" />
+                        <span className="absolute bottom-1 left-1 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          #{idx + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExistingImage(idx)}
+                          className="absolute top-1 right-1 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition shadow cursor-pointer z-10"
+                          title="Remove this photo"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {existingImages.map((imgUrl, idx) => (
-                    <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 aspect-video bg-gray-100">
-                      <img src={imgUrl} alt={`gallery-${idx}`} className="w-full h-full object-cover" />
+              )}
+
+              {/* Newly Selected Local Image Files Preview */}
+              {selectedImageFiles.length > 0 && (
+                <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200">
+                  <div className="text-xs font-bold text-amber-900 mb-2.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Check size={14} className="text-green-600" />
+                      <span>Ready to Upload ({selectedImageFiles.length} new photos)</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedImageFiles([])}
+                      className="text-[10px] font-bold text-red-600 hover:underline"
+                    >
+                      Clear All New
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                    {selectedImageFiles.map((file, idx) => {
+                      const previewUrl = URL.createObjectURL(file);
+                      const sizeKb = Math.round(file.size / 1024);
+                      return (
+                        <div key={idx} className="relative group rounded-lg overflow-hidden border border-amber-300 aspect-video bg-white shadow-sm">
+                          <img src={previewUrl} alt={`preview-${idx}`} className="w-full h-full object-cover" />
+                          <div className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-[9px] px-1 py-0.5 truncate">
+                            {file.name} ({sizeKb}KB)
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSelectedImageFile(idx)}
+                            className="absolute top-1 right-1 p-1 bg-red-600 hover:bg-red-700 text-white rounded-full transition shadow cursor-pointer z-10"
+                            title="Remove file"
+                          >
+                            <X size={11} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Add More Images Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Upload Local Image Files */}
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-3.5 text-center hover:border-[#901C25] transition bg-stone-50/50">
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center justify-center gap-1.5 cursor-pointer">
+                    <UploadCloud size={14} className="text-[#901C25]" />
+                    <span>Choose Multiple Photos</span>
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => {
+                      handleAppendImageFiles(e.target.files);
+                      e.target.value = '';
+                    }}
+                    className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#901C25] file:text-white hover:file:bg-[#72151c] cursor-pointer"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1.5">
+                    Select one or multiple photos (JPG, PNG, WebP).
+                  </p>
+                </div>
+
+                {/* Add Image by URL */}
+                <div className="border border-gray-200 rounded-xl p-3.5 bg-stone-50/50 flex flex-col justify-between">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                      <Link size={13} className="text-[#901C25]" />
+                      <span>Or Paste Image URL</span>
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        placeholder="https://.../uploads/images/photo.jpg"
+                        value={imageUrlInput}
+                        onChange={(e) => setImageUrlInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddImageUrl(); } }}
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                      />
                       <button
                         type="button"
-                        onClick={() => handleRemoveExistingImage(idx)}
-                        className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-md opacity-0 group-hover:opacity-100 transition shadow"
-                        title="Remove image"
+                        onClick={handleAddImageUrl}
+                        className="px-3 py-1.5 bg-gray-800 hover:bg-black text-white text-xs font-bold rounded-lg transition shrink-0"
                       >
-                        <Trash2 size={12} />
+                        + Add URL
                       </button>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Upload New Images */}
-            <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Add Images (Uploads to <code className="text-[#901C25] bg-red-50 px-1 py-0.5 rounded">/uploads/images</code>)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-[#901C25] transition cursor-pointer bg-stone-50/50">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) => setSelectedImageFiles(Array.from(e.target.files))}
-                  className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#901C25] file:text-white hover:file:bg-[#72151c] cursor-pointer"
-                />
-                <p className="text-[11px] text-gray-400 mt-2">
-                  Select multiple photos for this activity's gallery. Linked directly into the DB.
-                </p>
-                {selectedImageFiles.length > 0 && (
-                  <p className="text-xs font-bold text-green-700 mt-1">
-                    ✓ {selectedImageFiles.length} new image(s) ready to upload
+                  </div>
+                  <p className="text-[10px] text-gray-400 mt-1.5">
+                    Paste existing uploaded image path to append immediately.
                   </p>
-                )}
+                </div>
               </div>
             </div>
 
-            {/* Existing Videos Preview */}
-            {existingVideos.length > 0 && (
-              <div className="bg-stone-50 p-4 rounded-xl border border-gray-200">
-                <div className="text-xs font-bold text-gray-700 mb-2 flex items-center justify-between">
-                  <span>Current Videos ({existingVideos.length})</span>
+            {/* 2. VIDEOS SECTION */}
+            <div className="space-y-4 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2">
+                  <Film size={15} className="text-[#901C25]" />
+                  <span>Videos (Optional)</span>
+                </label>
+                <span className="text-[11px] font-semibold text-gray-500">
+                  Total Videos: {existingVideos.length + selectedVideoFiles.length}
+                </span>
+              </div>
+
+              {/* Current Videos Preview */}
+              {existingVideos.length > 0 && (
+                <div className="bg-stone-50 p-4 rounded-xl border border-gray-200">
+                  <div className="text-xs font-bold text-gray-700 mb-2.5 flex items-center justify-between">
+                    <span>Saved Videos ({existingVideos.length})</span>
+                    <span className="text-[10px] text-gray-500">Click red trash to remove</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {existingVideos.map((vidUrl, idx) => (
+                      <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-300 bg-black aspect-video flex items-center justify-center shadow-sm">
+                        <video src={vidUrl} controls preload="none" className="w-full h-full object-contain" />
+                        <span className="absolute bottom-1 left-1 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                          Video #{idx + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveExistingVideo(idx)}
+                          className="absolute top-2 right-2 p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition shadow z-10 cursor-pointer"
+                          title="Remove video"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {existingVideos.map((vidUrl, idx) => (
-                    <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 bg-black aspect-video flex items-center justify-center">
-                      <video src={vidUrl} controls preload="metadata" className="w-full h-full object-contain" />
+              )}
+
+              {/* Newly Selected Video Files Preview */}
+              {selectedVideoFiles.length > 0 && (
+                <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200">
+                  <div className="text-xs font-bold text-amber-900 mb-2.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Check size={14} className="text-green-600" />
+                      <span>Ready to Upload ({selectedVideoFiles.length} new videos)</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedVideoFiles([])}
+                      className="text-[10px] font-bold text-red-600 hover:underline"
+                    >
+                      Clear All New
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {selectedVideoFiles.map((file, idx) => {
+                      const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+                      return (
+                        <div key={idx} className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-amber-200 text-xs">
+                          <div className="flex items-center gap-2 truncate">
+                            <Film size={16} className="text-red-700 shrink-0" />
+                            <span className="font-semibold truncate">{file.name}</span>
+                            <span className="text-gray-400 text-[10px]">({sizeMb} MB)</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSelectedVideoFile(idx)}
+                            className="p-1 text-red-600 hover:bg-red-50 rounded transition shrink-0"
+                            title="Remove video"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Add More Videos Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Upload Local Video Files */}
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-3.5 text-center hover:border-[#901C25] transition bg-stone-50/50">
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center justify-center gap-1.5 cursor-pointer">
+                    <UploadCloud size={14} className="text-[#901C25]" />
+                    <span>Choose Video Files</span>
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    accept="video/*"
+                    onChange={(e) => {
+                      handleAppendVideoFiles(e.target.files);
+                      e.target.value = '';
+                    }}
+                    className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#901C25] file:text-white hover:file:bg-[#72151c] cursor-pointer"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1.5">
+                    Upload MP4, WebM files (saved to <code className="text-[#901C25]">/uploads/videos</code>).
+                  </p>
+                </div>
+
+                {/* Add Video by URL */}
+                <div className="border border-gray-200 rounded-xl p-3.5 bg-stone-50/50 flex flex-col justify-between">
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                      <Link size={13} className="text-[#901C25]" />
+                      <span>Or Paste Video URL / Path</span>
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        placeholder="https://.../uploads/videos/v1.mp4"
+                        value={videoUrlInput}
+                        onChange={(e) => setVideoUrlInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddVideoUrl(); } }}
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                      />
                       <button
                         type="button"
-                        onClick={() => handleRemoveExistingVideo(idx)}
-                        className="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-md opacity-90 hover:opacity-100 transition shadow"
-                        title="Remove video"
+                        onClick={handleAddVideoUrl}
+                        className="px-3 py-1.5 bg-gray-800 hover:bg-black text-white text-xs font-bold rounded-lg transition shrink-0"
                       >
-                        <Trash2 size={13} />
+                        + Add URL
                       </button>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Upload New Videos */}
-            <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Add Videos (Optional - Uploads to <code className="text-[#901C25] bg-red-50 px-1 py-0.5 rounded">/uploads/videos</code>)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-[#901C25] transition cursor-pointer bg-stone-50/50">
-                <input
-                  type="file"
-                  multiple
-                  accept="video/*"
-                  onChange={(e) => setSelectedVideoFiles(Array.from(e.target.files))}
-                  className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#901C25] file:text-white hover:file:bg-[#72151c] cursor-pointer"
-                />
-                <p className="text-[11px] text-gray-400 mt-2">
-                  Upload MP4, WebM, etc. Automatically linked to the database table.
-                </p>
-                {selectedVideoFiles.length > 0 && (
-                  <p className="text-xs font-bold text-green-700 mt-1">
-                    ✓ {selectedVideoFiles.length} video(s) ready to upload
+                  </div>
+                  <p className="text-[10px] text-gray-400 mt-1.5">
+                    Paste direct URL or video link to append to this entry.
                   </p>
-                )}
+                </div>
               </div>
             </div>
 

@@ -243,7 +243,7 @@ export default function ActivityMediaViewer({
   }
 
   // Case 2: Only Images (No Video)
-  // If only 1 image:
+  // If 1 image:
   if (imgList.length <= 1) {
     const singlePhoto = imgList[0] || defaultFallback;
     return (
@@ -260,114 +260,130 @@ export default function ActivityMediaViewer({
             decoding="async"
             onError={(e) => { e.target.src = defaultFallback; }}
           />
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+              <ImageIcon size={13} />
+              <span>View Full Photo</span>
+            </span>
+          </div>
         </div>
       </div>
     );
   }
 
-  // If 2 or more images: Show 2 images (Left slider + Right slider) with manual arrows
-  return (
-    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start animate-fadeIn">
-      {/* Left Slider */}
-      <div className="w-full">
-        <div
-          onClick={() => onOpenLightbox && onOpenLightbox(imgList, leftIndex)}
-          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group select-none"
-        >
-          <img
-            src={imgList[leftIndex] || defaultFallback}
-            alt={`${title} - Left Photo ${leftIndex + 1}`}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
-            loading="lazy"
-            decoding="async"
-            onError={(e) => { e.target.src = defaultFallback; }}
-          />
-
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-              <ImageIcon size={13} />
-              <span>View Full Photo</span>
-            </span>
+  // If exactly 2 images: Show 2-column side-by-side grid
+  if (imgList.length === 2) {
+    return (
+      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start animate-fadeIn">
+        {imgList.map((photo, idx) => (
+          <div
+            key={idx}
+            onClick={() => onOpenLightbox && onOpenLightbox(imgList, idx)}
+            className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group select-none"
+          >
+            <img
+              src={photo || defaultFallback}
+              alt={`${title} - Photo ${idx + 1}`}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+              loading="lazy"
+              decoding="async"
+              onError={(e) => { e.target.src = defaultFallback; }}
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+              <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+                <ImageIcon size={13} />
+                <span>View Full Photo</span>
+              </span>
+            </div>
+            <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
+              {idx + 1} / 2
+            </div>
           </div>
+        ))}
+      </div>
+    );
+  }
 
-          {/* Left / Right Navigation Arrows (Show only if more than 2 images exist) */}
-          {imgList.length > 2 && (
-            <>
-              <button
-                type="button"
-                onClick={handleLeftPrev}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-                title="Previous Photo"
-              >
-                <ChevronLeft size={20} />
-              </button>
+  // If 3 or more images: Featured slider with navigation arrows + interactive thumbnail strip underneath
+  return (
+    <div ref={containerRef} className="max-w-4xl mx-auto space-y-3 animate-fadeIn select-none">
+      {/* Main Featured Photo */}
+      <div
+        onClick={() => onOpenLightbox && onOpenLightbox(imgList, currentIndex)}
+        className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
+      >
+        <img
+          src={imgList[currentIndex] || defaultFallback}
+          alt={`${title} - Photo ${currentIndex + 1}`}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-101"
+          loading="lazy"
+          decoding="async"
+          onError={(e) => { e.target.src = defaultFallback; }}
+        />
 
-              <button
-                type="button"
-                onClick={handleLeftNext}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-                title="Next Photo"
-              >
-                <ChevronRight size={20} />
-              </button>
+        {/* Lightbox hint overlay */}
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+          <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
+            <ImageIcon size={13} />
+            <span>Click to View Full Photo</span>
+          </span>
+        </div>
 
-              <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-                {leftIndex + 1} / {imgList.length}
-              </div>
-            </>
-          )}
+        {/* Previous Button */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10 cursor-pointer"
+          title="Previous Photo"
+        >
+          <ChevronLeft size={22} />
+        </button>
+
+        {/* Next Button */}
+        <button
+          type="button"
+          onClick={handleNext}
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10 cursor-pointer"
+          title="Next Photo"
+        >
+          <ChevronRight size={22} />
+        </button>
+
+        {/* Photo Counter */}
+        <div className="absolute bottom-3 right-3 bg-black/75 text-white text-xs font-bold px-3 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
+          Photo {currentIndex + 1} of {imgList.length}
         </div>
       </div>
 
-      {/* Right Slider */}
-      <div className="w-full">
-        <div
-          onClick={() => onOpenLightbox && onOpenLightbox(imgList, rightIndex)}
-          className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group select-none"
-        >
-          <img
-            src={imgList[rightIndex] || defaultFallback}
-            alt={`${title} - Right Photo ${rightIndex + 1}`}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
-            loading="lazy"
-            decoding="async"
-            onError={(e) => { e.target.src = defaultFallback; }}
-          />
-
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-            <span className="px-3.5 py-1.5 bg-white/95 text-gray-900 text-xs font-bold rounded-full shadow flex items-center gap-1.5">
-              <ImageIcon size={13} />
-              <span>View Full Photo</span>
-            </span>
-          </div>
-
-          {/* Left / Right Navigation Arrows (Show only if more than 2 images exist) */}
-          {imgList.length > 2 && (
-            <>
-              <button
-                type="button"
-                onClick={handleRightPrev}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-                title="Previous Photo"
-              >
-                <ChevronLeft size={20} />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleRightNext}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-[#901C25] text-white flex items-center justify-center transition shadow-lg z-10"
-                title="Next Photo"
-              >
-                <ChevronRight size={20} />
-              </button>
-
-              <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[11px] font-bold px-2.5 py-1 rounded-full pointer-events-none backdrop-blur-sm z-10">
-                {rightIndex + 1} / {imgList.length}
-              </div>
-            </>
-          )}
-        </div>
+      {/* Interactive Thumbnail Strip */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 px-1 scrollbar-thin">
+        {imgList.map((photo, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setCurrentIndex(idx)}
+              className={`relative shrink-0 w-20 h-14 sm:w-24 sm:h-16 rounded-lg overflow-hidden border-2 transition cursor-pointer ${
+                isActive
+                  ? 'border-[#901C25] ring-2 ring-[#901C25]/30 scale-102 shadow'
+                  : 'border-gray-200 opacity-70 hover:opacity-100'
+              }`}
+              title={`View Photo ${idx + 1}`}
+            >
+              <img
+                src={photo || defaultFallback}
+                alt={`thumb-${idx}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] font-bold px-1 rounded">
+                #{idx + 1}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
