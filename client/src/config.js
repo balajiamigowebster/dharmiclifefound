@@ -1,34 +1,39 @@
 // Central Configuration for Dharmic Life Foundation
 export const DIRECT_MEDIA_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclifepondicherry';
-const LIVE_BACKEND_URL = 'https://node256.iseencloud.net/~amigoweb/dharmiclife';
+export const LIVE_BACKEND_URL = 'http://dharmiclifefoundation.com/api';
 
-// Resolve Backend Base URL
+// Resolve Backend Base URL: use relative '' on Vercel to proxy via vercel.json rewrites (no Mixed Content / CORS errors)
 export const BACKEND_URL = (() => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
   }
-  if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app'))) {
-    return LIVE_BACKEND_URL;
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return '';
   }
-  return '';
+  return LIVE_BACKEND_URL;
 })();
 
 // Full API URL prefix
-export const API_BASE_URL = `${BACKEND_URL}/api`;
+export const API_BASE_URL = BACKEND_URL ? `${BACKEND_URL}` : '/api';
 
 // Helper to resolve media URLs (images and videos in /uploads or uploaded to backend)
 export function getMediaUrl(url) {
   if (!url) return '';
-  // Normalize old paths or direct paths
+  // Normalize old WordPress paths
   if (url.includes('amigowebster.in/dharmiclife/uploads/') || url.includes('/dharmiclife/uploads/')) {
     return url
       .replace('https://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
       .replace('http://amigowebster.in/dharmiclife', DIRECT_MEDIA_URL)
       .replace('/dharmiclife/uploads/', `${DIRECT_MEDIA_URL}/uploads/`);
   }
+  if (url.includes('node256.iseencloud.net/~amigoweb/dharmiclife/')) {
+    return url.replace('/dharmiclife/', '/dharmiclifepondicherry/');
+  }
+  // New backend uploads saved in dharmiclife-file/uploads/
   if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
     const clean = url.startsWith('/') ? url : `/${url}`;
-    return `${DIRECT_MEDIA_URL}${clean}`;
+    // Proxies through Vercel /uploads/* rewrite or directly to backend
+    return BACKEND_URL ? `${BACKEND_URL}${clean}` : clean;
   }
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
@@ -37,7 +42,7 @@ export function getMediaUrl(url) {
     return url.startsWith('/') ? url : `/${url}`;
   }
   const cleanPath = url.startsWith('/') ? url : `/${url}`;
-  return `${DIRECT_MEDIA_URL}${cleanPath}`;
+  return cleanPath;
 }
 
 export default {

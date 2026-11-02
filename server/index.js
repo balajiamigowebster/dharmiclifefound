@@ -87,6 +87,7 @@ app.use('/images', express.static(path.join(__dirname, '..', 'client', 'public',
 
 // Serve uploaded files (images and videos) statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/dharmiclife/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Media Routes (Upload & Media Management)

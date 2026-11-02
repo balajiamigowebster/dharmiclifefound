@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "http://dharmiclifefoundation.com/api/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "http://dharmiclifefoundation.com/api/uploads/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
