@@ -41,6 +41,10 @@ function saveHomepageContent(data) {
 
 // CORS Configuration for Local & Live Production (Vercel & cPanel amigowebster.in)
 const allowedOrigins = [
+  'https://dharmiclifefoundation.com',
+  'https://www.dharmiclifefoundation.com',
+  'http://dharmiclifefoundation.com',
+  'http://www.dharmiclifefoundation.com',
   'https://client-e1mu.vercel.app',
   'https://amigowebster.in',
   'http://amigowebster.in',
@@ -58,6 +62,7 @@ app.use(cors({
     if (
       allowedOrigins.indexOf(origin) !== -1 ||
       origin.endsWith('.vercel.app') ||
+      origin.includes('dharmiclifefoundation.com') ||
       origin.includes('amigowebster.in')
     ) {
       return callback(null, true);
@@ -113,7 +118,7 @@ app.get(['/', '/dharmiclife', '/api/health', '/dharmiclife/api/health'], (req, r
   res.json({
     status: 'ok',
     message: 'Dharmic Life Foundation Backend is Live',
-    applicationUrl: 'https://amigowebster.in/dharmiclife/',
+    applicationUrl: 'https://dharmiclifefoundation.com/',
     timestamp: new Date().toISOString(),
     database: db.getStatus()
   });
