@@ -186,9 +186,7 @@ export default function EducationSupportPage({ onNavigate }) {
               {/* Drive Header Bar */}
               <div className="bg-[#FAF8F5] border-b border-gray-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-[#901C25] text-white text-xs font-bold flex items-center justify-center shrink-0">
-                    {drive.id}
-                  </span>
+                  
                   <h3 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug">
                     {drive.title}
                   </h3>
