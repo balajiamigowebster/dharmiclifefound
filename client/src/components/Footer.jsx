@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { submitNewsletter } from '../api';
+import logoImg from '../assets/logo.jpeg';
 
 export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
   const [email, setEmail] = useState('');
