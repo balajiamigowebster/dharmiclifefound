@@ -715,15 +715,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               </button>
             </div>
 
-            <div className="pt-3 border-t border-gray-100 mt-2">
-              <button
-                onClick={handleResetDefaults}
-                className="w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium text-gray-500 hover:text-amber-800 hover:bg-amber-50 transition flex items-center gap-2"
-              >
-                <RefreshCw size={13} />
-                <span>Reset All to Defaults</span>
-              </button>
-            </div>
+            
           </div>
 
           {/* Right Editor Panel */}
