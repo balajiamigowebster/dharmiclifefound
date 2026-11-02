@@ -3,15 +3,20 @@
 export const LIVE_BACKEND_URL = 'http://dharmiclifefoundation.com/api';
 
 // Resolve Backend Base URL
+// On Vercel (client-e1mu.vercel.app), use relative '' so API fetch() calls use same-origin HTTPS proxy
+// This eliminates browser Mixed Content blocks while allowing live DB updates and saves
 export const BACKEND_URL = (() => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
   }
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return '';
+  }
   return LIVE_BACKEND_URL;
 })();
 
-// Full API URL prefix
-export const API_BASE_URL = BACKEND_URL;
+// Full API URL prefix: /api on Vercel, or full URL on self-hosted live domains
+export const API_BASE_URL = BACKEND_URL ? `${BACKEND_URL}` : '/api';
 
 // Helper to resolve media URLs directly from http://dharmiclifefoundation.com/api/uploads
 export function getMediaUrl(url) {

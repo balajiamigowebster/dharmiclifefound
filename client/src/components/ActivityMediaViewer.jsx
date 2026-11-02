@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { getMediaUrl } from '../config';
 
 /**
  * Universal Activity Media Viewer for all Activity Sub-categories
- * - When Video is present:
- *   Left column: Interactive Image slider with Next / Prev arrows (manual click only, no auto-move).
- *   Right column: HTML5 Video Player.
- * - When Only Images are present:
- *   If 1 image: Single centered/full photo card.
- *   If 2+ images: 2-column layout (Left side slider + Right side slider, or split gallery) with Next / Prev arrows.
- * - Clicking the image triggers onOpenLightbox (if provided).
- * - No auto-play/auto-move slider; changes only on user click.
+ * - Implements true Lazy Loading:
+ *   - IntersectionObserver delays mounting heavy media until scrolled within 300px
+ *   - Video player uses preload="none" so videos only buffer when Play is clicked
+ *   - Images use loading="lazy" and decoding="async"
+ * - Prevents network congestion across large datasets (81+ drives)
  */
 export default function ActivityMediaViewer({
   images = [],
@@ -20,6 +17,29 @@ export default function ActivityMediaViewer({
   defaultFallback = '/images/act-other.jpg',
   onOpenLightbox
 }) {
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Lazy loading observer: Only mount media when user scrolls within 300px
+  useEffect(() => {
+    if (!containerRef.current) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px 0px' }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   // Normalize images and videos to guaranteed arrays
   let imgList = [];
   if (Array.isArray(images)) {
@@ -79,12 +99,27 @@ export default function ActivityMediaViewer({
     setRightIndex((prev) => (prev + 1) % imgList.length);
   };
 
+  // Pre-intersection placeholder: zero layout shift skeleton box
+  if (!isVisible) {
+    return (
+      <div
+        ref={containerRef}
+        className="w-full h-72 sm:h-80 md:h-96 rounded-xl bg-stone-100 border border-gray-200 animate-pulse flex items-center justify-center text-gray-400 text-xs font-semibold"
+      >
+        <span className="flex items-center gap-2">
+          <ImageIcon size={16} />
+          <span>Loading activity media...</span>
+        </span>
+      </div>
+    );
+  }
+
   // Case 1: Video is available (Left = Image Slider with arrows, Right = Video player)
   if (hasVideo) {
     const currentPhoto = hasImages ? imgList[currentIndex] : defaultFallback;
 
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div ref={containerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start animate-fadeIn">
         {/* Left: Photos Slider with manual arrows */}
         <div className="w-full">
           <div
@@ -96,6 +131,7 @@ export default function ActivityMediaViewer({
               alt={`${title} - Photo ${currentIndex + 1}`}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
               loading="lazy"
+              decoding="async"
               onError={(e) => { e.target.src = defaultFallback; }}
             />
 
@@ -137,7 +173,7 @@ export default function ActivityMediaViewer({
           </div>
         </div>
 
-        {/* Right: Authentic HTML5 Video Player */}
+        {/* Right: Authentic HTML5 Video Player with preload="none" for instant page loading */}
         <div className="w-full">
           <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-300 bg-black shadow-inner flex items-center justify-center">
             <video
@@ -145,7 +181,7 @@ export default function ActivityMediaViewer({
               src={vidList[0]}
               controls
               playsInline
-              preload="metadata"
+              preload="none"
               className="w-full h-full object-contain"
             >
               <source src={vidList[0]} type="video/mp4" />
@@ -162,7 +198,7 @@ export default function ActivityMediaViewer({
   if (imgList.length <= 1) {
     const singlePhoto = imgList[0] || defaultFallback;
     return (
-      <div className="max-w-3xl mx-auto">
+      <div ref={containerRef} className="max-w-3xl mx-auto animate-fadeIn">
         <div
           onClick={() => onOpenLightbox && onOpenLightbox(imgList, 0)}
           className="relative w-full h-72 sm:h-80 md:h-96 rounded-xl overflow-hidden border border-gray-200 bg-stone-100 shadow-sm cursor-pointer group"
@@ -172,6 +208,7 @@ export default function ActivityMediaViewer({
             alt={title}
             className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
             loading="lazy"
+            decoding="async"
             onError={(e) => { e.target.src = defaultFallback; }}
           />
         </div>
@@ -181,7 +218,7 @@ export default function ActivityMediaViewer({
 
   // If 2 or more images: Show 2 images (Left slider + Right slider) with manual arrows
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start animate-fadeIn">
       {/* Left Slider */}
       <div className="w-full">
         <div
@@ -193,6 +230,7 @@ export default function ActivityMediaViewer({
             alt={`${title} - Left Photo ${leftIndex + 1}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
             loading="lazy"
+            decoding="async"
             onError={(e) => { e.target.src = defaultFallback; }}
           />
 
@@ -243,6 +281,7 @@ export default function ActivityMediaViewer({
             alt={`${title} - Right Photo ${rightIndex + 1}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
             loading="lazy"
+            decoding="async"
             onError={(e) => { e.target.src = defaultFallback; }}
           />
 
