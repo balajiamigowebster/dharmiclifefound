@@ -86,9 +86,15 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, '..', 'client', 'public', 'images')));
 
 // Serve uploaded files (images and videos) statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/dharmiclife/uploads', express.static(path.join(__dirname, 'uploads')));
+const serveStaticUploads = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+};
+app.use('/uploads', serveStaticUploads, express.static(path.join(__dirname, 'uploads')));
+app.use('/api/uploads', serveStaticUploads, express.static(path.join(__dirname, 'uploads')));
+app.use('/dharmiclife/uploads', serveStaticUploads, express.static(path.join(__dirname, 'uploads')));
 
 // Media Routes (Upload & Media Management)
 app.use('/api/media', mediaRoutes);
