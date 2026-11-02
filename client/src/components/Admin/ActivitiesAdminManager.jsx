@@ -72,16 +72,21 @@ export default function ActivitiesAdminManager() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Load items when sub-category changes
-  const loadCategoryItems = async (slug) => {
-    setLoading(true);
+  // Load items when sub-category changes (fast background load, never blocks UI if data exists)
+  const loadCategoryItems = async (slug, showSpinner = true) => {
+    if (showSpinner) setLoading(true);
     const data = await fetchActivityItems(slug);
-    setItems(data);
+    if (data && data.length > 0) {
+      setItems(data);
+    }
     setLoading(false);
   };
 
   useEffect(() => {
-    loadCategoryItems(selectedSubmenu);
+    // Pre-populate with static items so dashboard is 100% instant (0ms blank time)
+    const initialStatic = STATIC_DATA_MAP[selectedSubmenu] || [];
+    setItems(initialStatic);
+    loadCategoryItems(selectedSubmenu, false);
     resetForm();
   }, [selectedSubmenu]);
 
@@ -162,8 +167,16 @@ export default function ActivitiesAdminManager() {
           type: 'success',
           text: editingId ? 'Activity item updated successfully!' : 'New activity item added & media saved securely!'
         });
+
+        // Instant optimistic update (0ms UI wait)
+        if (editingId && res.data) {
+          setItems((prev) => prev.map((item) => (item.id === editingId ? { ...item, ...res.data } : item)));
+        } else if (res.data) {
+          setItems((prev) => [res.data, ...prev]);
+        }
+
         resetForm();
-        await loadCategoryItems(selectedSubmenu);
+        loadCategoryItems(selectedSubmenu, false);
         setTimeout(() => setMessage({ type: '', text: '' }), 4000);
       } else {
         setMessage({ type: 'error', text: res.message || 'Failed to save activity item.' });
@@ -179,17 +192,22 @@ export default function ActivitiesAdminManager() {
   const handleDelete = async (id, title) => {
     if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
 
+    // Instant optimistic deletion from UI
+    setItems((prev) => prev.filter((item) => item.id !== id));
+
     try {
       const res = await deleteActivityItem(id);
       if (res && res.success) {
         setMessage({ type: 'success', text: 'Activity item deleted successfully.' });
-        await loadCategoryItems(selectedSubmenu);
+        loadCategoryItems(selectedSubmenu, false);
         setTimeout(() => setMessage({ type: '', text: '' }), 4000);
       } else {
         setMessage({ type: 'error', text: res.message || 'Could not delete item.' });
+        loadCategoryItems(selectedSubmenu, false);
       }
     } catch (err) {
       setMessage({ type: 'error', text: 'Error deleting activity item.' });
+      loadCategoryItems(selectedSubmenu, false);
     }
   };
 
