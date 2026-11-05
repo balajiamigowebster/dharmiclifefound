@@ -89,7 +89,7 @@ export default function ContactModal({ isOpen, onClose }) {
               <div className="grid grid-cols-2 gap-2 p-3 bg-amber-50/50 rounded-xl border border-amber-200/50 text-xs">
                 <div className="flex items-center gap-2 text-gray-700">
                   <Mail size={14} className="text-[#901C25]" />
-                  <span className="truncate">dharmiclifestyle@gmail.com</span>
+                  <span className="truncate">info@dharmiclifefoundation.com</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-700">
                   <MapPin size={14} className="text-[#901C25]" />

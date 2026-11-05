@@ -13,7 +13,7 @@ export async function fetchSiteInfo() {
   }
   return {
     site_title: 'Dharmic Life Foundation',
-    email: 'dharmiclifestyle@gmail.com',
+    email: 'info@dharmiclifefoundation.com',
     phone: '+91 98765 43210',
     address: 'Pondicherry, India'
   };

@@ -223,7 +223,7 @@ export const defaultHomeContent = {
     ]
   },
   siteInfo: {
-    email: 'dharmiclifestyle@gmail.com',
+    email: 'info@dharmiclifefoundation.com',
     phone: '+91 98765 43210',
     address: 'Pondicherry, India',
     footerAboutText: 'Dharmic Life Foundation is a charitable Trust dedicated to feeding the hungry, supporting homeless communities, and spreading kindness through social service.',

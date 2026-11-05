@@ -3,7 +3,7 @@ import { Mail, MapPin } from 'lucide-react';
 import logoImg from '../assets/logo.jpeg';
 
 export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
-  const officialEmail = siteInfo?.email || 'dharmiclifestyle@gmail.com';
+  const officialEmail = siteInfo?.email || 'info@dharmiclifefoundation.com';
   const officialAddress = siteInfo?.address || 'Pondicherry, India';
   const footerAboutText =
     siteInfo?.footerAboutText ||

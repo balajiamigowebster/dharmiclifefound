@@ -117,10 +117,9 @@ export default function ContactPage({ onNavigate }) {
                 Support Email
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed font-sans pt-1">
-                <a href="mailto:dharmiclifestyle@gmail.com" className="hover:text-[#901C25] transition font-medium block truncate">
-                  dharmiclifestyle@gmail.com
+                <a href="mailto:info@dharmiclifefoundation.com" className="hover:text-[#901C25] transition font-medium block truncate">
+                  info@dharmiclifefoundation.com
                 </a>
-                <span className="text-xs text-gray-400 block">info@cleanheart.com</span>
               </p>
             </div>
           </div>

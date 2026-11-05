@@ -3,7 +3,7 @@
 const siteSettings = {
   site_title: 'Dharmic Life Foundation',
   tagline: 'Humanity is the Mother of Dharma',
-  email: 'dharmiclifestyle@gmail.com',
+  email: 'info@dharmiclifefoundation.com',
   phone: '+91 98765 43210',
   address: 'Pondicherry, India',
   about_summary: 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.',

@@ -310,8 +310,8 @@ export default function ActivityDetailPage({ activitySlug, onNavigate }) {
                 </div>
                 <div className="flex items-center gap-2 truncate">
                   <Mail size={15} className="text-[#E48A2D]" />
-                  <a href="mailto:dharmiclifestyle@gmail.com" className="hover:underline">
-                    dharmiclifestyle@gmail.com
+                  <a href="mailto:info@dharmiclifefoundation.com" className="hover:underline">
+                    info@dharmiclifefoundation.com
                   </a>
                 </div>
               </div>

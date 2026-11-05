@@ -15,7 +15,7 @@ export default function GallerySection({ content, gallery = [] }) {
   ];
 
   const sectionBadge = content?.badge || 'Moments of Grace';
-  const sectionTitle = content?.title || 'Our Seva in Pictures';
+  const sectionTitle = content?.title || 'Our Services in Pictures';
   const sectionSubtitle =
     content?.subtitle ||
     'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.';

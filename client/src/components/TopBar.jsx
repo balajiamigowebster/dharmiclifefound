@@ -2,7 +2,7 @@ import React from 'react';
 import { Mail, MapPin } from 'lucide-react';
 
 export default function TopBar({ siteInfo }) {
-  const email = siteInfo?.email || 'dharmiclifestyle@gmail.com';
+  const email = siteInfo?.email || 'info@dharmiclifefoundation.com';
   const address = siteInfo?.address || 'Pondicherry';
   const facebook = siteInfo?.facebook || 'https://facebook.com';
   const twitter = siteInfo?.twitter || 'https://twitter.com';
