@@ -58,8 +58,8 @@ export function getMediaUrl(url) {
 
   // If already an absolute HTTP/HTTPS URL
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
-    // Only redirect legacy local dev or localhost upload URLs
-    if (clean.includes('localhost:5001/uploads/') || clean.includes('localhost:5000/uploads/')) {
+    // Redirect any upload media (whether from legacy hosts or local) to live backend uploads
+    if (clean.includes('/uploads/')) {
       const uploadPath = clean.substring(clean.indexOf('/uploads/'));
       return `${LIVE_BACKEND_URL}${uploadPath}`;
     }
