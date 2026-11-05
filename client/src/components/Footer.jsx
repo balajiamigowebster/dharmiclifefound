@@ -159,18 +159,6 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
                   Contact Us
                 </a>
               </li>
-              <li>
-                <a
-                  href="/admin"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (onNavigate) onNavigate('admin');
-                  }}
-                  className="text-stone-400 hover:text-[#E48A2D] transition block font-medium"
-                >
-                  Admin Portal
-                </a>
-              </li>
             </ul>
           </div>
 

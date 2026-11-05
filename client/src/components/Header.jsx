@@ -383,22 +383,6 @@ export default function Header({
                   Contact
                 </a>
               </li>
-              <li className="flex-shrink-0">
-                <a
-                  href="/admin"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick('admin');
-                  }}
-                  className={`font-bold text-[13px] xl:text-[13.5px] px-2.5 py-1 rounded-md border border-[#901C25]/25 hover:bg-[#901C25] hover:text-white whitespace-nowrap transition flex items-center gap-1.5 ${
-                    currentPage === 'admin' ? 'bg-[#901C25] text-white shadow-sm' : 'text-[#901C25] hover:border-[#901C25]'
-                  }`}
-                  title="Admin Portal"
-                >
-                  <Lock size={12} />
-                  <span>Admin</span>
-                </a>
-              </li>
             </ul>
           </nav>
 
@@ -538,15 +522,6 @@ export default function Header({
             }`}
           >
             Contact
-          </button>
-          <button
-            onClick={() => handleNavClick('admin')}
-            className={`w-full text-left py-2 px-3 font-bold rounded flex items-center gap-2 border-t border-gray-100 pt-3 mt-1 ${
-              currentPage === 'admin' ? 'bg-red-50 text-[#901C25]' : 'text-[#901C25] hover:bg-stone-50'
-            }`}
-          >
-            <Lock size={15} className="text-[#901C25]" />
-            <span>Admin Portal</span>
           </button>
         </div>
       )}
