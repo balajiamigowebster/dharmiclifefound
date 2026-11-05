@@ -865,10 +865,10 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
                       {slide.image && (
                         <div className="mt-2 relative h-40 rounded-lg overflow-hidden border border-gray-200 bg-stone-900 group">
                           <img
-                            src={slide.image}
+                            src={getMediaUrl(slide.image)}
                             alt="Slide Preview"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            onError={(e) => { e.target.src = '/images/hero-bg.jpg'; }}
+                            className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${idx === 0 ? '-scale-x-100' : ''}`}
+                            onError={(e) => { e.target.src = getMediaUrl('/images/hero-bg.jpg'); }}
                           />
                           <span className="absolute top-2 left-2 px-2.5 py-1 bg-black/70 backdrop-blur-md text-white text-[10px] font-semibold rounded-md shadow">
                             Slide Preview

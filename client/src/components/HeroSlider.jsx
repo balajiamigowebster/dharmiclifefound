@@ -1,3 +1,4 @@
+import { getMediaUrl } from '../config';
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, ArrowRight, Sparkles } from 'lucide-react';
 
@@ -73,16 +74,21 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
               isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
-            {/* Background image with subtle ken-burns zoom */}
-            <div
-              className={`absolute inset-0 bg-cover bg-center transition-transform duration-[7000ms] ease-out ${
-                isActive ? 'scale-105' : 'scale-100'
-              }`}
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
-              {/* Dark Gradient Overlay for readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/35"></div>
+            {/* Background image container with subtle ken-burns zoom (Slide 1 mirrored horizontally) */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div
+                className="w-full h-full bg-cover bg-center transition-transform duration-[7000ms] ease-out"
+                style={{
+                  backgroundImage: `url(${getMediaUrl(slide.image)})`,
+                  transform: index === 0
+                    ? (isActive ? 'scaleX(-1.05) scaleY(1.05)' : 'scaleX(-1) scaleY(1)')
+                    : (isActive ? 'scale(1.05)' : 'scale(1)')
+                }}
+              />
             </div>
+
+            {/* Dark Gradient Overlay for readability (stays non-mirrored: dark on left for text, clear on right for people) */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/35 pointer-events-none"></div>
 
             {/* Slide Content */}
             <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
