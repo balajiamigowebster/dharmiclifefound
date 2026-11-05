@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, X, ZoomIn } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 import { getMediaUrl, getAppBaseUrl } from '../config';
 
 export default function GallerySection({ content, gallery = [] }) {
@@ -57,7 +57,7 @@ export default function GallerySection({ content, gallery = [] }) {
             <div
               key={item.id || idx}
               onClick={() => setActivePhoto(item)}
-              className="relative group rounded-2xl overflow-hidden aspect-square bg-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="relative rounded-2xl overflow-hidden aspect-square bg-gray-200 shadow-sm cursor-pointer"
             >
               <img
                 src={item.image}
@@ -69,18 +69,8 @@ export default function GallerySection({ content, gallery = [] }) {
                   const filename = (item.image || '').split('/').pop();
                   if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
                 }}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                className="w-full h-full object-cover"
               />
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-[#901C25]/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center text-white">
-                <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-2 transform scale-75 group-hover:scale-100 transition-transform">
-                  <ZoomIn size={22} className="text-white" />
-                </div>
-                <h4 className="font-serif font-bold text-sm sm:text-base leading-snug drop-shadow">
-                  {item.title}
-                </h4>
-                <span className="text-xs text-amber-200 mt-1 uppercase tracking-wider font-semibold">View Full</span>
-              </div>
             </div>
           ))}
         </div>
