@@ -6,7 +6,7 @@ const siteSettings = {
   email: 'info@dharmiclifefoundation.com',
   phone: '+91 98765 43210',
   address: 'Pondicherry, India',
-  about_summary: 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.',
+  about_summary: 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the deserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.',
   footer_description: 'Dharmic Life Foundation is a charitable Trust dedicated to feeding the hungry, supporting homeless communities, and spreading kindness through social service.',
   copyright: '© 2026 Copyrights by Dharmic Life Foundation . All Rights Reserved | Designed by amigowebster',
   facebook: 'https://facebook.com',
