@@ -81,20 +81,6 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
               {description1}
             </p>
 
-            {/* Feature Checklist */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-              {highlights.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                  <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check size={13} className="stroke-[3]" />
-                  </div>
-                  <span className="text-xs sm:text-sm font-medium text-gray-700 leading-snug">
-                    {item}
-                  </span>
-                </div>
-              ))}
-            </div>
-
             {/* Quote / Highlight Strip */}
             <div className="p-4 rounded-xl bg-amber-50/70 border-l-4 border-[#E48A2D] text-xs sm:text-sm text-gray-800 italic">
               {quote}
