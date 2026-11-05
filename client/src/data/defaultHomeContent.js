@@ -64,7 +64,7 @@ export const defaultHomeContent = {
         slug: 'unclaimed-souls',
         title: 'Honoring the Unclaimed Souls with Dignified Cremation',
         description: 'We provide honorable final ceremonies for unclaimed bodies, ensuring every individual is treated with dignity, regardless of their circumstances.',
-        image: '/images/act-cremation.jpg',
+        image: 'https://dharmiclifefoundation.com/api/uploads/images/8-7-600x540.jpg',
         badge: 'Vedic Last Rites'
       },
       {
@@ -72,7 +72,7 @@ export const defaultHomeContent = {
         slug: 'spreading-the-dharmic-way-of-life',
         title: 'Spreading the Dharmic Way of Life (Traditional life Education for the Public)',
         description: 'Inspiring lives rooted in Dharma by preserving sacred traditions and nurturing compassion, righteousness, and unity.',
-        image: '/images/act-dharmic.jpg',
+        image: 'https://dharmiclifefoundation.com/api/uploads/images/9.jpg.jpeg',
         badge: 'Life Transformation'
       },
       {
@@ -96,7 +96,7 @@ export const defaultHomeContent = {
         slug: 'caring-for-homeless-people',
         title: 'Compassion Begins with Caring for Homeless People',
         description: 'Reaching out to homeless individuals with seasonal clothing, warm blankets, hygiene kits, and nourishing food across streets.',
-        image: '/images/act-homeless.jpg',
+        image: 'https://dharmiclifefoundation.com/api/uploads/images/21-2-600x540.jpg',
         badge: 'Karuna Seva'
       },
       {

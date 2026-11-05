@@ -28,7 +28,7 @@ export const coreActivitiesHomeList = [
     slug: 'unclaimed-souls',
     title: 'Honoring the Unclaimed Souls with Dignified Cremation',
     description: 'We provide honorable final ceremonies for unclaimed bodies, ensuring every individual is treated with dignity, regardless of their circumstances.',
-    image: '/images/act-cremation.jpg',
+    image: 'https://dharmiclifefoundation.com/api/uploads/images/8-7-600x540.jpg',
     icon: Flame,
     badge: 'Vedic Last Rites'
   },
@@ -37,7 +37,7 @@ export const coreActivitiesHomeList = [
     slug: 'spreading-the-dharmic-way-of-life',
     title: 'Spreading the Dharmic Way of Life (Traditional life Education for the Public)',
     description: 'Inspiring lives rooted in Dharma by preserving sacred traditions and nurturing compassion, righteousness, and unity.',
-    image: '/images/act-dharmic.jpg',
+    image: 'https://dharmiclifefoundation.com/api/uploads/images/9.jpg.jpeg',
     icon: BookOpen,
     badge: 'Life Transformation'
   },
@@ -64,7 +64,7 @@ export const coreActivitiesHomeList = [
     slug: 'caring-for-homeless-people',
     title: 'Compassion Begins with Caring for Homeless People',
     description: 'Reaching out to homeless individuals with seasonal clothing, warm blankets, hygiene kits, and nourishing food across streets.',
-    image: '/images/act-homeless.jpg',
+    image: 'https://dharmiclifefoundation.com/api/uploads/images/21-2-600x540.jpg',
     icon: HeartHandshake,
     badge: 'Karuna Seva'
   },
@@ -154,12 +154,6 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
-                  
-                  {/* Badge */}
-                  <div className="absolute top-4 left-4 bg-[#901C25] text-white px-3 py-1 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#E48A2D]"></span>
-                    <span>{act.badge}</span>
-                  </div>
 
                   {/* Floating Icon Badge */}
                   <div className="absolute bottom-4 right-4 w-12 h-12 rounded-xl bg-[#901C25] text-white flex items-center justify-center shadow-lg group-hover:bg-[#E48A2D] group-hover:scale-110 transition-all duration-300">
