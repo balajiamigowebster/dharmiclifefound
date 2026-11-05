@@ -338,14 +338,6 @@ export default function App() {
               onNavigate={handleNavigate}
             />
 
-            {/* Dharmic Impact Across the Map / Events */}
-            <EventsSection
-              content={homeContent?.eventsSection}
-              events={events}
-              onNavigate={handleNavigate}
-              onOpenDonation={() => handleOpenDonation('Community Event & Rites Fund')}
-            />
-
             {/* Visual Gallery Grid with Lightbox */}
             <GallerySection
               content={homeContent?.gallerySection}
