@@ -8,7 +8,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
   const defaultSlides = [
     {
       id: 1,
-      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-17.jpg',
+      image: '/images/hero-1.jpg',
       badge: 'Serving Humanity, Preserving Dharma',
       titlePrefix: 'Humanity is',
       titleMiddle: 'the Mother of',
@@ -21,7 +21,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
     },
     {
       id: 2,
-      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-13.jpg',
+      image: '/images/hero-2.jpg',
       badge: 'Compassion In Action',
       titlePrefix: 'Humanity is',
       titleMiddle: 'the Mother of',

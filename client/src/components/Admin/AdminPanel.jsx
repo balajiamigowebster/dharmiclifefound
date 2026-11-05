@@ -174,7 +174,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
   const handleAddSlide = () => {
     const newSlide = {
       id: Date.now(),
-      image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-17.jpg',
+      image: '/images/hero-1.jpg',
       badge: 'New Initiative',
       titlePrefix: 'Humanity is',
       titleMiddle: 'the Mother of',
