@@ -187,7 +187,7 @@ export const defaultHomeContent = {
   },
   gallerySection: {
     badge: 'Moments of Grace',
-    title: 'Our Seva in Pictures',
+    title: 'Our Services in Pictures',
     subtitle: 'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.',
     items: [
       // Aarthi Relief Fund
