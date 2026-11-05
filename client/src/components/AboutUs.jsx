@@ -19,7 +19,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
   const title = data.title || 'Upholding Dharma through Selfless Service';
   const description1 = data.description1 || 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.';
   const quote = data.quote || '“Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.”';
-  const image = data.image || 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg';
+  const image = data.image || '/images/about.jpg';
   const experienceBadgeTitle = data.experienceBadgeTitle || '100% Volunteer Driven';
   const experienceBadgeSub = data.experienceBadgeSub || 'Every rupee contributed directly impacts lives on ground in Pondicherry.';
   const primaryBtnText = data.primaryBtnText || 'Discover More';

@@ -34,17 +34,17 @@ export const defaultHomeContent = {
     title: 'Upholding Dharma through Selfless Service',
     description1: 'Dharmic Life Foundation is dedicated to restoring dignity to the forgotten and providing a pathway to a better life for the underserved. From ensuring a respectful final farewell to empowering the next generation through education, we believe that righteousness is found in service.',
     quote: '“Humanity is the Mother of Dharma. Grounding all action in righteousness, Karuna (compassion), and duty.”',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-18-769x1024.jpg',
+    image: '/images/about.jpg',
     experienceBadgeTitle: '100% Volunteer Driven',
     experienceBadgeSub: 'Every rupee contributed directly impacts lives on ground in Pondicherry.',
     primaryBtnText: 'Discover More',
     secondaryBtnText: 'Our Trustees',
-    highlights: [
-      'Daily Annadhanam drives nourishing destitute elders and street dwellers',
-      'Sacred traditional final cremation ceremonies for unclaimed deceased bodies',
-      'Educational sponsorships, student tuition, school uniforms, and books',
-      'Women vocational skill development workshops for financial freedom'
-    ]
+    // highlights: [
+    //   'Daily Annadhanam drives nourishing destitute elders and street dwellers',
+    //   'Sacred traditional final cremation ceremonies for unclaimed deceased bodies',
+    //   'Educational sponsorships, student tuition, school uniforms, and books',
+    //   'Women vocational skill development workshops for financial freedom'
+    // ]
   },
   coreActivities: {
     badge: 'Our Core Activities',
@@ -56,7 +56,7 @@ export const defaultHomeContent = {
         slug: 'annadhanam',
         title: 'Annadhanam (When Hunger ends, Dharma begins)',
         description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/12-5.jpg',
+        image: '/images/act-annadhanam.jpg',
         badge: 'Annam Parabrahma'
       },
       {
@@ -64,7 +64,7 @@ export const defaultHomeContent = {
         slug: 'unclaimed-souls',
         title: 'Honoring the Unclaimed Souls with Dignified Cremation',
         description: 'We provide honorable final ceremonies for unclaimed bodies, ensuring every individual is treated with dignity, regardless of their circumstances.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/Body-4.jpg',
+        image: '/images/act-cremation.jpg',
         badge: 'Vedic Last Rites'
       },
       {
@@ -72,7 +72,7 @@ export const defaultHomeContent = {
         slug: 'spreading-the-dharmic-way-of-life',
         title: 'Spreading the Dharmic Way of Life (Traditional life Education for the Public)',
         description: 'Inspiring lives rooted in Dharma by preserving sacred traditions and nurturing compassion, righteousness, and unity.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/18-2.jpg',
+        image: '/images/act-dharmic.jpg',
         badge: 'Life Transformation'
       },
       {
@@ -80,7 +80,7 @@ export const defaultHomeContent = {
         slug: 'education-support',
         title: 'Educational Support (Investing in Education and Transforming lives)',
         description: 'Empowering students in government schools and colleges by providing tuition fees, uniforms, and study materials to ensure a bright future.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-14.jpg',
+        image: '/images/act-education.jpg',
         badge: 'Vidya Dhanam'
       },
       {
@@ -88,7 +88,7 @@ export const defaultHomeContent = {
         slug: 'women-empowerment',
         title: 'Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)',
         description: 'Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-13.jpg',
+        image: '/images/act-women.jpg',
         badge: 'Stree Shakti'
       },
       {
@@ -96,7 +96,7 @@ export const defaultHomeContent = {
         slug: 'caring-for-homeless-people',
         title: 'Compassion Begins with Caring for Homeless People',
         description: 'Reaching out to homeless individuals with seasonal clothing, warm blankets, hygiene kits, and nourishing food across streets.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/3.jpg',
+        image: '/images/act-homeless.jpg',
         badge: 'Karuna Seva'
       },
       {
@@ -104,7 +104,7 @@ export const defaultHomeContent = {
         slug: 'other-additional-activities',
         title: 'Other Additional Activities',
         description: 'Extending emergency disaster relief, victim family support, and humanitarian seva across boundaries wherever need arises.',
-        image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/08/other-1-768x524.png',
+        image: '/images/act-other.jpg',
         badge: 'Humanitarian Seva'
       }
     ]

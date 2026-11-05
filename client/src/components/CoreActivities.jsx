@@ -19,7 +19,7 @@ export const coreActivitiesHomeList = [
     slug: 'annadhanam',
     title: 'Annadhanam (When Hunger ends, Dharma begins)',
     description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/12-5.jpg',
+    image: '/images/act-annadhanam.jpg',
     icon: Utensils,
     badge: 'Annam Parabrahma'
   },
@@ -28,7 +28,7 @@ export const coreActivitiesHomeList = [
     slug: 'unclaimed-souls',
     title: 'Honoring the Unclaimed Souls with Dignified Cremation',
     description: 'We provide honorable final ceremonies for unclaimed bodies, ensuring every individual is treated with dignity, regardless of their circumstances.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/Body-4.jpg',
+    image: '/images/act-cremation.jpg',
     icon: Flame,
     badge: 'Vedic Last Rites'
   },
@@ -37,7 +37,7 @@ export const coreActivitiesHomeList = [
     slug: 'spreading-the-dharmic-way-of-life',
     title: 'Spreading the Dharmic Way of Life (Traditional life Education for the Public)',
     description: 'Inspiring lives rooted in Dharma by preserving sacred traditions and nurturing compassion, righteousness, and unity.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/18-2.jpg',
+    image: '/images/act-dharmic.jpg',
     icon: BookOpen,
     badge: 'Life Transformation'
   },
@@ -46,7 +46,7 @@ export const coreActivitiesHomeList = [
     slug: 'education-support',
     title: 'Educational Support (Investing in Education and Transforming lives)',
     description: 'Empowering students in government schools and colleges by providing tuition fees, uniforms, and study materials to ensure a bright future.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/4-14.jpg',
+    image: '/images/act-education.jpg',
     icon: GraduationCap,
     badge: 'Vidya Dhanam'
   },
@@ -55,7 +55,7 @@ export const coreActivitiesHomeList = [
     slug: 'women-empowerment',
     title: 'Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)',
     description: 'Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/04/1-13.jpg',
+    image: '/images/act-women.jpg',
     icon: Heart,
     badge: 'Stree Shakti'
   },
@@ -64,7 +64,7 @@ export const coreActivitiesHomeList = [
     slug: 'caring-for-homeless-people',
     title: 'Compassion Begins with Caring for Homeless People',
     description: 'Reaching out to homeless individuals with seasonal clothing, warm blankets, hygiene kits, and nourishing food across streets.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/07/3.jpg',
+    image: '/images/act-homeless.jpg',
     icon: HeartHandshake,
     badge: 'Karuna Seva'
   },
@@ -73,7 +73,7 @@ export const coreActivitiesHomeList = [
     slug: 'other-additional-activities',
     title: 'Other Additional Activities',
     description: 'Extending emergency disaster relief, victim family support, and humanitarian seva across boundaries wherever need arises.',
-    image: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/08/other-1-768x524.png',
+    image: '/images/act-other.jpg',
     icon: Sparkles,
     badge: 'Humanitarian Seva'
   }
@@ -146,7 +146,12 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                     alt={act.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     loading="lazy"
-                    onError={(e) => { e.target.src = getMediaUrl('/images/about.jpg'); }}
+                    onError={(e) => {
+                      if (!e.target.dataset.failed) {
+                        e.target.dataset.failed = 'true';
+                        e.target.src = getMediaUrl('/images/act-annadhanam.jpg');
+                      }
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
                   
