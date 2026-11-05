@@ -338,13 +338,6 @@ export default function App() {
               onNavigate={handleNavigate}
             />
 
-            {/* Volunteer & Impact Metrics */}
-            <VolunteerSection
-              content={homeContent?.stats}
-              onNavigate={handleNavigate}
-              onOpenVolunteer={() => setVolunteerModalOpen(true)}
-            />
-
             {/* Dharmic Impact Across the Map / Events */}
             <EventsSection
               content={homeContent?.eventsSection}
