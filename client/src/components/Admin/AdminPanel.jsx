@@ -307,6 +307,37 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     });
   };
 
+  // State for uploading hero slide image files
+  const [slideUploadingIdx, setSlideUploadingIdx] = useState(null);
+  const [slideUploadProgress, setSlideUploadProgress] = useState(0);
+  const [slideUploadError, setSlideUploadError] = useState('');
+
+  const handleUploadSlideFile = async (idx, file) => {
+    if (!file) return;
+    setSlideUploadingIdx(idx);
+    setSlideUploadProgress(0);
+    setSlideUploadError('');
+
+    try {
+      const res = await uploadMediaSingle(file, (percent) => {
+        setSlideUploadProgress(percent);
+      });
+
+      if (res && res.success && res.data?.url) {
+        handleUpdateSlide(idx, 'image', res.data.url);
+      } else {
+        setSlideUploadError(res.message || 'Image upload failed. Please try again.');
+      }
+    } catch (err) {
+      setSlideUploadError('Network error uploading image.');
+    } finally {
+      setTimeout(() => {
+        setSlideUploadingIdx(null);
+        setSlideUploadProgress(0);
+      }, 500);
+    }
+  };
+
   // State for uploading gallery image files
   const [galleryUploadingIdx, setGalleryUploadingIdx] = useState(null);
   const [galleryUploadProgress, setGalleryUploadProgress] = useState(0);

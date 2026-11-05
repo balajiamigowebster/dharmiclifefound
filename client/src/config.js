@@ -56,14 +56,21 @@ export function getMediaUrl(url) {
 
   let clean = String(url).trim();
 
-  // Strip legacy hostnames & paths and point directly to backend uploads
-  if (clean.includes('/uploads/')) {
-    const uploadPath = clean.substring(clean.indexOf('/uploads/'));
-    return `${LIVE_BACKEND_URL}${uploadPath}`;
+  // If already an absolute HTTP/HTTPS URL
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    // Only redirect legacy local dev or localhost upload URLs
+    if (clean.includes('localhost:5001/uploads/') || clean.includes('localhost:5000/uploads/')) {
+      const uploadPath = clean.substring(clean.indexOf('/uploads/'));
+      return `${LIVE_BACKEND_URL}${uploadPath}`;
+    }
+    // Upgrade http to https to prevent mixed-content
+    return clean.replace(/^http:\/\//i, 'https://');
   }
 
-  if (clean.startsWith('uploads/')) {
-    return `${LIVE_BACKEND_URL}/${clean}`;
+  // Backend uploaded media (starts with /uploads/ or uploads/)
+  if (clean.startsWith('/uploads/') || clean.startsWith('uploads/')) {
+    const uploadPath = clean.startsWith('/') ? clean : `/${clean}`;
+    return `${LIVE_BACKEND_URL}${uploadPath}`;
   }
 
   // Resolve local static frontend assets (/images/...) relative to the app base URL
@@ -78,12 +85,7 @@ export function getMediaUrl(url) {
     return `${getAppBaseUrl()}images/${relPath}`;
   }
 
-  // Upgrade any external http:// to https:// to prevent mixed-content warnings
-  if (clean.startsWith('http://')) {
-    clean = clean.replace(/^http:\/\//i, 'https://');
-  }
-
-  if (clean.startsWith('https://') || clean.startsWith('data:')) {
+  if (clean.startsWith('data:')) {
     return clean;
   }
 
