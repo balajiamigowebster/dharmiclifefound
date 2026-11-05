@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { submitNewsletter } from '../api';
+import React from 'react';
+import { Mail, MapPin } from 'lucide-react';
 import logoImg from '../assets/logo.jpeg';
 
 export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [loading, setLoading] = useState(false);
-
   const officialEmail = siteInfo?.email || 'dharmiclifestyle@gmail.com';
   const officialAddress = siteInfo?.address || 'Pondicherry, India';
   const footerAboutText =
@@ -16,22 +11,6 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
   const facebookUrl = siteInfo?.facebook || 'https://facebook.com';
   const instagramUrl = siteInfo?.instagram || 'https://instagram.com';
   const whatsappUrl = siteInfo?.whatsapp || 'https://wa.me/919876543210';
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    if (!email || !email.includes('@')) return;
-    setLoading(true);
-    try {
-      await submitNewsletter(email);
-      setSubscribed(true);
-      setEmail('');
-    } catch (e) {
-      // fallback
-      setSubscribed(true);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleScrollTo = (id) => {
     const el = document.getElementById(id);
@@ -42,11 +21,11 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
     <footer id="contact" className="bg-[#1c1917] text-white pt-16 pb-8 border-t-4 border-[#901C25]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main 4-column Grid */}
+        {/* Main 3-column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
           
-          {/* Col 1: About / Logo (4 cols) */}
-          <div className="lg:col-span-4 space-y-4">
+          {/* Col 1: About / Logo (5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
             <div className="bg-white p-2.5 rounded-xl inline-block shadow-md">
               <img
                 src={logoImg}
@@ -60,8 +39,8 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
             </p>
           </div>
 
-          {/* Col 2: Get In Touch! (3 cols) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Col 2: Get In Touch! (4 cols) */}
+          <div className="lg:col-span-4 space-y-4">
             <h3 className="text-lg font-bold font-serif text-white tracking-wide relative inline-block">
               Get In Touch!
               <span className="block w-10 h-0.5 bg-[#E48A2D] mt-1.5"></span>
@@ -83,8 +62,8 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
             </ul>
           </div>
 
-          {/* Col 3: Quick Links (2 cols) */}
-          <div className="lg:col-span-2 space-y-4">
+          {/* Col 3: Quick Links (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
             <h3 className="text-lg font-bold font-serif text-white tracking-wide relative inline-block">
               Quick Links
               <span className="block w-10 h-0.5 bg-[#E48A2D] mt-1.5"></span>
@@ -193,44 +172,6 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
                 </a>
               </li>
             </ul>
-          </div>
-
-          {/* Col 4: Newsletter / Updates (3 cols) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h3 className="text-lg font-bold font-serif text-white tracking-wide relative inline-block">
-              Stay Connected
-              <span className="block w-10 h-0.5 bg-[#E48A2D] mt-1.5"></span>
-            </h3>
-            <p className="text-xs text-gray-300 leading-relaxed">
-              Subscribe to receive weekly seva reports, Annadhanam updates, and event invitations.
-            </p>
-
-            {subscribed ? (
-              <div className="flex items-center gap-2 p-3 bg-green-950/60 border border-green-700/60 text-green-300 text-xs rounded-xl">
-                <CheckCircle2 size={16} />
-                <span>Thank you for subscribing!</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="space-y-2">
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-white/10 border border-white/20 rounded-xl text-xs text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E48A2D]"
-                  />
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="absolute right-1 top-1 bottom-1 px-3 bg-[#901C25] hover:bg-[#73161d] rounded-lg text-white flex items-center justify-center transition"
-                  >
-                    <Send size={13} />
-                  </button>
-                </div>
-              </form>
-            )}
           </div>
 
         </div>
