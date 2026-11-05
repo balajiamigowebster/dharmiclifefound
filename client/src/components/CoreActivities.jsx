@@ -144,7 +144,7 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                   <img
                     src={getMediaUrl(act.image)}
                     alt={act.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"
                     onError={(e) => {
                       if (!e.target.dataset.failed) {
@@ -154,7 +154,7 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
-
+                  
                   {/* Floating Icon Badge */}
                   <div className="absolute bottom-4 right-4 w-12 h-12 rounded-xl bg-[#901C25] text-white flex items-center justify-center shadow-lg group-hover:bg-[#E48A2D] group-hover:scale-110 transition-all duration-300">
                     <IconComponent size={22} className="stroke-[2.2]" />
