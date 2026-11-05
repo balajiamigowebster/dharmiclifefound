@@ -167,7 +167,7 @@ export default function Footer({ siteInfo, onOpenContact, onNavigate }) {
         {/* Bottom Bar: Copyright & Socials */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
           <p className="text-center sm:text-left">
-            &copy; 2026 Copyrights by <span className="text-white font-semibold">Dharmic Life Foundation</span> . All Rights Reserved | Designed by <a href="https://amigowebster.in" target="_blank" rel="noreferrer" className="text-[#E48A2D] hover:underline">amigowebster</a>
+           All Rights Reserved  &copy; 2026 Copyrights by <span className="text-white font-semibold">Dharmic Life Foundation </span>| Designed by <a href="https://amigowebster.in" target="_blank" rel="noreferrer" className="text-[#E48A2D] hover:underline">amigowebster</a>
             <span className="mx-2 text-stone-600">|</span>
             <a
               href="/admin"
