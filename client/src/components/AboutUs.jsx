@@ -46,17 +46,6 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
                   className="w-full h-[480px] sm:h-[540px] object-cover hover:scale-105 transition-transform duration-700"
                   onError={(e) => { e.target.src = getMediaUrl('/images/about.jpg'); }}
                 />
-                
-                {/* Floating Experience Badge */}
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-xl p-4 shadow-xl border border-amber-100 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#901C25] text-white flex items-center justify-center font-bold text-xl shrink-0">
-                    <Sparkles size={22} className="text-[#E48A2D]" />
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-gray-900 text-sm font-serif">{experienceBadgeTitle}</h5>
-                    <p className="text-xs text-gray-600">{experienceBadgeSub}</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
