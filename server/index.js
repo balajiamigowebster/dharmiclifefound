@@ -1,11 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const db = require('./mariadb');
-const { sequelize, AdminUser } = require('./models');
+const { sequelize, AdminUser, ContactMessage } = require('./models');
+const { sendContactInquiryEmail } = require('./config/mailer');
 const mediaRoutes = require('./routes/mediaRoutes');
 const activityItemsRoutes = require('./routes/activityItemsRoutes');
 const awardItemsRoutes = require('./routes/awardItemsRoutes');
@@ -273,26 +273,69 @@ app.post('/api/volunteer', async (req, res) => {
   }
 });
 
-// Contact Query
-app.post('/api/contact', async (req, res) => {
+// Contact Query - Store in Table & Send Email to cPanel with CC to Google Mail
+app.post(['/api/contact', '/dharmiclife/api/contact'], async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'Name, email, and message are required' });
     }
-    const contactMsg = await db.createContactMessage({
-      name,
-      email,
-      phone,
-      subject,
-      message
-    });
+
+    let savedMessage = null;
+
+    // 1. Store in DB table using Sequelize model
+    try {
+      if (ContactMessage) {
+        savedMessage = await ContactMessage.create({
+          name: String(name).trim(),
+          email: String(email).trim(),
+          phone: String(phone || '').trim(),
+          subject: String(subject || '').trim(),
+          message: String(message).trim(),
+          status: 'unread',
+          emailSent: false
+        });
+      }
+    } catch (dbErr) {
+      console.warn('Sequelize insert warning for contact_messages:', dbErr.message);
+    }
+
+    // Fallback/sync to mariadb pool/localStore if Sequelize did not capture it
+    if (!savedMessage) {
+      savedMessage = await db.createContactMessage({
+        name,
+        email,
+        phone,
+        subject,
+        message
+      });
+    }
+
+    // 2. Dispatch Email via cPanel SMTP with CC to Google Mail
+    let emailResult = { success: false };
+    try {
+      emailResult = await sendContactInquiryEmail({
+        name,
+        email,
+        phone,
+        subject,
+        message
+      });
+      if (emailResult.success && savedMessage && typeof savedMessage.update === 'function') {
+        await savedMessage.update({ emailSent: true }).catch(() => {});
+      }
+    } catch (mailErr) {
+      console.error('Email dispatch error on contact submission:', mailErr.message);
+    }
+
     res.status(201).json({
       success: true,
-      message: 'Message received! We will get back to you promptly.',
-      contactMsg
+      message: 'Thank you! Your message has been received. Our team will contact you soon.',
+      contactMsg: savedMessage,
+      emailSent: emailResult.success
     });
   } catch (err) {
+    console.error('Failed to submit contact form:', err);
     res.status(500).json({ error: 'Failed to submit contact form' });
   }
 });
@@ -398,8 +441,20 @@ app.put('/api/homepage', (req, res) => {
 });
 
 // GET Contact Inquiries for Admin
-app.get('/api/admin/messages', async (req, res) => {
+app.get(['/api/admin/messages', '/dharmiclife/api/admin/messages'], async (req, res) => {
   try {
+    if (ContactMessage) {
+      try {
+        const messages = await ContactMessage.findAll({
+          order: [['createdAt', 'DESC']]
+        });
+        if (messages && messages.length > 0) {
+          return res.json(messages.map(m => m.toJSON()));
+        }
+      } catch (seqErr) {
+        console.warn('Sequelize fetch messages warning:', seqErr.message);
+      }
+    }
     const messages = await db.getContactMessages();
     res.json(messages);
   } catch (err) {
@@ -408,9 +463,16 @@ app.get('/api/admin/messages', async (req, res) => {
 });
 
 // DELETE Contact Inquiry
-app.delete('/api/admin/messages/:id', async (req, res) => {
+app.delete(['/api/admin/messages/:id', '/dharmiclife/api/admin/messages/:id'], async (req, res) => {
   try {
     const { id } = req.params;
+    if (ContactMessage) {
+      try {
+        await ContactMessage.destroy({ where: { id } });
+      } catch (seqErr) {
+        console.warn('Sequelize delete message warning:', seqErr.message);
+      }
+    }
     await db.deleteContactMessage(id);
     res.json({ success: true, message: 'Message removed' });
   } catch (err) {

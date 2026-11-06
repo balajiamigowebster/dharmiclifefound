@@ -22,7 +22,10 @@ export default function ContactPage({ onNavigate }) {
     setError('');
     setLoading(true);
     try {
-      await submitContact({ name, email, phone, subject, message });
+      const res = await submitContact({ name, email, phone, subject, message });
+      if (res && res.error) {
+        throw new Error(res.error);
+      }
       setSuccess(true);
       setName('');
       setEmail('');
@@ -30,7 +33,7 @@ export default function ContactPage({ onNavigate }) {
       setSubject('');
       setMessage('');
     } catch (err) {
-      setError('Failed to send message. Please try again later.');
+      setError(err.message || 'Failed to send message. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -100,9 +103,9 @@ export default function ContactPage({ onNavigate }) {
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed font-sans pt-1">
                 <a href="tel:+919876543210" className="hover:text-[#901C25] transition font-medium block">
-                  +91 98765 43210
+                  +91 99942 69157
                 </a>
-                <span className="text-xs text-gray-400 block">(406) 555-0120</span>
+                {/* <span className="text-xs text-gray-400 block">(406) 555-0120</span> */}
               </p>
             </div>
           </div>

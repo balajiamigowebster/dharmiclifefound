@@ -24,10 +24,13 @@ export default function ContactModal({ isOpen, onClose }) {
     setError('');
     setLoading(true);
     try {
-      await submitContact({ name, email, phone, subject, message });
+      const res = await submitContact({ name, email, phone, subject, message });
+      if (res && res.error) {
+        throw new Error(res.error);
+      }
       setSuccess(true);
     } catch (err) {
-      setError('Failed to send message. Please try again.');
+      setError(err.message || 'Failed to send message. Please try again.');
     } finally {
       setLoading(false);
     }
