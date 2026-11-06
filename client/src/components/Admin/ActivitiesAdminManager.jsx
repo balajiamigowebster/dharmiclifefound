@@ -405,12 +405,12 @@ export default function ActivitiesAdminManager() {
               <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
                 Title <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <textarea
+                rows={3}
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
                 placeholder="e.g. 1. Offline Class 26th October 2020 at chennai or Food Distribution Drive"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none resize-y leading-relaxed"
                 required
               />
             </div>
