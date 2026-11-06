@@ -108,7 +108,7 @@ export default function TrustPage({ onNavigate, onOpenDonation, onOpenVolunteer 
             className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#7A0A0A] text-[#7A0A0A] hover:bg-[#7A0A0A] hover:text-white rounded-xl font-bold text-sm transition"
           >
             <ArrowLeft size={16} />
-            <span>Back to Home</span>
+            <span>Back to Home</span
           </button> */}
 
           {/* <div className="flex items-center gap-3">
