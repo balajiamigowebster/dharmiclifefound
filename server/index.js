@@ -324,8 +324,13 @@ app.post(['/api/contact', '/dharmiclife/api/contact'], async (req, res) => {
         subject,
         message
       });
-      if (emailResult.success && savedMessage && typeof savedMessage.update === 'function') {
-        await savedMessage.update({ emailSent: true }).catch(() => {});
+      if (emailResult.success) {
+        if (savedMessage && typeof savedMessage.update === 'function') {
+          await savedMessage.update({ emailSent: true }).catch(() => {});
+        }
+        if (savedMessage && savedMessage.id) {
+          await db.updateContactMessageEmailSent(savedMessage.id).catch(() => {});
+        }
       }
     } catch (mailErr) {
       console.error('Email dispatch error on contact submission:', mailErr.message);

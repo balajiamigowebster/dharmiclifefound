@@ -319,25 +319,47 @@ class DatabaseManager {
       subject: data.subject || '',
       message: data.message || '',
       status: 'unread',
+      emailSent: data.emailSent ? 1 : 0,
       created_at: new Date().toISOString()
     };
 
     if (this.isMariaDBConnected && this.pool) {
       try {
         const [res] = await this.pool.query(
-          'INSERT INTO contact_messages (name, email, phone, subject, message, status) VALUES (?, ?, ?, ?, ?, ?)',
-          [record.name, record.email, record.phone, record.subject, record.message, record.status]
+          'INSERT INTO contact_messages (name, email, phone, subject, message, status, emailSent) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [record.name, record.email, record.phone, record.subject, record.message, record.status, record.emailSent]
         );
         record.id = res.insertId;
         return record;
       } catch (e) {
-        console.error('DB error saving message:', e.message);
+        try {
+          const [res] = await this.pool.query(
+            'INSERT INTO contact_messages (name, email, phone, subject, message, status) VALUES (?, ?, ?, ?, ?, ?)',
+            [record.name, record.email, record.phone, record.subject, record.message, record.status]
+          );
+          record.id = res.insertId;
+          return record;
+        } catch (e2) {
+          console.error('DB error saving message:', e2.message);
+        }
       }
     }
 
     record.id = this.localStore.contactMessages.length + 1;
     this.localStore.contactMessages.push(record);
     return record;
+  }
+
+  async updateContactMessageEmailSent(id) {
+    if (this.isMariaDBConnected && this.pool) {
+      try {
+        await this.pool.query('UPDATE contact_messages SET emailSent = 1 WHERE id = ?', [id]);
+        return true;
+      } catch (e) {
+        console.error('DB error updating emailSent:', e.message);
+      }
+    }
+    return false;
   }
 
   async getContactMessages() {
