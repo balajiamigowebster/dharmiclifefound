@@ -254,7 +254,7 @@ export default function EducationSupportPage({ onNavigate }) {
       )}
 
       {/* 6. Bottom Call-To-Action Banner */}
-      <section className="bg-gradient-to-r from-[#901C25] via-[#7d1820] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
+      {/* <section className="bg-gradient-to-r from-[#901C25] via-[#7d1820] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-1.5 text-center md:text-left">
@@ -280,7 +280,7 @@ export default function EducationSupportPage({ onNavigate }) {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

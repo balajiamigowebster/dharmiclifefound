@@ -122,9 +122,10 @@ export default function TrusteesPage({ onNavigate }) {
         </div>
       </div>
 
-      {/* 3. Trustees Profiles List (5 Authentic Trustees Matching Live Site Verbatim) */}
+      {/* 3. Trustees Profiles List (All with Photos; 1st with Metrics & Highlights, Others with Only Paragraphs) */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-        {trusteesData.map((trustee) => {
+        {trusteesData.map((trustee, index) => {
+          const isFirst = index === 0;
           const splitIndex = trustee.quotePosition || trustee.paragraphs.length;
           const preQuote = trustee.paragraphs.slice(0, splitIndex);
           const postQuote = trustee.paragraphs.slice(splitIndex);
@@ -187,71 +188,85 @@ export default function TrusteesPage({ onNavigate }) {
                 <div className="h-[2px] w-[70%] mx-auto bg-gradient-to-r from-transparent via-[#8B1E1E] to-transparent rounded"></div>
 
                 {/* Body Content */}
-                <div className="space-y-4 text-[14.5px] leading-relaxed text-[#4A5568] text-justify font-sans">
-                  
-                  {/* Pre-quote paragraphs */}
-                  {preQuote.map((p, idx) => (
-                    <p
-                      key={idx}
-                      className={idx === 0 ? 'text-[15px] font-medium text-[#2D3748]' : ''}
-                    >
-                      {p}
-                    </p>
-                  ))}
+                {isFirst ? (
+                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#4A5568] text-justify font-sans">
+                    
+                    {/* Pre-quote paragraphs */}
+                    {preQuote.map((p, idx) => (
+                      <p
+                        key={idx}
+                        className={idx === 0 ? 'text-[15px] font-medium text-[#2D3748]' : ''}
+                      >
+                        {p}
+                      </p>
+                    ))}
 
-                  {/* Quote Box (Exact .dlf-quote-box) */}
-                  {trustee.quote && (
-                    <div className="relative bg-gradient-to-br from-[#FFF9F5] to-[#FFF4ED] border-l-4 border-[#8B1E1E] rounded-r-xl p-5 pl-12 my-6 shadow-sm">
-                      <div className="absolute top-2 left-3.5 text-3xl font-serif text-[#8B1E1E]/35 leading-none select-none">
-                        “
+                    {/* Quote Box */}
+                    {trustee.quote && (
+                      <div className="relative bg-gradient-to-br from-[#FFF9F5] to-[#FFF4ED] border-l-4 border-[#8B1E1E] rounded-r-xl p-5 pl-12 my-6 shadow-sm">
+                        <div className="absolute top-2 left-3.5 text-3xl font-serif text-[#8B1E1E]/35 leading-none select-none">
+                          “
+                        </div>
+                        <blockquote className="font-serif text-[15.5px] font-semibold italic text-[#6D1B1B] leading-relaxed m-0 text-left">
+                          {trustee.quote}
+                        </blockquote>
                       </div>
-                      <blockquote className="font-serif text-[15.5px] font-semibold italic text-[#6D1B1B] leading-relaxed m-0 text-left">
-                        {trustee.quote}
-                      </blockquote>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Post-quote paragraphs (e.g. for Radha Ramanathan) */}
-                  {postQuote.map((p, idx) => (
-                    <p key={`post-${idx}`}>
-                      {p}
-                    </p>
-                  ))}
+                    {/* Post-quote paragraphs */}
+                    {postQuote.map((p, idx) => (
+                      <p key={`post-${idx}`}>
+                        {p}
+                      </p>
+                    ))}
 
-                  {/* Metric Cards Grid (Exact .dlf-metrics-grid) */}
-                  {trustee.metrics && trustee.metrics.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-6 pt-2">
-                      {trustee.metrics.map((m, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-white border border-[#F1E4D5] rounded-xl p-3.5 text-center hover:border-[#D97706] hover:shadow-md transition duration-200"
-                        >
-                          <span className="block font-serif text-2xl sm:text-[26px] font-extrabold text-[#8B1E1E] leading-tight">
-                            {m.value}
-                          </span>
-                          <span className="block text-[11.5px] font-semibold uppercase text-slate-500 tracking-wide mt-1">
-                            {m.title}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    {/* Metric Cards Grid */}
+                    {trustee.metrics && trustee.metrics.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-6 pt-2">
+                        {trustee.metrics.map((m, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-white border border-[#F1E4D5] rounded-xl p-3.5 text-center hover:border-[#D97706] hover:shadow-md transition duration-200"
+                          >
+                            <span className="block font-serif text-2xl sm:text-[26px] font-extrabold text-[#8B1E1E] leading-tight">
+                              {m.value}
+                            </span>
+                            <span className="block text-[11.5px] font-semibold uppercase text-slate-500 tracking-wide mt-1">
+                              {m.title}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                  {/* Highlights (Exact .dlf-highlights) */}
-                  {trustee.highlights && trustee.highlights.length > 0 && (
-                    <div className="mt-6 pt-4 border-t border-dashed border-gray-200 space-y-3">
-                      {trustee.highlights.map((h, idx) => (
-                        <div key={idx} className="flex items-start gap-3 text-left">
-                          <div className="w-2 h-2 rounded-full bg-[#8B1E1E] mt-2 shrink-0"></div>
-                          <p className="text-[13.5px] leading-relaxed text-[#4A5568] m-0">
-                            <strong className="text-gray-900">{h.title}:</strong> {h.text}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    {/* Highlights */}
+                    {trustee.highlights && trustee.highlights.length > 0 && (
+                      <div className="mt-6 pt-4 border-t border-dashed border-gray-200 space-y-3">
+                        {trustee.highlights.map((h, idx) => (
+                          <div key={idx} className="flex items-start gap-3 text-left">
+                            <div className="w-2 h-2 rounded-full bg-[#8B1E1E] mt-2 shrink-0"></div>
+                            <p className="text-[13.5px] leading-relaxed text-[#4A5568] m-0">
+                              <strong className="text-gray-900">{h.title}:</strong> {h.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                </div>
+                  </div>
+                ) : (
+                  /* Other Trustees: Only Paragraphs */
+                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#4A5568] text-justify font-sans">
+                    {trustee.paragraphs.map((p, idx) => (
+                      <p
+                        key={idx}
+                        className={idx === 0 ? 'text-[15px] font-medium text-[#2D3748]' : ''}
+                      >
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                )}
 
               </div>
             </div>
@@ -260,7 +275,7 @@ export default function TrusteesPage({ onNavigate }) {
       </div>
 
       {/* 4. Bottom Statement & Navigation Bar */}
-      <div className="bg-[#7A0A0A] text-white py-10 px-4 text-center border-t-4 border-[#D4A017] mt-12">
+      {/* <div className="bg-[#7A0A0A] text-white py-10 px-4 text-center border-t-4 border-[#D4A017] mt-12">
         <p className="max-w-4xl mx-auto text-base sm:text-lg font-medium text-[#FEE180] leading-relaxed mb-6">
           Through these efforts, Dharmic Life Foundation strives to promote healthy living, moral values, compassion, and social responsibility for the betterment of society.
         </p>
@@ -285,9 +300,10 @@ export default function TrusteesPage({ onNavigate }) {
           >
             <span>Contact Us</span>
             <ArrowRight size={16} />
+
           </button>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );

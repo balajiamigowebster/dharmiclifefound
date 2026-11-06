@@ -516,40 +516,102 @@ export default function AwardsAdminManager() {
             </div>
           </div>
 
-          {/* Description Content */}
-          <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-              Awardee Biography & Details
-            </label>
-            <textarea
-              rows={4}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Detailed description of the recipient's dedication, ritual history, and foundation honours..."
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm"
-            />
-          </div>
+          {/* Description Content & Citations */}
+          {selectedAwardType === 'dharma-shri-award' ? (
+            <div className="space-y-5 p-5 rounded-xl bg-[#FAF7F2] border border-[#EAE2D8]">
+              <div className="flex items-center justify-between border-b border-[#EAE2D8] pb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#901C25] flex items-center gap-1.5">
+                  <span>👥</span>
+                  <span>Two Persons Awardees Configuration (Per Year Edition)</span>
+                </span>
+                <span className="text-[11px] text-gray-500 font-medium">
+                  Each person has their own photo (left) & description (right)
+                </span>
+              </div>
 
-          {/* Tribute Box Citation */}
-          <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-              Citation / Tribute Text
-            </label>
-            <input
-              type="text"
-              value={tributeText}
-              onChange={(e) => setTributeText(e.target.value)}
-              placeholder="e.g. Recognising a lifetime of devotion to Agni, Dharma, and sacred Vedic rituals..."
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm"
-            />
-          </div>
+              {/* Person 1 / Awardee 1 */}
+              <div className="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#8B2613] uppercase tracking-wider flex items-center gap-2">
+                    <span>✦ Person 1: Dharma Shri Award</span>
+                  </label>
+                  <span className="text-[11px] font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    Paired with Image 1 (Left Side)
+                  </span>
+                </div>
+                <textarea
+                  rows={4}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Enter detailed description for 1st Awardee (displayed on the right side of the 1st photo)..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm leading-relaxed"
+                />
+              </div>
+
+              {/* Person 2 / Awardee 2 */}
+              <div className="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#8B2613] uppercase tracking-wider flex items-center gap-2">
+                    <span>✦ Person 2: Dharma Shri Award</span>
+                  </label>
+                  <span className="text-[11px] font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    Paired with Image 2 (Left Side)
+                  </span>
+                </div>
+                <textarea
+                  rows={4}
+                  value={tributeText}
+                  onChange={(e) => setTributeText(e.target.value)}
+                  placeholder="Enter detailed description for 2nd Awardee (displayed on the right side of the 2nd photo)..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm leading-relaxed"
+                />
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Description Content */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Awardee Biography & Details
+                </label>
+                <textarea
+                  rows={4}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Detailed description of the recipient's dedication, ritual history, and foundation honours..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm"
+                />
+              </div>
+
+              {/* Tribute Box Citation */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Citation / Tribute Text
+                </label>
+                <textarea
+                  rows={3}
+                  value={tributeText}
+                  onChange={(e) => setTributeText(e.target.value)}
+                  placeholder="e.g. Recognising a lifetime of devotion to Agni, Dharma, and sacred Vedic rituals..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#901C25] text-sm"
+                />
+              </div>
+            </>
+          )}
 
           {/* Existing Photos */}
           {existingImages.length > 0 && (
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Attached Images ({existingImages.length})
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  Attached Images ({existingImages.length})
+                </label>
+                {selectedAwardType === 'dharma-shri-award' && (
+                  <span className="text-[11px] text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded font-medium">
+                    Image 1 = Person 1 (Top) • Image 2 = Person 2 (Bottom)
+                  </span>
+                )}
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {existingImages.map((imgSrc, idx) => (
                   <div key={idx} className="relative rounded-xl overflow-hidden border border-gray-200 group bg-stone-100 aspect-video">
@@ -558,6 +620,11 @@ export default function AwardsAdminManager() {
                       alt="Award"
                       className="w-full h-full object-cover"
                     />
+                    {selectedAwardType === 'dharma-shri-award' && (
+                      <span className="absolute bottom-1.5 left-1.5 bg-black/75 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                        {idx === 0 ? 'Person 1 Photo' : idx === 1 ? 'Person 2 Photo' : `Photo ${idx + 1}`}
+                      </span>
+                    )}
                     <button
                       type="button"
                       onClick={() => handleRemoveExistingImage(idx)}
@@ -671,14 +738,38 @@ export default function AwardsAdminManager() {
           <div className="space-y-4">
             {items.map((item, idx) => {
               const images = Array.isArray(item.images) ? item.images : [];
+              const isDharmaShri = selectedAwardType === 'dharma-shri-award';
               return (
                 <div
                   key={item.id || idx}
                   className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-sm hover:shadow-md transition flex flex-col md:flex-row gap-5 items-start"
                 >
                   {/* Thumbnail */}
-                  <div className="w-full md:w-48 shrink-0">
-                    {images.length > 0 ? (
+                  <div className="w-full md:w-52 shrink-0">
+                    {isDharmaShri && images.length >= 2 ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="aspect-square rounded-xl overflow-hidden bg-stone-100 border border-gray-200 relative group">
+                          <img
+                            src={getMediaUrl(images[0])}
+                            alt="Person 1"
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute bottom-1 left-1 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            Person 1
+                          </span>
+                        </div>
+                        <div className="aspect-square rounded-xl overflow-hidden bg-stone-100 border border-gray-200 relative group">
+                          <img
+                            src={getMediaUrl(images[1])}
+                            alt="Person 2"
+                            className="w-full h-full object-cover"
+                          />
+                          <span className="absolute bottom-1 left-1 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                            Person 2
+                          </span>
+                        </div>
+                      </div>
+                    ) : images.length > 0 ? (
                       <div className="aspect-video rounded-xl overflow-hidden bg-stone-100 border border-gray-200 relative">
                         <img
                           src={getMediaUrl(images[0])}
@@ -723,14 +814,37 @@ export default function AwardsAdminManager() {
                       {item.title}
                     </h4>
 
-                    <div className="text-xs font-semibold text-[#901C25] mt-0.5">
-                      Recipient: <strong>{item.recipient}</strong>
-                    </div>
+                    {isDharmaShri ? (
+                      <div className="mt-2.5 space-y-2">
+                        <div className="p-2.5 rounded-lg bg-[#FAF7F2] border border-amber-200/70 text-xs">
+                          <span className="font-bold text-[#8B2613] block mb-0.5">
+                            ✦ Person 1: Dharma Shri Award
+                          </span>
+                          <p className="text-stone-600 line-clamp-2">
+                            {item.content || item.recipientsList?.[0]?.desc || 'No description added'}
+                          </p>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-[#FAF7F2] border border-amber-200/70 text-xs">
+                          <span className="font-bold text-[#8B2613] block mb-0.5">
+                            ✦ Person 2: Dharma Shri Award
+                          </span>
+                          <p className="text-stone-600 line-clamp-2">
+                            {item.tributeText || item.recipientsList?.[1]?.desc || 'No description added'}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-xs font-semibold text-[#901C25] mt-0.5">
+                          Recipient: <strong>{item.recipient}</strong>
+                        </div>
 
-                    {item.content && (
-                      <p className="text-xs text-gray-600 line-clamp-2 mt-2 leading-relaxed">
-                        {item.content}
-                      </p>
+                        {item.content && (
+                          <p className="text-xs text-gray-600 line-clamp-2 mt-2 leading-relaxed">
+                            {item.content}
+                          </p>
+                        )}
+                      </>
                     )}
                   </div>
 

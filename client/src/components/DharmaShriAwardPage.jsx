@@ -93,6 +93,7 @@ export default function DharmaShriAwardPage({ onNavigate }) {
               The <strong className="text-[#8B2613]">Dharma Shri Award</strong> was initially introduced to encourage students of the Dharmic Life Foundation. The Trustee Committee later extended this recognition to any individual in society who sincerely follows the path of Dharma and serves as an inspiring example to others.
             </div>
 
+
             {/* Award Honor & Token of Respect card */}
             <div className="bg-[#FDF8F2] border border-dashed border-[#D3A17E] rounded-xl p-5 sm:p-6">
               <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2 mb-2">
@@ -133,6 +134,18 @@ export default function DharmaShriAwardPage({ onNavigate }) {
             const primaryContent = item.content || '';
             const secondaryTribute = item.tributeText || '';
 
+            const awardHeading = item.awardName || 'Dharma Shri Award';
+
+            // Awardee 1 (Person 1)
+            const person1Image = images[0] || item.recipientsList?.[0]?.image || '';
+            const person1Title = awardHeading;
+            const person1Desc = primaryContent || item.recipientsList?.[0]?.desc || '';
+
+            // Awardee 2 (Person 2)
+            const person2Image = images[1] || item.recipientsList?.[1]?.image || '';
+            const person2Title = awardHeading;
+            const person2Desc = secondaryTribute || item.recipientsList?.[1]?.desc || '';
+
             return (
               <div
                 key={item.id || idx}
@@ -153,80 +166,102 @@ export default function DharmaShriAwardPage({ onNavigate }) {
                   )}
                 </div>
 
-                {/* Card Body: Images Grid & Narrative Content */}
+                {/* Card Body */}
                 <div className="p-6 sm:p-8 space-y-6">
-                  {/* Images Area: 1 or 2 photos side-by-side with full visibility (object-contain / natural portrait framing) */}
-                  {images.length > 0 && (
-                    <div
-                      className={`grid gap-4 ${
-                        images.length === 1
-                          ? 'grid-cols-1 max-w-md mx-auto'
-                          : 'grid-cols-1 sm:grid-cols-2'
-                      }`}
-                    >
-                      {images.map((imgSrc, imgIdx) => (
-                        <div
-                          key={imgIdx}
-                          className="relative rounded-xl overflow-hidden shadow-sm border border-stone-200/80 bg-stone-50 group cursor-pointer h-72 sm:h-80 flex items-center justify-center p-2"
-                          onClick={() => setSelectedImage(getMediaUrl(imgSrc))}
-                        >
-                          <img
-                            src={getMediaUrl(imgSrc)}
-                            alt={`${item.title} Photo ${imgIdx + 1}`}
-                            loading="lazy"
-                            decoding="async"
-                            className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
-                          />
-                          <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
-                            <span className="bg-white/95 text-stone-900 text-xs font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5">
-                              <ZoomIn size={14} className="text-[#901C25]" />
-                              <span>View Full Photo</span>
-                            </span>
+                  {/* Recognition & Felicitation Badges */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold rounded-full">
+                      🪙 20-Gram Pure Silver Coin Recipient
+                    </span>
+                    <span className="px-3 py-1 bg-stone-100 text-stone-700 border border-stone-200 text-xs font-medium rounded-full">
+                      📜 Official Appreciation Certificate
+                    </span>
+                    {item.location && (
+                      <span className="px-3 py-1 bg-rose-50 text-rose-900 border border-rose-200 text-xs font-medium rounded-full">
+                        📍 {item.location}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Awardees: Left Image & Right Description for each person */}
+                  <div className="space-y-6 pt-2">
+                    {/* Awardee 1 */}
+                    {(person1Desc || person1Image) && (
+                      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-[#FAF7F2] p-5 sm:p-6 rounded-2xl border border-stone-200/80">
+                        {/* Left Side: 1st Image */}
+                        {person1Image && (
+                          <div className="w-full md:w-5/12 shrink-0">
+                            <div
+                              className="relative rounded-xl overflow-hidden shadow-sm border border-stone-200 bg-white group cursor-pointer h-64 sm:h-72 flex items-center justify-center p-2"
+                              onClick={() => setSelectedImage(getMediaUrl(person1Image))}
+                            >
+                              <img
+                                src={getMediaUrl(person1Image)}
+                                alt={person1Title}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                              />
+                              <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                <span className="bg-white/95 text-stone-900 text-xs font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5">
+                                  <ZoomIn size={14} className="text-[#901C25]" />
+                                  <span>View Full Photo</span>
+                                </span>
+                              </div>
+                            </div>
                           </div>
+                        )}
+
+                        {/* Right Side: 1st Person Content (Description) */}
+                        <div className="flex-1 space-y-2.5">
+                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2">
+                            <span>✦</span>
+                            <span>{person1Title}</span>
+                          </h3>
+                          <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-sans text-justify">
+                            {person1Desc}
+                          </p>
                         </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Recognition & Felicitation Details */}
-                  <div className="space-y-4 pt-2">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold rounded-full">
-                        🪙 20-Gram Pure Silver Coin Recipient
-                      </span>
-                      <span className="px-3 py-1 bg-stone-100 text-stone-700 border border-stone-200 text-xs font-medium rounded-full">
-                        📜 Official Appreciation Certificate
-                      </span>
-                      {item.location && (
-                        <span className="px-3 py-1 bg-rose-50 text-rose-900 border border-rose-200 text-xs font-medium rounded-full">
-                          📍 {item.location}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Section 1: Spiritual Guidance & Excellence */}
-                    {primaryContent && (
-                      <div className="bg-[#FAF7F2] p-5 rounded-xl border border-stone-200/70 space-y-2">
-                        <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2">
-                          <span>✦</span>
-                          <span>Excellence in Spiritual Guidance Award</span>
-                        </h3>
-                        <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-sans text-justify">
-                          {primaryContent}
-                        </p>
                       </div>
                     )}
 
-                    {/* Section 2: Dharma Shri Award Honour */}
-                    {secondaryTribute && (
-                      <div className="bg-white p-5 rounded-xl border border-stone-200 space-y-2">
-                        <h3 className="text-base sm:text-lg font-bold font-serif text-stone-900 flex items-center gap-2">
-                          <span>✦</span>
-                          <span>Dharma Shri Award Citation</span>
-                        </h3>
-                        <p className="text-sm sm:text-base text-stone-600 leading-relaxed font-sans text-justify">
-                          {secondaryTribute}
-                        </p>
+                    {/* Awardee 2 */}
+                    {(person2Desc || person2Image) && (
+                      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-[#FAF7F2] p-5 sm:p-6 rounded-2xl border border-stone-200/80">
+                        {/* Left Side: 2nd Image */}
+                        {person2Image && (
+                          <div className="w-full md:w-5/12 shrink-0">
+                            <div
+                              className="relative rounded-xl overflow-hidden shadow-sm border border-stone-200 bg-white group cursor-pointer h-64 sm:h-72 flex items-center justify-center p-2"
+                              onClick={() => setSelectedImage(getMediaUrl(person2Image))}
+                            >
+                              <img
+                                src={getMediaUrl(person2Image)}
+                                alt={person2Title}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                              />
+                              <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                <span className="bg-white/95 text-stone-900 text-xs font-bold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5">
+                                  <ZoomIn size={14} className="text-[#901C25]" />
+                                  <span>View Full Photo</span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Right Side: 2nd Person Content (Description) */}
+                        <div className="flex-1 space-y-2.5">
+                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2">
+                            <span>✦</span>
+                            <span>{person2Title}</span>
+                          </h3>
+                          <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-sans text-justify">
+                            {person2Desc}
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>
