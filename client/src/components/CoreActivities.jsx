@@ -19,7 +19,7 @@ export const coreActivitiesHomeList = [
     slug: 'annadhanam',
     title: 'Annadhanam (When Hunger ends, Dharma begins)',
     description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
-    image: '/images/act-annadhanam.jpg',
+    image: '/images/home-annadhanam.jpeg',
     icon: Utensils,
     badge: 'Annam Parabrahma'
   },
@@ -55,7 +55,7 @@ export const coreActivitiesHomeList = [
     slug: 'women-empowerment',
     title: 'Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)',
     description: 'Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.',
-    image: '/images/act-women.jpg',
+    image: '/images/hospital-home.jpeg',
     icon: Heart,
     badge: 'Stree Shakti'
   },

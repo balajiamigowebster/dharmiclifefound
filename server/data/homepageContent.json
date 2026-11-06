@@ -56,7 +56,7 @@
         "slug": "annadhanam",
         "title": "Annadhanam (When Hunger ends, Dharma begins)",
         "description": "Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.",
-        "image": "/images/act-annadhanam.jpg",
+        "image": "/images/home-annadhanam.jpeg",
         "badge": "Annam Parabrahma"
       },
       {
@@ -88,7 +88,7 @@
         "slug": "women-empowerment",
         "title": "Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)",
         "description": "Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.",
-        "image": "/images/act-women.jpg",
+        "image": "/images/hospital-home.jpeg",
         "badge": "Stree Shakti"
       },
       {
@@ -215,6 +215,12 @@
         "image": "/images/gallery-6.jpg"
       },
       {
+        "id": 23,
+        "category": "aarthi",
+        "title": "Medical Seva & Patient Care",
+        "image": "/images/hospital-home.jpeg"
+      },
+      {
         "id": 5,
         "category": "clothes",
         "title": "Dressing with Dignity - Clothes Drive",
@@ -263,16 +269,16 @@
         "image": "/images/hero-1.jpg"
       },
       {
+        "id": 22,
+        "category": "annadhanam",
+        "title": "Daily Annadhanam Seva",
+        "image": "/images/home-annadhanam.jpeg"
+      },
+      {
         "id": 13,
         "category": "award",
         "title": "Dharma Shri Award Ceremony",
         "image": "/images/event-4.jpg"
-      },
-      {
-        "id": 15,
-        "category": "award",
-        "title": "Sacred Vedic Honors & Felicitation",
-        "image": "/images/act-dharmic.jpg"
       },
       {
         "id": 17,

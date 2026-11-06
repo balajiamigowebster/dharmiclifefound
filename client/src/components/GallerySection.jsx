@@ -96,17 +96,14 @@ export default function GallerySection({ content, gallery = [] }) {
             </button>
             <img
               src={activePhoto.image}
-              alt={activePhoto.title}
+              alt="Dharmic Life Gallery"
               onError={(e) => {
                 e.target.onerror = null;
                 const filename = (activePhoto.image || '').split('/').pop();
                 if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
               }}
-              className="max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl border border-white/10"
+              className="max-h-[85vh] w-auto max-w-full rounded-xl object-contain shadow-2xl border border-white/10"
             />
-            <p className="mt-4 text-white text-base font-serif font-medium text-center">
-              {activePhoto.title}
-            </p>
           </div>
         </div>
       )}

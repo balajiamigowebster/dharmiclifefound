@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, ZoomIn, X, ChevronLeft, ArrowRight, Heart } from 'lucide-react';
+import { Home, ChevronRight, X, ChevronLeft, Heart } from 'lucide-react';
 import { getMediaUrl, getAppBaseUrl } from '../config';
 
 export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: customItems }) {
@@ -22,6 +22,7 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
     { id: 2, category: 'aarthi', title: 'Emergency Aid Disbursement', image: '/images/gallery-4.jpg' },
     { id: 3, category: 'aarthi', title: 'Community Medical Support Camp', image: '/images/event-1.jpg' },
     { id: 4, category: 'aarthi', title: 'Relief Provisions Distribution', image: '/images/gallery-6.jpg' },
+    { id: 23, category: 'aarthi', title: 'Medical Seva & Patient Care', image: '/images/hospital-home.jpeg' },
 
     // Clothes Distribution
     { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/event-5.jpg' },
@@ -34,11 +35,11 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
     { id: 10, category: 'annadhanam', title: 'Nutritious Hot Meals for Needy', image: '/images/event-2.jpg' },
     { id: 11, category: 'annadhanam', title: 'Daily Food Seva for Destitute', image: '/images/gallery-3.jpg' },
     { id: 12, category: 'annadhanam', title: 'Prasadam Distribution Drive', image: '/images/hero-1.jpg' },
+    { id: 22, category: 'annadhanam', title: 'Daily Annadhanam Seva', image: '/images/home-annadhanam.jpeg' },
 
     // Dharma Shri Award
     { id: 13, category: 'award', title: 'Dharma Shri Award Ceremony', image: '/images/event-4.jpg' },
     { id: 14, category: 'award', title: 'Honoring Exemplary Social Guardians', image: '/images/team-1.jpg' },
-    { id: 15, category: 'award', title: 'Sacred Vedic Honors & Felicitation', image: '/images/act-dharmic.jpg' },
     { id: 16, category: 'award', title: 'Srowtha Rathana Award Gathering', image: '/images/team-3.jpg' },
 
     // Diwali Sweets & Clothes
@@ -211,7 +212,7 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
             <div
               key={item.id}
               onClick={() => openLightbox(index)}
-              className="group relative rounded-2xl overflow-hidden aspect-square bg-gray-100 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="relative rounded-2xl overflow-hidden aspect-square bg-gray-100 border border-gray-200 shadow-sm cursor-pointer"
             >
               <img
                 src={item.image}
@@ -223,58 +224,14 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
                   const filename = (item.image || '').split('/').pop();
                   if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
                 }}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                className="w-full h-full object-cover"
               />
-              
-              {/* Dark Hover Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 text-white">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 transform -translate-y-2 group-hover:translate-y-0 transition-transform">
-                  <ZoomIn size={20} className="text-white" />
-                </div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#E48A2D] mb-1">
-                  {categories.find(c => c.id === item.category)?.name || 'Dharmic Life'}
-                </span>
-                <h4 className="font-serif font-bold text-sm sm:text-base leading-snug drop-shadow line-clamp-2">
-                  {item.title}
-                </h4>
-              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 5. Bottom Call-To-Action Banner */}
-      <section className="bg-gradient-to-r from-[#901C25] via-[#73161d] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            <div className="space-y-2 text-center md:text-left">
-              <span className="inline-block px-3 py-1 bg-[#E48A2D] text-white text-xs font-bold uppercase rounded-full tracking-wider">
-                Support Our Mission
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-bold font-serif text-white">
-                Be Part of Our Next Story of Hope
-              </h3>
-              <p className="text-white/80 text-sm max-w-xl">
-                Every picture represents hundreds of warm meals served, students educated, and forgotten souls honored.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-4 shrink-0">
-              <button
-                onClick={() => onNavigate('contact')}
-                className="px-8 py-3.5 bg-[#E48A2D] hover:bg-[#c9751e] text-white font-bold text-sm rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2"
-              >
-                <span>Get in Touch</span>
-                <ArrowRight size={16} />
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Full-Screen Interactive Lightbox */}
+      {/* 5. Full-Screen Interactive Lightbox */}
       {lightboxIndex !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fadeIn"
@@ -307,30 +264,21 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
             <ChevronRight size={36} />
           </button>
 
-          {/* Image & Caption Card */}
+          {/* Image */}
           <div
             className="relative max-w-4xl w-full max-h-[85vh] flex flex-col items-center select-none"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={filteredItems[lightboxIndex]?.image}
-              alt={filteredItems[lightboxIndex]?.title}
+              alt="Dharmic Life Gallery"
               onError={(e) => {
                 e.target.onerror = null;
                 const filename = (filteredItems[lightboxIndex]?.image || '').split('/').pop();
                 if (filename) e.target.src = `${getAppBaseUrl()}images/${filename}`;
               }}
-              className="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl border border-white/15"
+              className="max-h-[85vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl border border-white/15"
             />
-            
-            <div className="mt-4 text-center">
-              <span className="text-xs uppercase tracking-widest text-[#E48A2D] font-bold block mb-1">
-                {lightboxIndex + 1} of {filteredItems.length} &bull; {categories.find(c => c.id === filteredItems[lightboxIndex]?.category)?.name}
-              </span>
-              <p className="text-white text-base sm:text-lg font-serif font-medium">
-                {filteredItems[lightboxIndex]?.title}
-              </p>
-            </div>
           </div>
         </div>
       )}

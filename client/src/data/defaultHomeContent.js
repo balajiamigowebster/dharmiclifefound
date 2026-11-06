@@ -56,7 +56,7 @@ export const defaultHomeContent = {
         slug: 'annadhanam',
         title: 'Annadhanam (When Hunger ends, Dharma begins)',
         description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
-        image: '/images/act-annadhanam.jpg',
+        image: '/images/home-annadhanam.jpeg',
         badge: 'Annam Parabrahma'
       },
       {
@@ -88,7 +88,7 @@ export const defaultHomeContent = {
         slug: 'women-empowerment',
         title: 'Women Empowerment (Every Women Deserves Opportunity, Respect and Dignity)',
         description: 'Supporting women through vocational training and skill-building workshops to help them achieve financial independence and lead confident lives.',
-        image: '/images/act-women.jpg',
+        image: '/images/hospital-home.jpeg',
         badge: 'Stree Shakti'
       },
       {
@@ -195,6 +195,7 @@ export const defaultHomeContent = {
       { id: 2, category: 'aarthi', title: 'Emergency Aid Disbursement', image: '/images/gallery-4.jpg' },
       { id: 3, category: 'aarthi', title: 'Community Medical Support Camp', image: '/images/event-1.jpg' },
       { id: 4, category: 'aarthi', title: 'Relief Provisions Distribution', image: '/images/gallery-6.jpg' },
+      { id: 23, category: 'aarthi', title: 'Medical Seva & Patient Care', image: '/images/hospital-home.jpeg' },
 
       // Clothes Distribution
       { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/event-5.jpg' },
@@ -207,11 +208,11 @@ export const defaultHomeContent = {
       { id: 10, category: 'annadhanam', title: 'Nutritious Hot Meals for Needy', image: '/images/event-2.jpg' },
       { id: 11, category: 'annadhanam', title: 'Daily Food Seva for Destitute', image: '/images/gallery-3.jpg' },
       { id: 12, category: 'annadhanam', title: 'Prasadam Distribution Drive', image: '/images/hero-1.jpg' },
+      { id: 22, category: 'annadhanam', title: 'Daily Annadhanam Seva', image: '/images/home-annadhanam.jpeg' },
 
       // Dharma Shri Award
       { id: 13, category: 'award', title: 'Dharma Shri Award Ceremony', image: '/images/event-4.jpg' },
       { id: 14, category: 'award', title: 'Honoring Exemplary Social Guardians', image: '/images/team-1.jpg' },
-      { id: 15, category: 'award', title: 'Sacred Vedic Honors & Felicitation', image: '/images/act-dharmic.jpg' },
       { id: 16, category: 'award', title: 'Srowtha Rathana Award Gathering', image: '/images/team-3.jpg' },
 
       // Diwali Sweets & Clothes
