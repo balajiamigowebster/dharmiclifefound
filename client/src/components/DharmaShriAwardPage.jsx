@@ -135,15 +135,20 @@ export default function DharmaShriAwardPage({ onNavigate }) {
             const secondaryTribute = item.tributeText || '';
 
             const awardHeading = item.awardName || 'Dharma Shri Award';
+            const cleanTitle = (awardHeading || 'Dharma Shri Award').replace(/^\d+[\.\s]*/, '').trim() || 'Dharma Shri Award';
+
+            // Sequential numbering across all awards (each year has 2 awards: 1 & 2 for 2021, 3 & 4 for 2022, etc.)
+            const awardNum1 = idx * 2 + 1;
+            const awardNum2 = idx * 2 + 2;
 
             // Awardee 1 (Person 1)
             const person1Image = images[0] || item.recipientsList?.[0]?.image || '';
-            const person1Title = awardHeading;
+            const person1Title = `${awardNum1}. ${cleanTitle}`;
             const person1Desc = primaryContent || item.recipientsList?.[0]?.desc || '';
 
             // Awardee 2 (Person 2)
             const person2Image = images[1] || item.recipientsList?.[1]?.image || '';
-            const person2Title = awardHeading;
+            const person2Title = `${awardNum2}. ${cleanTitle}`;
             const person2Desc = secondaryTribute || item.recipientsList?.[1]?.desc || '';
 
             return (
@@ -214,9 +219,8 @@ export default function DharmaShriAwardPage({ onNavigate }) {
 
                         {/* Right Side: 1st Person Content (Description) */}
                         <div className="flex-1 space-y-2.5">
-                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2">
-                            <span>✦</span>
-                            <span>{person1Title}</span>
+                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613]">
+                            {person1Title}
                           </h3>
                           <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-sans text-justify">
                             {person1Desc}
@@ -254,9 +258,8 @@ export default function DharmaShriAwardPage({ onNavigate }) {
 
                         {/* Right Side: 2nd Person Content (Description) */}
                         <div className="flex-1 space-y-2.5">
-                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613] flex items-center gap-2">
-                            <span>✦</span>
-                            <span>{person2Title}</span>
+                          <h3 className="text-base sm:text-lg font-bold font-serif text-[#8B2613]">
+                            {person2Title}
                           </h3>
                           <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-sans text-justify">
                             {person2Desc}
