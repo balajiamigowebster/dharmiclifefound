@@ -152,15 +152,15 @@ export default function DharmaShriAwardPage({ onNavigate }) {
                 className="bg-white rounded-2xl border border-stone-200/90 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
               >
                 {/* Year Title Bar on Top of the Card */}
-                <div className="bg-gradient-to-r from-stone-900 via-[#701c22] to-stone-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 border-b border-stone-200">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#E48A2D]"></span>
-                    <h2 className="text-lg sm:text-xl font-bold font-serif tracking-wide text-white">
+                <div className="relative bg-gradient-to-r from-stone-900 via-[#701c22] to-stone-900 text-white px-6 py-4 flex items-center justify-center border-b border-stone-200">
+                  <div className="flex items-center justify-center gap-2.5 text-center">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#E48A2D] shrink-0"></span>
+                    <h2 className="text-lg sm:text-xl font-bold font-serif tracking-wide text-white text-center">
                       {item.title}
                     </h2>
                   </div>
                   {item.year && (
-                    <span className="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-300/30 text-xs font-bold rounded-full">
+                    <span className="hidden sm:inline-block absolute right-6 px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-300/30 text-xs font-bold rounded-full">
                       Year {item.year}
                     </span>
                   )}

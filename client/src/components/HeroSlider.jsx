@@ -1,6 +1,6 @@
 import { getMediaUrl } from '../config';
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Heart, ArrowRight, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -8,16 +8,12 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
   const defaultSlides = [
     {
       id: 1,
-      image: '/images/hero-1.jpg',
+      image: '/images/hospital-home.jpeg',
       badge: 'Serving Humanity, Preserving Dharma',
       titlePrefix: 'Humanity is',
       titleMiddle: 'the Mother of',
       titleHighlight: 'Dharma',
-      description: 'Restoring dignity to the forgotten, feeding the hungry, and bringing eternal peace to departed souls in Pondicherry.',
-      ctaText: 'Explore Activities',
-      ctaTarget: 'activities',
-      secondaryText: 'About Us',
-      secondaryTarget: 'trust'
+      description: 'Restoring dignity to the forgotten, feeding the hungry, and bringing eternal peace to departed souls in Pondicherry.'
     },
     {
       id: 2,
@@ -26,11 +22,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
       titlePrefix: 'Humanity is',
       titleMiddle: 'the Mother of',
       titleHighlight: 'Dharma',
-      description: 'Join hands with Dharmic Life Foundation to empower students, care for homeless families, and preserve timeless sacred traditions.',
-      ctaText: 'Our Activities',
-      ctaTarget: 'activities',
-      secondaryText: 'Trustees & Leadership',
-      secondaryTarget: 'trustees'
+      description: 'Join hands with Dharmic Life Foundation to empower students, care for homeless families, and preserve timeless sacred traditions.'
     }
   ];
 
@@ -51,15 +43,6 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const handleCtaClick = (target) => {
-    if (onNavigate) {
-      onNavigate(target);
-    } else {
-      const el = document.getElementById(target);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   return (
@@ -84,8 +67,8 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
               />
             </div>
 
-            {/* Dark Gradient Overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/35 pointer-events-none"></div>
+            {/* Subtle Gradient Overlay for enhanced image visibility and readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/10 pointer-events-none"></div>
 
             {/* Slide Content */}
             <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
@@ -103,7 +86,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
 
                 {/* Main Headline */}
                 <h1
-                  className={`text-3xl sm:text-5xl lg:text-6xl font-bold font-serif text-white leading-tight transition-all duration-700 delay-200 ${
+                  className={`text-3xl sm:text-5xl lg:text-6xl font-bold font-serif text-white leading-tight drop-shadow-md transition-all duration-700 delay-200 ${
                     isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
                   }`}
                 >
@@ -116,34 +99,12 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
 
                 {/* Description */}
                 <p
-                  className={`text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed max-w-xl transition-all duration-700 delay-300 ${
+                  className={`text-sm sm:text-base lg:text-lg text-white/95 drop-shadow leading-relaxed max-w-xl transition-all duration-700 delay-300 ${
                     isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
                   }`}
                 >
                   {slide.description}
                 </p>
-
-                {/* Call To Action Buttons */}
-                <div
-                  className={`flex flex-wrap items-center gap-4 pt-2 transition-all duration-700 delay-500 ${
-                    isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                  }`}
-                >
-                  <button
-                    onClick={() => handleCtaClick(slide.ctaTarget)}
-                    className="px-6 sm:px-8 py-3.5 bg-[#901C25] hover:bg-[#78171f] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg shadow-xl shadow-red-950/40 transition transform active:scale-95 flex items-center gap-2 group"
-                  >
-                    <span>{slide.ctaText}</span>
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-
-                  <button
-                    onClick={() => handleCtaClick(slide.secondaryTarget)}
-                    className="px-6 sm:px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-lg border border-white/20 backdrop-blur-sm transition"
-                  >
-                    {slide.secondaryText}
-                  </button>
-                </div>
 
               </div>
             </div>

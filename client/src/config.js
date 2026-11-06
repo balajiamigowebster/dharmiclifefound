@@ -2,10 +2,14 @@
 // Direct high-speed HTTPS backend on cPanel (sub-second response, zero mixed content)
 export const LIVE_BACKEND_URL = 'https://dharmiclifefoundation.com/api';
 
-// Resolve Backend Base URL: Direct HTTPS connection (or relative proxy on Vercel)
+// Resolve Backend Base URL: Direct HTTPS connection (or relative proxy on Vercel / Localhost)
 export const BACKEND_URL = (() => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
+  }
+  // On Localhost dev server, route through /api proxy to local backend (http://localhost:5001)
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return '/api';
   }
   // On Vercel, route through /api proxy to eliminate browser cross-origin preflight errors
   if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
@@ -62,7 +66,11 @@ export function getMediaUrl(url) {
 
   // If already an absolute HTTP/HTTPS URL
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
-    // Redirect any upload media (whether from legacy hosts or local) to live backend uploads
+    // If it's a WordPress upload, keep the URL intact
+    if (clean.includes('/wp-content/uploads/')) {
+      return clean.replace(/^http:\/\//i, 'https://');
+    }
+    // If it contains /uploads/, redirect to the live cPanel backend uploads
     if (clean.includes('/uploads/')) {
       const uploadPath = clean.substring(clean.indexOf('/uploads/'));
       return `${LIVE_BACKEND_URL}${uploadPath}`;

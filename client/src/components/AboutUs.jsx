@@ -76,7 +76,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
             </div>
 
             {/* Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            {/* <div className="flex flex-wrap items-center gap-4 pt-4">
               <a
                 href="/trust"
                 onClick={(e) => {
@@ -99,7 +99,7 @@ export default function AboutUs({ onNavigate, onOpenDonation, onOpenVolunteer, c
               >
                 {secondaryBtnText}
               </a>
-            </div>
+            </div> */}
 
           </div>
 

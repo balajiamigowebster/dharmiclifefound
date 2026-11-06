@@ -1,5 +1,5 @@
 import { defaultHomeContent } from './data/defaultHomeContent';
-import { API_BASE_URL, getMediaUrl } from './config';
+import { API_BASE_URL, LIVE_BACKEND_URL, getMediaUrl } from './config';
 
 // API Client for Dharmic Life Foundation
 const API_BASE = API_BASE_URL;
@@ -182,26 +182,6 @@ function mergeHomeContent(data) {
 }
 
 export async function fetchHomepageContent() {
-  // Check localStorage first if modified by admin locally (especially on static Vercel deploy)
-  if (typeof window !== 'undefined') {
-    const cached = localStorage.getItem('dlf_homepage_content');
-    if (cached) {
-      try {
-        const parsed = mergeHomeContent(JSON.parse(cached));
-        // Try syncing from server in background if available, but local overrides when API is unreachable
-        try {
-          const res = await fetch(`${API_BASE}/homepage`);
-          if (res.ok) {
-            const serverData = mergeHomeContent(await res.json());
-            localStorage.setItem('dlf_homepage_content', JSON.stringify(serverData));
-            return serverData;
-          }
-        } catch (err) {}
-        return parsed;
-      } catch (e) {}
-    }
-  }
-
   try {
     const res = await fetch(`${API_BASE}/homepage`);
     if (res.ok) {
@@ -213,6 +193,16 @@ export async function fetchHomepageContent() {
     }
   } catch (err) {
     console.warn('API fetch homepage fallback:', err.message);
+  }
+
+  // Fallback to localStorage if API is unreachable
+  if (typeof window !== 'undefined') {
+    const cached = localStorage.getItem('dlf_homepage_content');
+    if (cached) {
+      try {
+        return mergeHomeContent(JSON.parse(cached));
+      } catch (e) {}
+    }
   }
 
   return defaultHomeContent;
@@ -283,7 +273,8 @@ export async function deleteAdminMessage(id) {
 // Activity Items (Sub-categories items with images and videos)
 export async function fetchActivityItems(categorySlug) {
   try {
-    const url = categorySlug ? `${API_BASE}/activity-items/category/${categorySlug}` : `${API_BASE}/activity-items`;
+    const baseUrl = LIVE_BACKEND_URL || API_BASE;
+    const url = categorySlug ? `${baseUrl}/activity-items/category/${categorySlug}` : `${baseUrl}/activity-items`;
     const res = await fetch(url);
     if (res.ok) {
       const json = await res.json();
@@ -428,9 +419,10 @@ export function uploadMediaSingle(file, onProgress) {
 
 export async function fetchAwardItems(awardType) {
   try {
+    const baseUrl = LIVE_BACKEND_URL || API_BASE;
     const url = awardType
-      ? `${API_BASE}/award-items/type/${awardType}`
-      : `${API_BASE}/award-items`;
+      ? `${baseUrl}/award-items/type/${awardType}`
+      : `${baseUrl}/award-items`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();

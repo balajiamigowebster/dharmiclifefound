@@ -184,7 +184,7 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
       </div>
 
       {/* 3. Featured Carousel Section ("What they’re talking about welowe") */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-14">
@@ -198,14 +198,14 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
             </h2>
           </div>
 
-          {/* Carousel Slider Card */}
+         
           <div className="max-w-4xl mx-auto bg-stone-50 rounded-3xl p-8 sm:p-12 border border-gray-100 shadow-xl relative">
             <div className="absolute top-6 right-8 text-[#901C25]/10">
               <Quote size={80} />
             </div>
 
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-              {/* Avatar */}
+             
               <div className="shrink-0 text-center">
                 <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#E48A2D] shadow-lg mx-auto bg-gray-100">
                   <img
@@ -216,21 +216,21 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
                 </div>
               </div>
 
-              {/* Text */}
+              
               <div className="flex-1 text-center md:text-left space-y-4">
-                {/* Rating */}
+                
                 <div className="flex items-center justify-center md:justify-start gap-1">
                   {[...Array(currentFeatured.rating)].map((_, i) => (
                     <Star key={i} size={18} className="fill-[#E48A2D] text-[#E48A2D]" />
                   ))}
                 </div>
 
-                {/* Quote */}
+             
                 <p className="text-gray-700 text-base sm:text-lg italic leading-relaxed font-sans">
                   "{currentFeatured.quote}"
                 </p>
 
-                {/* Author */}
+             
                 <div>
                   <h4 className="text-xl font-bold font-serif text-gray-900">{currentFeatured.name}</h4>
                   <p className="text-xs sm:text-sm text-[#901C25] font-semibold">{currentFeatured.role}</p>
@@ -238,7 +238,7 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
               </div>
             </div>
 
-            {/* Controls */}
+            
             <div className="flex items-center justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
               <button
                 onClick={prevSlide}
@@ -272,10 +272,10 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
           </div>
 
         </div>
-      </section>
+      </section> */}
 
       {/* 4. Grid Review Section ("People’s talk about us") */}
-      <section className="py-16 bg-stone-50 border-t border-gray-100">
+      {/* <section className="py-16 bg-stone-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-14">
@@ -289,7 +289,7 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
             </h2>
           </div>
 
-          {/* 4-Card Grid */}
+         
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {gridReviews.map((review, idx) => (
               <div
@@ -297,20 +297,20 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
                 className="bg-white rounded-2xl p-8 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="space-y-4">
-                  {/* Stars */}
+                 
                   <div className="flex items-center gap-1 text-[#E48A2D]">
                     {[...Array(review.rating)].map((_, i) => (
                       <Star key={i} size={16} className="fill-[#E48A2D]" />
                     ))}
                   </div>
 
-                  {/* Quote */}
+                  
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed italic">
                     "{review.quote}"
                   </p>
                 </div>
 
-                {/* Author Info */}
+             
                 <div className="flex items-center gap-4 mt-6 pt-6 border-t border-gray-100">
                   <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-200 shrink-0">
                     <img
@@ -329,10 +329,10 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
           </div>
 
         </div>
-      </section>
+      </section> */}
 
       {/* 5. Bottom CTA Banner ("Your story starts from here") */}
-      <section className="bg-gradient-to-r from-[#901C25] via-[#73161d] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
+      {/* <section className="bg-gradient-to-r from-[#901C25] via-[#73161d] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             
@@ -368,7 +368,7 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
 
           </div>
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

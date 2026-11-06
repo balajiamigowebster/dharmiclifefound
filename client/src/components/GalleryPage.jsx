@@ -17,6 +17,11 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
 
   // Comprehensive fallback gallery collection representing all albums
   const fallbackGalleryItems = [
+    { id: 101, category: 'all', title: 'Community Outreach & Seva', image: '/images/life-1.jpeg' },
+    { id: 102, category: 'all', title: 'Selfless Service Drive', image: '/images/life-2.jpeg' },
+    { id: 103, category: 'all', title: 'Dharmic Mission in Action', image: '/images/life-3.jpeg' },
+    { id: 104, category: 'all', title: 'Humanity & Compassion Camp', image: '/images/life-4.jpeg' },
+
     // Aarthi Relief Fund
     { id: 1, category: 'aarthi', title: 'Aarthi Relief Fund - Medical Assistance', image: '/images/gallery-1.jpg' },
     { id: 2, category: 'aarthi', title: 'Emergency Aid Disbursement', image: '/images/gallery-4.jpg' },
@@ -25,10 +30,10 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
     { id: 23, category: 'aarthi', title: 'Medical Seva & Patient Care', image: '/images/hospital-home.jpeg' },
 
     // Clothes Distribution
-    { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/event-5.jpg' },
+    { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/6th.jpeg' },
     { id: 6, category: 'clothes', title: 'Warm Clothing Distribution for Elders', image: '/images/gallery-2.jpg' },
     { id: 7, category: 'clothes', title: 'Winter Blanket & Dress Support', image: '/images/volunteer-bg.jpg' },
-    { id: 8, category: 'clothes', title: 'Street Dweller Care & Essentials', image: '/images/act-homeless.jpg' },
+    { id: 8, category: 'clothes', title: 'Street Dweller Care & Essentials', image: '/images/9th.jpeg' },
 
     // Annadhanam
     { id: 9, category: 'annadhanam', title: 'Mega Annadhanam Camp Pondicherry', image: '/images/act-annadhanam.jpg' },
@@ -186,24 +191,7 @@ export default function GalleryPage({ onNavigate, onOpenDonation, galleryItems: 
         </div>
       </div>
 
-      {/* 3. Filter Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
-                activeCategory === cat.id
-                  ? 'bg-[#901C25] text-white shadow-md scale-105'
-                  : 'bg-stone-100 hover:bg-stone-200 text-gray-700'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-      </div>
+
 
       {/* 4. Photo Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

@@ -3,7 +3,7 @@ export const defaultHomeContent = {
     slides: [
       {
         id: 1,
-        image: '/images/hero-1.jpg',
+        image: '/images/hospital-home.jpeg',
         badge: 'Serving Humanity, Preserving Dharma',
         titlePrefix: 'Humanity is',
         titleMiddle: 'the Mother of',
@@ -190,6 +190,11 @@ export const defaultHomeContent = {
     title: 'Our Services in Pictures',
     subtitle: 'Witness our on-ground compassion across streets, government schools, communities, and crematoriums.',
     items: [
+      { id: 101, category: 'all', title: 'Community Outreach & Seva', image: '/images/life-1.jpeg' },
+      { id: 102, category: 'all', title: 'Selfless Service Drive', image: '/images/life-2.jpeg' },
+      { id: 103, category: 'all', title: 'Dharmic Mission in Action', image: '/images/life-3.jpeg' },
+      { id: 104, category: 'all', title: 'Humanity & Compassion Camp', image: '/images/life-4.jpeg' },
+
       // Aarthi Relief Fund
       { id: 1, category: 'aarthi', title: 'Aarthi Relief Fund - Medical Assistance', image: '/images/gallery-1.jpg' },
       { id: 2, category: 'aarthi', title: 'Emergency Aid Disbursement', image: '/images/gallery-4.jpg' },
@@ -198,10 +203,10 @@ export const defaultHomeContent = {
       { id: 23, category: 'aarthi', title: 'Medical Seva & Patient Care', image: '/images/hospital-home.jpeg' },
 
       // Clothes Distribution
-      { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/event-5.jpg' },
+      { id: 5, category: 'clothes', title: 'Dressing with Dignity - Clothes Drive', image: '/images/6th.jpeg' },
       { id: 6, category: 'clothes', title: 'Warm Clothing Distribution for Elders', image: '/images/gallery-2.jpg' },
       { id: 7, category: 'clothes', title: 'Winter Blanket & Dress Support', image: '/images/volunteer-bg.jpg' },
-      { id: 8, category: 'clothes', title: 'Street Dweller Care & Essentials', image: '/images/act-homeless.jpg' },
+      { id: 8, category: 'clothes', title: 'Street Dweller Care & Essentials', image: '/images/9th.jpeg' },
 
       // Annadhanam
       { id: 9, category: 'annadhanam', title: 'Mega Annadhanam Camp Pondicherry', image: '/images/act-annadhanam.jpg' },
