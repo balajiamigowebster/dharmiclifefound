@@ -1,7 +1,13 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 require('dotenv').config();
-const nodemailer = require('nodemailer');
+
+let nodemailer = null;
+try {
+  nodemailer = require('nodemailer');
+} catch (e) {
+  console.warn('[Mailer Warning] nodemailer is not installed yet. In cPanel, click "Run NPM Install".');
+}
 
 // Extract credentials from standard or custom environment variables
 const smtpUser = process.env.SMTP_USER || process.env['cpanel email'] || 'info@dharmiclifefoundation.com';
@@ -16,6 +22,9 @@ const notificationCc = process.env.NOTIFICATION_CC_EMAIL || 'dharmiclifefondatio
 let transporter = null;
 
 function getTransporter() {
+  if (!nodemailer) {
+    return null;
+  }
   if (!transporter) {
     transporter = nodemailer.createTransport({
       host: smtpHost,
@@ -37,8 +46,16 @@ function getTransporter() {
  * Send contact inquiry email to cPanel inbox with CC to Google mail
  */
 async function sendContactInquiryEmail({ name, email, phone, subject, message }) {
+  if (!nodemailer) {
+    console.warn('[Mailer] nodemailer module is not installed on server yet. Message saved to database.');
+    return { success: false, error: 'nodemailer module not installed. Please click "Run NPM Install" in cPanel.' };
+  }
+
   try {
     const mailer = getTransporter();
+    if (!mailer) {
+      return { success: false, error: 'Failed to initialize mailer transporter' };
+    }
 
     const safeName = String(name || 'Website Visitor').trim();
     const safeEmail = String(email || '').trim();

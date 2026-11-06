@@ -2,10 +2,14 @@
 // Direct high-speed HTTPS backend on cPanel (sub-second response, zero mixed content)
 export const LIVE_BACKEND_URL = 'https://dharmiclifefoundation.com/api';
 
-// Resolve Backend Base URL: Direct HTTPS connection
+// Resolve Backend Base URL: Direct HTTPS connection (or relative proxy on Vercel)
 export const BACKEND_URL = (() => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
+  }
+  // On Vercel, route through /api proxy to eliminate browser cross-origin preflight errors
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    return '/api';
   }
   return LIVE_BACKEND_URL;
 })();

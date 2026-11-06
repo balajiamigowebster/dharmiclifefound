@@ -36,13 +36,12 @@ const ContactMessage = sequelize.define('ContactMessage', {
   },
   emailSent: {
     type: DataTypes.BOOLEAN,
-    allowNull: false,
+    allowNull: true,
     defaultValue: false
   }
 }, {
   tableName: 'contact_messages',
-  timestamps: true
+  timestamps: false
 });
 
 module.exports = ContactMessage;
-
