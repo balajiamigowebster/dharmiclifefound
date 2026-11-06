@@ -1,6 +1,8 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const db = require('./mariadb');
@@ -123,6 +125,7 @@ app.get(['/', '/dharmiclife', '/api/health', '/dharmiclife/api/health'], (req, r
     database: db.getStatus()
   });
 });
+
 
 // Site Settings
 app.get('/api/site-info', async (req, res) => {
@@ -552,3 +555,5 @@ app.listen(PORT, () => {
     console.error('[Sequelize Warning] Database connection failed or not yet reachable:', err.message);
   }
 })();
+
+module.exports = app;
