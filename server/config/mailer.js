@@ -17,7 +17,7 @@ const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
 const smtpSecure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : smtpPort === 465;
 
 const notificationTo = process.env.NOTIFICATION_EMAIL || 'info@dharmiclifefoundation.com';
-const notificationCc = process.env.NOTIFICATION_CC_EMAIL || 'dharmiclifefoundation@gmail.com';
+const notificationCc = process.env.NOTIFICATION_CC_EMAIL || 'dharmiclifestyle@gmail.com';
 
 let transporter = null;
 
