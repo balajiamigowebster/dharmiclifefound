@@ -348,6 +348,56 @@ app.post(['/api/contact', '/dharmiclife/api/contact'], async (req, res) => {
   }
 });
 
+// Test Mail Diagnostics Endpoint
+app.get(['/api/test-email-status', '/dharmiclife/api/test-email-status'], async (req, res) => {
+  const result = {
+    nodemailerLoaded: false,
+    transporterConfig: null,
+    verifyResult: null,
+    verifyError: null,
+    sendResult: null,
+    catchError: null
+  };
+
+  try {
+    const { getTransporter, sendContactInquiryEmail } = require('./config/mailer');
+    const transporter = getTransporter();
+
+    if (!transporter) {
+      result.error = 'Transporter could not be created. Check if nodemailer is installed.';
+      return res.json(result);
+    }
+
+    result.nodemailerLoaded = true;
+    result.transporterConfig = {
+      host: transporter.options?.host,
+      port: transporter.options?.port,
+      secure: transporter.options?.secure,
+      user: transporter.options?.auth?.user,
+      hasPassword: !!transporter.options?.auth?.pass
+    };
+
+    try {
+      result.verifyResult = await transporter.verify();
+    } catch (vErr) {
+      result.verifyError = vErr.message;
+    }
+
+    const testSend = await sendContactInquiryEmail({
+      name: 'Diagnostic Checker',
+      email: 'test@dharmiclifefoundation.com',
+      phone: '9999999999',
+      subject: 'Live cPanel Mail Test',
+      message: 'Checking if cPanel Node.js dispatches email.'
+    });
+    result.sendResult = testSend;
+  } catch (err) {
+    result.catchError = err.message;
+  }
+
+  res.json(result);
+});
+
 // Newsletter Subscription
 app.post('/api/newsletter', async (req, res) => {
   try {
