@@ -80,11 +80,11 @@ export default function ContactPage({ onNavigate }) {
             </div>
             <div className="space-y-1">
               <h3 className="text-xl font-bold font-serif text-gray-900">
-                Mailing Address
+                Address
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed font-sans pt-1">
                 Pondicherry, India<br />
-                <span className="text-xs text-gray-400">901 N Pitt Str., Suite 170 Alexandria, USA</span>
+           {/*      <span className="text-xs text-gray-400">901 N Pitt Str., Suite 170 Alexandria, USA</ */}
               </p>
             </div>
           </div>
