@@ -17,7 +17,16 @@ const smtpPort = parseInt(process.env.SMTP_PORT || '465', 10);
 const smtpSecure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : smtpPort === 465;
 
 const notificationTo = process.env.NOTIFICATION_EMAIL || 'info@dharmiclifefoundation.com';
-const notificationCc = process.env.NOTIFICATION_CC_EMAIL || 'dharmiclifestyle@gmail.com';
+
+function resolveNotificationCc() {
+  const envCc = (process.env.NOTIFICATION_CC_EMAIL || '').trim();
+  if (!envCc || envCc.includes('dharmiclifefoundation@gmail.com') || envCc.includes('dharmiclifefondation@gmail.com')) {
+    return 'dharmiclifestyle@gmail.com';
+  }
+  return envCc;
+}
+
+const notificationCc = resolveNotificationCc();
 
 let transporter = null;
 
@@ -137,19 +146,22 @@ async function sendContactInquiryEmail({ name, email, phone, subject, message })
     </html>
     `;
 
+    const activeCc = resolveNotificationCc();
+
     const mailOptions = {
       from: `"Dharmic Life Foundation" <${smtpUser}>`,
       to: notificationTo,
-      cc: notificationCc,
+      cc: activeCc,
       replyTo: `"${safeName}" <${safeEmail}>`,
       subject: `[Website Inquiry] ${safeSubject} - from ${safeName}`,
       text: `New Website Inquiry:\n\nName: ${safeName}\nEmail: ${safeEmail}\nPhone: ${safePhone}\nSubject: ${safeSubject}\nDate: ${sentTime}\n\nMessage:\n${String(message || '').trim()}\n`,
       html: htmlContent
     };
 
+    console.log(`[Mailer] Dispatching to ${notificationTo} with CC: ${activeCc}`);
     const info = await mailer.sendMail(mailOptions);
     console.log('✅ Contact form notification email sent successfully:', info.messageId);
-    return { success: true, messageId: info.messageId };
+    return { success: true, messageId: info.messageId, cc: activeCc };
   } catch (err) {
     console.error('❌ Failed to send contact notification email:', err.message);
     return { success: false, error: err.message };
@@ -158,5 +170,6 @@ async function sendContactInquiryEmail({ name, email, phone, subject, message })
 
 module.exports = {
   sendContactInquiryEmail,
-  getTransporter
+  getTransporter,
+  resolveNotificationCc
 };

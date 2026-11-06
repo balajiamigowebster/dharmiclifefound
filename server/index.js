@@ -368,7 +368,9 @@ app.get(['/api/test-email-status', '/dharmiclife/api/test-email-status'], async 
       return res.json(result);
     }
 
+    const { resolveNotificationCc } = require('./config/mailer');
     result.nodemailerLoaded = true;
+    result.resolvedCc = typeof resolveNotificationCc === 'function' ? resolveNotificationCc() : 'dharmiclifestyle@gmail.com';
     result.transporterConfig = {
       host: transporter.options?.host,
       port: transporter.options?.port,
