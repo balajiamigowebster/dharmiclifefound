@@ -402,15 +402,20 @@ export default function ActivitiesAdminManager() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Title */}
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Title <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <span className="text-[11px] font-mono text-gray-400">
+                  {formTitle.length} characters (Unlimited length supported)
+                </span>
+              </div>
               <textarea
-                rows={3}
+                rows={4}
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
                 placeholder="e.g. 1. Offline Class 26th October 2020 at chennai or Food Distribution Drive"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none resize-y leading-relaxed"
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 text-xs focus:ring-2 focus:ring-[#901C25] focus:outline-none resize-y leading-relaxed min-h-[96px]"
                 required
               />
             </div>

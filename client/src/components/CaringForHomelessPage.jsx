@@ -313,7 +313,7 @@ export default function CaringForHomelessPage({ onNavigate }) {
       )}
 
       {/* 6. Activity Cross-Navigation Links */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-[#FAF8F5] border border-[#EEDAC5] rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
             <h4 className="text-lg font-bold font-serif text-[#901C25]">
@@ -339,7 +339,7 @@ export default function CaringForHomelessPage({ onNavigate }) {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* 7. Bottom Call-To-Action Banner */}
       {/* <section className="bg-gradient-to-r from-[#901C25] via-[#7d1820] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">

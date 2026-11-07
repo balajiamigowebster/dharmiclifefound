@@ -50,7 +50,7 @@ export default function TrusteesPage({ onNavigate }) {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#FFD700] tracking-wide mb-2.5 font-serif">
               Trustees &amp; Leadership
             </h2>
-            <p className="text-sm sm:text-base md:text-lg italic text-[#F8EBE1] font-sans max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg italic text-[#F8EBE1] font-sans max-w-2xl mx-auto leading-relaxed font-bold">
               “Trustees are the backbone of Dharmic Life Foundation. Without their dedication, upholding the principles of Dharma would not be possible.”
             </p>
           </div>
@@ -58,7 +58,7 @@ export default function TrusteesPage({ onNavigate }) {
           {/* Content Body */}
           <div className="p-6 sm:p-10 space-y-6 font-sans text-gray-700 leading-relaxed text-base">
             
-            <div className="bg-[#FFF6ED] border-l-4 border-[#B84318] p-5 rounded-r-lg font-medium text-gray-800 text-sm sm:text-base leading-relaxed">
+            <div className="bg-[#FFF6ED] border-l-4 border-[#B84318] p-5 rounded-r-lg font-bold text-gray-800 text-sm sm:text-base leading-relaxed">
               Being a trustee does not mean that one must contribute to the Trust only through financial support. The <strong>Dharmic Life Foundation</strong> values and recognizes pure-hearted, service-minded individuals committed to the path of Dharma.
             </div>
 
@@ -68,7 +68,7 @@ export default function TrusteesPage({ onNavigate }) {
                 <span>🏛️</span>
                 <span>Principles of Trusteeship</span>
               </h3>
-              <p className="text-sm sm:text-base text-gray-800 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-800 leading-relaxed font-bold">
                 Anyone may become a trustee of the Trust if they truly demonstrate the qualities, commitment, and dedication deserving of such a responsibility. Trusteeship is not based solely on financial contribution, but on <strong>selfless service, character, commitment, and devotion</strong> to the ideals of Dharma.
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function TrusteesPage({ onNavigate }) {
                 <span>🌱</span>
                 <span>The Pathway to Trusteeship</span>
               </h3>
-              <p className="text-sm sm:text-base text-gray-800 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-800 leading-relaxed font-bold">
                 Anyone aspiring to become a Trustee of the Dharmic Life Foundation must begin from the foundation and grow through dedicated service:
               </p>
 
@@ -189,13 +189,13 @@ export default function TrusteesPage({ onNavigate }) {
 
                 {/* Body Content */}
                 {isFirst ? (
-                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#4A5568] text-justify font-sans">
+                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#2D3748] text-justify font-sans">
                     
                     {/* Pre-quote paragraphs */}
                     {preQuote.map((p, idx) => (
                       <p
                         key={idx}
-                        className={idx === 0 ? 'text-[15px] font-medium text-[#2D3748]' : ''}
+                        className="font-bold text-[#2D3748]"
                       >
                         {p}
                       </p>
@@ -215,7 +215,7 @@ export default function TrusteesPage({ onNavigate }) {
 
                     {/* Post-quote paragraphs */}
                     {postQuote.map((p, idx) => (
-                      <p key={`post-${idx}`}>
+                      <p key={`post-${idx}`} className="font-bold text-[#2D3748]">
                         {p}
                       </p>
                     ))}
@@ -245,7 +245,7 @@ export default function TrusteesPage({ onNavigate }) {
                         {trustee.highlights.map((h, idx) => (
                           <div key={idx} className="flex items-start gap-3 text-left">
                             <div className="w-2 h-2 rounded-full bg-[#8B1E1E] mt-2 shrink-0"></div>
-                            <p className="text-[13.5px] leading-relaxed text-[#4A5568] m-0">
+                            <p className="text-[13.5px] leading-relaxed text-[#2D3748] font-bold m-0">
                               <strong className="text-gray-900">{h.title}:</strong> {h.text}
                             </p>
                           </div>
@@ -256,11 +256,11 @@ export default function TrusteesPage({ onNavigate }) {
                   </div>
                 ) : (
                   /* Other Trustees: Only Paragraphs */
-                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#4A5568] text-justify font-sans">
+                  <div className="space-y-4 text-[14.5px] leading-relaxed text-[#2D3748] text-justify font-sans">
                     {trustee.paragraphs.map((p, idx) => (
                       <p
                         key={idx}
-                        className={idx === 0 ? 'text-[15px] font-medium text-[#2D3748]' : ''}
+                        className="font-bold text-[#2D3748]"
                       >
                         {p}
                       </p>

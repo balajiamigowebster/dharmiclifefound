@@ -93,7 +93,7 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
         {/* Sub-Title */}
         <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold font-serif text-gray-900">
-            Honoring the Unclaimed Souls with Dignified Cremation
+            Honoring the Unclaimed Souls with Dignified Burial
           </h2>
           <div className="w-16 h-1 bg-[#901C25] mx-auto mt-2.5 rounded-full"></div>
         </div>
@@ -139,7 +139,7 @@ export default function UnclaimedSoulsPage({ onNavigate }) {
                 <span>Long-Term Vision: Dharmic Life Garden</span>
               </h3>
               <p className="text-sm sm:text-base text-gray-800 leading-relaxed">
-                Looking ahead, Dharmic Life Foundation has a long-term vision of establishing a dedicated burial and cremation ground in Puducherry, where the departed can be given their final rites with dignity and respect. We envision developing this sacred space as a <strong>Dharmic Life Garden</strong>—a peaceful place that preserves the dignity and memory of those who left this world without anyone to claim them.
+                Looking ahead, Dharmic Life Foundation has a long-term vision of establishing a dedicated burial ground in Puducherry, where the departed can be given their final rites with dignity and respect. We envision developing this sacred space as a <strong>Dharmic Life Garden</strong>—a peaceful place that preserves the dignity and memory of those who left this world without anyone to claim them.
               </p>
             </div>
 

@@ -17,7 +17,7 @@ const AwardItem = sequelize.define('AwardItem', {
     allowNull: true
   },
   title: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   awardName: {

@@ -1,5 +1,20 @@
 const { AwardItem, Media } = require('../models');
 
+// Ensure MySQL column supports long titles beyond 255 chars
+let hasAlteredTable = false;
+async function ensureTableSchema() {
+  if (hasAlteredTable) return;
+  try {
+    if (AwardItem.sequelize) {
+      await AwardItem.sequelize.query('ALTER TABLE award_items MODIFY title TEXT NOT NULL');
+    }
+  } catch (err) {
+    // Ignore if already TEXT
+  } finally {
+    hasAlteredTable = true;
+  }
+}
+
 // Helper to record media file in DB
 async function recordUploadedMedia(file, awardType, title) {
   const isVideo = file.mimetype.startsWith('video/');
@@ -22,6 +37,7 @@ async function recordUploadedMedia(file, awardType, title) {
 // Get all awards by type (e.g. 'srowtha-rathana-award' or 'dharma-shri-award')
 exports.getAwardsByType = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { awardType } = req.params;
     const where = awardType ? { awardType } : {};
     const items = await AwardItem.findAll({
@@ -54,6 +70,7 @@ exports.getAwardsByType = async (req, res) => {
 // Create a new award item with files or existing URLs
 exports.createAwardItem = async (req, res) => {
   try {
+    await ensureTableSchema();
     const {
       awardType,
       year,
@@ -148,6 +165,7 @@ exports.createAwardItem = async (req, res) => {
 // Update existing award item
 exports.updateAwardItem = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { id } = req.params;
     const item = await AwardItem.findByPk(id);
 
@@ -252,6 +270,7 @@ exports.deleteAwardItem = async (req, res) => {
 // Bulk sync/seed items for awards
 exports.bulkSyncAwards = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { awardType, items } = req.body;
     if (!awardType || !Array.isArray(items)) {
       return res.status(400).json({ success: false, message: 'awardType and items array are required' });

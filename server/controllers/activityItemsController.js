@@ -1,5 +1,20 @@
 const { ActivityItem, Media } = require('../models');
 
+// Ensure MySQL column supports long titles beyond 255 chars
+let hasAlteredTable = false;
+async function ensureTableSchema() {
+  if (hasAlteredTable) return;
+  try {
+    if (ActivityItem.sequelize) {
+      await ActivityItem.sequelize.query('ALTER TABLE activity_items MODIFY title TEXT NOT NULL');
+    }
+  } catch (err) {
+    // Ignore if already TEXT or permissions restricted
+  } finally {
+    hasAlteredTable = true;
+  }
+}
+
 // Helper to record media file in DB
 async function recordUploadedMedia(file, categorySlug, title) {
   const isVideo = file.mimetype.startsWith('video/');
@@ -22,6 +37,7 @@ async function recordUploadedMedia(file, categorySlug, title) {
 // Get all items for a specific activity subcategory (or all if slug not given)
 exports.getItemsByCategory = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { slug } = req.params;
     const where = slug ? { categorySlug: slug } : {};
     const items = await ActivityItem.findAll({
@@ -55,6 +71,7 @@ exports.getItemsByCategory = async (req, res) => {
 // Create a new activity item with files and/or existing URLs
 exports.createItem = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { categorySlug, title, content, existingImages, existingVideos } = req.body;
 
     if (!categorySlug || !title) {
@@ -126,6 +143,7 @@ exports.createItem = async (req, res) => {
 // Update existing activity item
 exports.updateItem = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { id } = req.params;
     let item = await ActivityItem.findByPk(id);
 
@@ -223,6 +241,7 @@ exports.deleteItem = async (req, res) => {
 // Bulk sync/seed initial items for a category from frontend to DB
 exports.bulkSyncCategory = async (req, res) => {
   try {
+    await ensureTableSchema();
     const { categorySlug, items } = req.body;
     if (!categorySlug || !Array.isArray(items)) {
       return res.status(400).json({ success: false, message: 'categorySlug and items array are required' });
