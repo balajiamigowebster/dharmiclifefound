@@ -293,30 +293,23 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
                   {/* Content Info */}
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div>
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <h4 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug group-hover:text-[#901C25] transition">
-                          {video.title}
-                        </h4>
+                      <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <div>
+                          <h4 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug group-hover:text-[#901C25] transition flex items-center gap-1.5">
+                            <User size={16} className="text-[#901C25] shrink-0" />
+                            <span>{video.name || video.speakerName || video.title || 'Student Testimonial'}</span>
+                          </h4>
+                          {video.location && (
+                            <p className="text-xs text-gray-500 font-medium flex items-center gap-1 mt-0.5">
+                              <MapPin size={12} className="text-[#E48A2D] shrink-0" />
+                              <span>{video.location}</span>
+                            </p>
+                          )}
+                        </div>
                         {video.duration && (
                           <span className="shrink-0 px-2 py-0.5 rounded-full bg-stone-100 text-gray-600 text-[10px] font-bold flex items-center gap-1">
                             <Clock size={11} />
                             <span>{video.duration}</span>
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Name & Location */}
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs">
-                        {(video.name || video.speakerName) && (
-                          <span className="text-[#901C25] font-semibold flex items-center gap-1">
-                            <User size={13} />
-                            <span>{video.name || video.speakerName}</span>
-                          </span>
-                        )}
-                        {video.location && (
-                          <span className="text-gray-500 font-medium flex items-center gap-1">
-                            <MapPin size={13} className="text-[#E48A2D]" />
-                            <span>{video.location}</span>
                           </span>
                         )}
                       </div>

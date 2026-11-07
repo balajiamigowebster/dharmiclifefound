@@ -80,12 +80,17 @@ exports.createTestimonialVideo = async (req, res) => {
       videoUrl: passedVideoUrl
     } = req.body;
 
-    if (!category || !title) {
+    const personName = (name || speakerName || title || '').trim();
+    const personLocation = (location || '').trim();
+
+    if (!category || !personName) {
       return res.status(400).json({
         success: false,
-        message: 'Category and Title are required.'
+        message: 'Category and Student/Person Name are required.'
       });
     }
+
+    const resolvedTitle = (title || personName || 'Student Testimonial').trim();
 
     let resolvedVideoUrl = passedVideoUrl || '';
     let resolvedThumbnailUrl = '';
@@ -93,14 +98,14 @@ exports.createTestimonialVideo = async (req, res) => {
     // Handle uploaded video file
     const videoFile = (req.files && req.files.videoFile && req.files.videoFile[0]) || req.file;
     if (videoFile) {
-      const media = await recordUploadedVideo(videoFile, title, category);
+      const media = await recordUploadedVideo(videoFile, resolvedTitle, category);
       resolvedVideoUrl = media.url;
     }
 
     // Handle uploaded thumbnail image if present
     const thumbnailFile = req.files && req.files.thumbnailFile && req.files.thumbnailFile[0];
     if (thumbnailFile) {
-      const media = await recordUploadedVideo(thumbnailFile, `${title} thumbnail`, category);
+      const media = await recordUploadedVideo(thumbnailFile, `${resolvedTitle} thumbnail`, category);
       resolvedThumbnailUrl = media.url;
     }
 
@@ -119,13 +124,10 @@ exports.createTestimonialVideo = async (req, res) => {
         : 'Udaliyal Dharmam Classes';
     }
 
-    const personName = (name || speakerName || '').trim();
-    const personLocation = (location || '').trim();
-
     const newVideo = await TestimonialVideo.create({
       category: category.trim(),
       categoryName: cleanCategoryName.trim(),
-      title: title.trim(),
+      title: resolvedTitle,
       name: personName || null,
       speakerName: personName || null,
       location: personLocation || null,

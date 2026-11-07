@@ -20,7 +20,7 @@ const TestimonialVideo = sequelize.define('TestimonialVideo', {
   },
   title: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: true
   },
   // Student / Speaker Name
   name: {

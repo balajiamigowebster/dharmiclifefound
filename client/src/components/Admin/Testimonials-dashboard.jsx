@@ -48,7 +48,6 @@ export default function TestimonialsDashboard() {
   // Form states
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
@@ -77,7 +76,6 @@ export default function TestimonialsDashboard() {
 
   const resetForm = () => {
     setEditingId(null);
-    setTitle('');
     setName('');
     setLocation('');
     setDescription('');
@@ -90,8 +88,7 @@ export default function TestimonialsDashboard() {
 
   const handleStartEdit = (item) => {
     setEditingId(item.id);
-    setTitle(item.title || '');
-    setName(item.name || item.speakerName || '');
+    setName(item.name || item.speakerName || item.title || '');
     setLocation(item.location || '');
     setDescription(item.description || '');
     setDuration(item.duration || '');
@@ -115,11 +112,6 @@ export default function TestimonialsDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title.trim()) {
-      setMessage({ type: 'error', text: 'Please enter a video title.' });
-      return;
-    }
-
     if (!name.trim()) {
       setMessage({ type: 'error', text: 'Please enter the Student / Person Name.' });
       return;
@@ -137,7 +129,7 @@ export default function TestimonialsDashboard() {
     const videoData = {
       category: selectedCategory,
       categoryName: activeCatObj ? activeCatObj.name : 'Udaliyal Dharmam Classes',
-      title: title.trim(),
+      title: name.trim(),
       name: name.trim(),
       speakerName: name.trim(),
       location: location.trim(),
@@ -332,21 +324,6 @@ export default function TestimonialsDashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Title */}
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                Video Title / Topic *
-              </label>
-              <input
-                type="text"
-                required
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Life transformation and natural healing after Udaliyal Dharmam course"
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-[#901C25] focus:ring-1 focus:ring-[#901C25] outline-none text-sm transition"
-              />
-            </div>
-
             {/* Name */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
@@ -383,7 +360,7 @@ export default function TestimonialsDashboard() {
             </div>
 
             {/* Duration */}
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
                 Duration (Optional)
               </label>
@@ -567,9 +544,18 @@ export default function TestimonialsDashboard() {
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                   <div>
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="text-sm sm:text-base font-bold font-serif text-gray-900 leading-snug">
-                        {item.title}
-                      </h4>
+                      <div>
+                        <h4 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug flex items-center gap-1.5">
+                          <User size={16} className="text-[#901C25] shrink-0" />
+                          <span>{item.name || item.speakerName || item.title || 'Student Testimonial'}</span>
+                        </h4>
+                        {item.location && (
+                          <p className="text-xs text-gray-500 font-medium flex items-center gap-1 mt-0.5">
+                            <MapPin size={12} className="text-[#E48A2D] shrink-0" />
+                            <span>{item.location}</span>
+                          </p>
+                        )}
+                      </div>
                       {item.duration && (
                         <span className="shrink-0 px-2 py-0.5 rounded-full bg-stone-100 text-gray-600 text-[10px] font-bold">
                           {item.duration}
@@ -577,24 +563,8 @@ export default function TestimonialsDashboard() {
                       )}
                     </div>
 
-                    {/* Name & Location */}
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs">
-                      {(item.name || item.speakerName) && (
-                        <span className="text-[#901C25] font-semibold flex items-center gap-1">
-                          <User size={13} />
-                          <span>{item.name || item.speakerName}</span>
-                        </span>
-                      )}
-                      {item.location && (
-                        <span className="text-gray-500 font-medium flex items-center gap-1">
-                          <MapPin size={13} className="text-[#E48A2D]" />
-                          <span>{item.location}</span>
-                        </span>
-                      )}
-                    </div>
-
                     {item.description && (
-                      <p className="text-xs text-gray-600 mt-2 line-clamp-3 leading-relaxed">
+                      <p className="text-xs text-gray-600 mt-2.5 line-clamp-3 leading-relaxed">
                         {item.description}
                       </p>
                     )}
