@@ -55,21 +55,21 @@ export default function TrustPage({ onNavigate, onOpenDonation, onOpenVolunteer 
       {/* 3. Main Content Container */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-12">
         
-        {/* Origin & Journey */}
+        {/* 1. Our History */}
         <section className="space-y-5">
           <div className="relative pb-3 border-b-2 border-gray-100">
             <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#7A0A0A]">
-              Our Origin &amp; Journey
+              Our History
             </h2>
             <div className="absolute -bottom-0.5 left-0 w-16 h-1 bg-[#D4A017] rounded-full"></div>
           </div>
 
           <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
-            <strong className="text-gray-900 font-semibold">Dharmic Life Foundation</strong> was established by transforming the institution known as the <em className="text-[#7A0A0A] font-medium not-italic font-semibold">Academy of Dharmic Life</em>. The Academy was started in <strong className="text-gray-900">October 2020</strong> with the vision of educating people from all sections of society on overcoming the challenges of the COVID-19 pandemic through a Dharmic way of living—completely free of cost.
+            Dharmic Life Foundation was established by transforming an institution known as the <strong className="text-gray-900 font-bold">Academy of Dharmic Life</strong>. The Academy was started in October 2020 with the noble vision of educating people from all walks of life on how to face the challenges of the COVID-19 pandemic through a Dharmic way of living. All classes and awareness programmes were offered completely free of cost.
           </p>
 
           <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
-            The organization was formally registered as a trust in Puducherry on <strong className="text-gray-900">15 October 2021</strong>, on the auspicious occasion of <em className="text-[#7A0A0A] font-serif font-bold">Vijayadashami</em>. It was founded by <strong className="text-gray-900 font-semibold">Mr. Balaji</strong> (Founder &amp; Managing Trustee) alongside his parents, <strong className="text-gray-900 font-semibold">Mr. V. Anbalagan @ Rajagopal</strong> and <strong className="text-gray-900 font-semibold">Mrs. N. Gomathi</strong>, as founding trustees.
+            The organisation was formally registered as a Trust in Puducherry on <strong className="text-gray-900 font-bold">15 October 2021</strong>, on the auspicious occasion of <em className="text-[#7A0A0A] font-serif font-bold not-italic">Vijayadashami</em>. It was founded by <strong className="text-gray-900 font-bold">Mr. A. Balaji, Founder and Managing Trustee</strong>, along with his parents, <strong className="text-gray-900 font-bold">Mr. V. Anbalagan @ Rajagopal</strong> and <strong className="text-gray-900 font-bold">Mrs. N. Gomathi</strong>, who joined as the founding trustees.
           </p>
 
           {/* Founding Trustees Highlight Box */}
@@ -78,15 +78,15 @@ export default function TrustPage({ onNavigate, onOpenDonation, onOpenVolunteer 
               Founding Trustees &bull; Puducherry
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-              <div className="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
+              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <p className="text-xs text-gray-500 font-medium">Founder &amp; Managing Trustee</p>
-                <p className="text-base font-bold text-gray-900 font-serif">Mr. Balaji</p>
+                <p className="text-base font-bold text-gray-900 font-serif">Mr. A. Balaji</p>
               </div>
-              <div className="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
+              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <p className="text-xs text-gray-500 font-medium">Founding Trustee</p>
                 <p className="text-base font-bold text-gray-900 font-serif">Mr. V. Anbalagan @ Rajagopal</p>
               </div>
-              <div className="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
+              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <p className="text-xs text-gray-500 font-medium">Founding Trustee</p>
                 <p className="text-base font-bold text-gray-900 font-serif">Mrs. N. Gomathi</p>
               </div>
@@ -94,33 +94,158 @@ export default function TrustPage({ onNavigate, onOpenDonation, onOpenVolunteer 
           </div>
         </section>
 
-        {/* Core Philosophy */}
-        <section className="space-y-4 text-gray-700 text-base sm:text-lg leading-relaxed font-sans pt-2">
-          <p>
-            Lifestyle reflects how a person or society thinks, lives, and behaves. In the Indian tradition, the principles of <strong className="text-gray-900 font-semibold">Karma (action)</strong> and <strong className="text-gray-900 font-semibold">Dharma (righteous conduct)</strong> serve as the foundation for modern living. An unhealthy lifestyle directly impacts health and longevity. We conduct regular awareness programs and classes to help individuals harmonize with traditional values and universal laws of nature.
+        {/* 2. Our Philosophy */}
+        <section className="space-y-5">
+          <div className="relative pb-3 border-b-2 border-gray-100">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#7A0A0A]">
+              Our Philosophy
+            </h2>
+            <div className="absolute -bottom-0.5 left-0 w-16 h-1 bg-[#D4A017] rounded-full"></div>
+          </div>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            Lifestyle reflects the way a person thinks, lives and behaves. In Indian tradition, the principles of <strong className="text-gray-900 font-bold">Karma (action) and Dharma (righteous conduct)</strong> form the foundation of a balanced and meaningful life.
+          </p>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            An unhealthy lifestyle can directly affect a person's health, happiness and longevity. We believe that understanding and following the laws of nature is essential for leading a healthy and peaceful life.
+          </p>
+
+          <div className="p-5 rounded-xl bg-[#FFF9F5] border-l-4 border-[#D4A017] border border-[#F1E4D5] shadow-sm">
+            <p className="text-gray-800 text-base sm:text-[17px] leading-relaxed">
+              Through regular awareness programmes and educational classes, we strive to help individuals understand and practise <strong className="text-[#7A0A0A] font-bold">Udaliyal Dharmam (the natural laws governing the body) and Manoviyal Dharmam (the natural laws governing the mind)</strong>.
+            </p>
+          </div>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            Our aim is to reconnect people with traditional values and universal laws of nature, helping them lead healthier, happier and more meaningful lives.
           </p>
         </section>
 
-        {/* 4. Action Row */}
-        <div className="pt-6 flex flex-wrap items-center justify-between gap-4 border-t border-gray-100">
-          {/* <button
-            onClick={() => onNavigate('home')}
-            className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#7A0A0A] text-[#7A0A0A] hover:bg-[#7A0A0A] hover:text-white rounded-xl font-bold text-sm transition"
-          >
-            <ArrowLeft size={16} />
-            <span>Back to Home</span
-          </button> */}
+        {/* 3. Our Primary Mission */}
+        <section className="space-y-5">
+          <div className="relative pb-3 border-b-2 border-gray-100">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#7A0A0A]">
+              Our Primary Mission
+            </h2>
+            <div className="absolute -bottom-0.5 left-0 w-16 h-1 bg-[#D4A017] rounded-full"></div>
+          </div>
 
-          {/* <div className="flex items-center gap-3">
-            <button
-              onClick={() => onOpenVolunteer()}
-              className="px-6 py-3 bg-[#D4A017] hover:bg-[#b88b14] text-white rounded-xl font-bold text-sm shadow transition flex items-center gap-2"
-            >
-              <Users size={16} />
-              <span>Join As Volunteer</span>
-            </button>
-          </div> */}
-        </div>
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            The foremost mission of Dharmic Life Foundation is to educate people about the importance of a healthy and righteous lifestyle. The Trust is wholly dedicated to this noble cause.
+          </p>
+
+          <div className="bg-[#FAF8F5] border border-[#EAE2D8] rounded-xl p-5 sm:p-6 space-y-2">
+            <h3 className="text-[#7A0A0A] font-serif font-bold text-lg flex items-center gap-2">
+              <span>🌿</span>
+              <span>Classes &amp; Satsang Gatherings</span>
+            </h3>
+            <p className="text-gray-700 text-base sm:text-[16.5px] leading-relaxed">
+              We regularly conduct <strong className="text-gray-900 font-bold">Udaliyal Dharmam and Manoviyal Dharmam classes</strong> for new students and organise monthly <strong className="text-gray-900 font-bold">Satsang gatherings</strong> for existing students. These gatherings help them deepen their knowledge, share their experiences and strengthen their practice of Dharmic living.
+            </p>
+          </div>
+        </section>
+
+        {/* 4. Our Social Activities */}
+        <section className="space-y-6">
+          <div className="relative pb-3 border-b-2 border-gray-100">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#7A0A0A]">
+              Our Social Activities
+            </h2>
+            <div className="absolute -bottom-0.5 left-0 w-16 h-1 bg-[#D4A017] rounded-full"></div>
+          </div>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            Along with our primary mission of spreading lifestyle awareness, the Trust is actively involved in various social welfare activities:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Annadhanam</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Providing food to needy people and those facing difficult circumstances.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Dignified Last Rites</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Honouring unclaimed souls by ensuring they receive respectful and dignified last rites.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Educational Support</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Extending support to Government educational institutions and encouraging the growth of education.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Women Empowerment</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Celebrating motherhood and promoting the dignity, welfare and empowerment of women.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Care for the Homeless</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Providing care, support and assistance to homeless and underprivileged people.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl border border-[#EAE2D8] hover:border-[#D4A017] hover:shadow-md transition duration-200">
+              <div className="flex items-start gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#7A0A0A] mt-2 shrink-0"></span>
+                <div>
+                  <h4 className="text-base font-bold text-[#7A0A0A] font-serif">Emergency Assistance</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mt-1">Extending timely help to individuals and families facing unexpected difficulties and emergencies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Our Long-Term Vision */}
+        <section className="space-y-5">
+          <div className="relative pb-3 border-b-2 border-gray-100">
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#7A0A0A]">
+              Our Long-Term Vision
+            </h2>
+            <div className="absolute -bottom-0.5 left-0 w-16 h-1 bg-[#D4A017] rounded-full"></div>
+          </div>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            Our long-term vision is to spread Dharma across the world and create a peaceful universe where every living being can live with dignity, harmony, love and compassion.
+          </p>
+
+          <p className="text-gray-700 text-base sm:text-[17px] leading-relaxed">
+            We aspire to build a world where people live in harmony with nature, respect one another and care for all living beings.
+          </p>
+
+          {/* Golden Highlight Card */}
+          <div className="bg-gradient-to-r from-[#FFFDF9] via-[#FFF8EE] to-[#FFF3E0] border border-[#EEDAC5] border-l-4 border-l-[#D4A017] rounded-2xl p-6 sm:p-8 text-center shadow-md">
+            <p className="text-lg sm:text-xl font-bold font-serif text-[#7A0A0A] tracking-wide leading-relaxed">
+              “Our dream is to make this universe a peaceful home for every living being.”
+            </p>
+          </div>
+        </section>
 
       </div>
 

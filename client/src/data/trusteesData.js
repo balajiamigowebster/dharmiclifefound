@@ -8,28 +8,19 @@ export const trusteesData = [
     tenure: '',
     image: '/images/trustees/balaji.png',
     fallbackImage: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/08/987789-Edited-580x580.png',
-    quote: 'Live a Dharmic Life – your problems can be overcome through a disciplined and balanced lifestyle.',
-    quotePosition: 3,
+    quote: '',
+    quotePosition: 0,
     paragraphs: [
-      'A. Balaji is the Founder-cum-Managing Trustee of the Dharmic Life Foundation. A multi-talented personality by nature, he is professionally an advocate and, above all, a compassionate and service-minded individual with a strong desire to contribute to society.',
-      'Having chosen to remain unmarried, Balaji considers society his family and has dedicated his life to serving people and promoting a healthier and more meaningful way of living.',
-      'For more than 15 years, he has been researching various aspects of lifestyle, physical well-being, and mental well-being. Through his personal experiences and disciplined lifestyle, he believes that many challenges faced by individuals can be addressed by adopting healthy and balanced lifestyle practices.'
+      'Born on 11 July 1982 in Puducherry, A. Balaji is a multi-talented personality who is professionally an Advocate and, above all, a compassionate and service-minded individual with a deep desire to contribute to society. He is the proud son of Mr. V. Anbalagan @ Rajagopal and Late Mrs. N. Gomathi.',
+      'Having chosen to remain unmarried, Balaji considers society his family. He has dedicated his life to serving people, spreading awareness and promoting a healthier, happier and more meaningful way of living.',
+      'For more than 15 years, he has been researching various aspects of lifestyle, physical well-being and mental well-being. Through his personal experiences, continuous learning and disciplined way of life, he believes that many challenges faced by individuals can be addressed through healthy, balanced and nature-oriented lifestyle practices.',
+      'His Message to Students and Followers: “Physical well-being, mental peace and a meaningful life are not separate goals; they are interconnected aspects of Dharmic living.” This philosophy forms the foundation of his teachings and continues to inspire his students and followers to adopt a balanced and Dharmic way of life.',
+      'Achievements & Contributions: Over his journey, he has received 100+ awards and prizes in recognition of his talents, efforts and contributions across various fields, backed by 15+ years of dedicated research into lifestyle, physical well-being and mental well-being.',
+      'During the COVID-19 pandemic in 2020, he initiated dedicated community groups to help the public face the pandemic\'s challenges through awareness, health discipline and responsible lifestyle guidance. Through Dharmic Life Foundation, he continues his ongoing mission of promoting ethical, healthy and purposeful living while encouraging individuals to contribute positively to society.',
+      'His ultimate aspiration is to create a healthier society where people live in harmony with nature, maintain peace of mind and follow the principles of Dharma in their everyday lives.'
     ],
-    metrics: [
-      { value: '15+', title: 'Awards Received' },
-      { value: '100+', title: 'Prizes Won' },
-      { value: '15+', title: 'Years of Research' }
-    ],
-    highlights: [
-      {
-        title: 'Pandemic Response (2020)',
-        text: 'Initiated dedicated community groups to help the public navigate pandemic challenges through awareness, health discipline, and responsible lifestyle guidance.'
-      },
-      {
-        title: 'Ongoing Mission',
-        text: 'Championing ethical, healthy, and purposeful living practices across communities through the Dharmic Life Foundation.'
-      }
-    ]
+    metrics: [],
+    highlights: []
   },
   {
     id: 2,

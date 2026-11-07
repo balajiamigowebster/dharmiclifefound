@@ -142,7 +142,7 @@ export default function ContactPage({ onNavigate }) {
               Leave us a message
             </h2>
             <p className="text-sm text-gray-600 mt-2 max-w-xl mx-auto">
-              Have queries regarding our Annadhanam drives, Dignified Cremation ceremonies, or student sponsorship? We welcome your heartfelt message.
+             Do You Need a Helping Hand? Or Are You Willing to Extend One to Someone Truly Deserving? We welcome your heartfelt message.
             </p>
           </div>
 
