@@ -132,10 +132,10 @@ export default function EventPage({ onNavigate }) {
                 Dharmic Life Foundation Official Programme
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#FFD700]">
+            {/* <div className="flex items-center gap-2 text-xs font-semibold text-[#FFD700]">
               <Sparkles size={14} />
               <span>Sathyam Vadha &bull; Dharmam Chara</span>
-            </div>
+            </div> */}
           </div>
 
           {/* Main Grid: Poster Image & Detailed Content */}
