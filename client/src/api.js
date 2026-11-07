@@ -540,6 +540,17 @@ export async function fetchTestimonialVideos(category = null) {
   }
 }
 
+export async function syncTestimonialVideosTable() {
+  try {
+    const baseUrl = LIVE_BACKEND_URL || API_BASE;
+    const res = await fetch(`${baseUrl}/testimonial-videos/sync-table`);
+    return await res.json();
+  } catch (err) {
+    console.warn('Failed to sync testimonial table:', err.message);
+    return { success: false, message: err.message };
+  }
+}
+
 export function saveTestimonialVideo(videoData, files = {}, isUpdate = false, itemId = null, onProgress = null) {
   return new Promise((resolve) => {
     const formData = new FormData();

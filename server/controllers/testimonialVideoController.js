@@ -2,6 +2,18 @@ const path = require('path');
 const fs = require('fs');
 const { TestimonialVideo, Media } = require('../models');
 
+// Ensure table exists in MySQL automatically
+let tableChecked = false;
+async function ensureTestimonialTable() {
+  if (tableChecked) return;
+  try {
+    await TestimonialVideo.sync();
+    tableChecked = true;
+  } catch (err) {
+    console.warn('[TestimonialVideo] Auto-sync check warning:', err.message);
+  }
+}
+
 // Helper to record video media in DB
 async function recordUploadedVideo(file, title, category) {
   const isVideo = file.mimetype.startsWith('video/');
@@ -21,9 +33,25 @@ async function recordUploadedVideo(file, title, category) {
   });
 }
 
+// 0. Manual or programmatic sync endpoint
+exports.syncTable = async (req, res) => {
+  try {
+    await TestimonialVideo.sync({ alter: true });
+    tableChecked = true;
+    res.json({
+      success: true,
+      message: 'Table testimonial_videos synchronized successfully in MySQL database'
+    });
+  } catch (error) {
+    console.error('Error synchronizing testimonial_videos table:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // 1. Get all testimonial videos (optionally filtered by category)
 exports.getTestimonialVideos = async (req, res) => {
   try {
+    await ensureTestimonialTable();
     const category = req.params.category || req.query.category;
     const where = {};
     if (category) {
@@ -45,6 +73,17 @@ exports.getTestimonialVideos = async (req, res) => {
     });
   } catch (error) {
     console.error('Error in getTestimonialVideos:', error);
+    // If table doesn't exist yet, attempt sync once and return empty array gracefully
+    if (error.original && (error.original.code === 'ER_NO_SUCH_TABLE' || error.message.includes("doesn't exist"))) {
+      try {
+        await TestimonialVideo.sync();
+        tableChecked = true;
+        return res.json({ success: true, count: 0, data: [] });
+      } catch (syncErr) {
+        console.error('Sync attempt failed:', syncErr.message);
+      }
+      return res.json({ success: true, count: 0, data: [] });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -52,6 +91,7 @@ exports.getTestimonialVideos = async (req, res) => {
 // 2. Get single testimonial video by ID
 exports.getTestimonialVideoById = async (req, res) => {
   try {
+    await ensureTestimonialTable();
     const { id } = req.params;
     const video = await TestimonialVideo.findByPk(id);
     if (!video) {
@@ -67,6 +107,7 @@ exports.getTestimonialVideoById = async (req, res) => {
 // 3. Create a new testimonial video
 exports.createTestimonialVideo = async (req, res) => {
   try {
+    await ensureTestimonialTable();
     const {
       category,
       categoryName,
@@ -145,6 +186,33 @@ exports.createTestimonialVideo = async (req, res) => {
     });
   } catch (error) {
     console.error('Error in createTestimonialVideo:', error);
+    // If table doesn't exist, try to sync and retry once
+    if (error.original && (error.original.code === 'ER_NO_SUCH_TABLE' || error.message.includes("doesn't exist"))) {
+      try {
+        await TestimonialVideo.sync();
+        tableChecked = true;
+        const retryPersonName = (req.body.name || req.body.speakerName || req.body.title || '').trim();
+        const retryVideo = await TestimonialVideo.create({
+          category: req.body.category.trim(),
+          categoryName: req.body.categoryName || 'Udaliyal Dharmam Classes',
+          title: retryPersonName,
+          name: retryPersonName || null,
+          speakerName: retryPersonName || null,
+          location: req.body.location || null,
+          videoUrl: req.body.videoUrl || '',
+          description: req.body.description || null,
+          duration: req.body.duration || null,
+          orderIndex: 0
+        });
+        return res.status(201).json({
+          success: true,
+          message: 'Table created and video testimonial recorded successfully',
+          data: retryVideo
+        });
+      } catch (retryErr) {
+        console.error('Retry after sync failed:', retryErr.message);
+      }
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -152,6 +220,7 @@ exports.createTestimonialVideo = async (req, res) => {
 // 4. Update an existing testimonial video
 exports.updateTestimonialVideo = async (req, res) => {
   try {
+    await ensureTestimonialTable();
     const { id } = req.params;
     const item = await TestimonialVideo.findByPk(id);
     if (!item) {
@@ -204,6 +273,7 @@ exports.updateTestimonialVideo = async (req, res) => {
     if (personName !== undefined) {
       item.name = personName ? personName.trim() : null;
       item.speakerName = personName ? personName.trim() : null;
+      if (!title) item.title = personName ? personName.trim() : 'Student Testimonial';
     }
     if (location !== undefined) {
       item.location = location ? location.trim() : null;
@@ -228,6 +298,7 @@ exports.updateTestimonialVideo = async (req, res) => {
 // 5. Delete testimonial video
 exports.deleteTestimonialVideo = async (req, res) => {
   try {
+    await ensureTestimonialTable();
     const { id } = req.params;
     const item = await TestimonialVideo.findByPk(id);
     if (!item) {
@@ -253,4 +324,3 @@ exports.deleteTestimonialVideo = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-

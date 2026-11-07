@@ -8,6 +8,9 @@ const testimonialUpload = upload.fields([
   { name: 'thumbnailFile', maxCount: 1 }
 ]);
 
+// Manual or programmatic table sync endpoint
+router.all('/sync-table', controller.syncTable);
+
 // GET all or by category query (/api/testimonial-videos?category=...)
 router.get('/', controller.getTestimonialVideos);
 

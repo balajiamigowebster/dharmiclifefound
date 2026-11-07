@@ -15,12 +15,14 @@ import {
   MapPin,
   Clock,
   ExternalLink,
-  MessageSquareQuote
+  MessageSquareQuote,
+  Database
 } from 'lucide-react';
 import {
   fetchTestimonialVideos,
   saveTestimonialVideo,
-  deleteTestimonialVideo
+  deleteTestimonialVideo,
+  syncTestimonialVideosTable
 } from '../../api';
 import { getMediaUrl } from '../../config';
 
@@ -42,6 +44,7 @@ export default function TestimonialsDashboard() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -66,6 +69,30 @@ export default function TestimonialsDashboard() {
       setVideos([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSyncTable = async () => {
+    setSyncing(true);
+    setMessage({ type: '', text: '' });
+    try {
+      const res = await syncTestimonialVideosTable();
+      if (res && res.success) {
+        setMessage({
+          type: 'success',
+          text: 'Table "testimonial_videos" synchronized successfully in MySQL database!'
+        });
+        loadVideos(selectedCategory);
+      } else {
+        setMessage({
+          type: 'error',
+          text: res?.message || 'Auto-creation failed. Please execute the SQL script in phpMyAdmin.'
+        });
+      }
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Error connecting to database sync endpoint.' });
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -213,6 +240,25 @@ export default function TestimonialsDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={handleSyncTable}
+              disabled={syncing}
+              className="px-4 py-2.5 bg-[#E48A2D] hover:bg-[#c9741f] text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-2 shrink-0 disabled:opacity-50"
+              title="Ensure testimonial_videos table is created in MySQL DB"
+            >
+              {syncing ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" />
+                  <span>Syncing DB...</span>
+                </>
+              ) : (
+                <>
+                  <Database size={14} />
+                  <span>Sync to DB</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={() => {
                 if (showAddForm) resetForm();
