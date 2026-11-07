@@ -63,7 +63,18 @@ export default function TestimonialsDashboard() {
     setLoading(true);
     try {
       const data = await fetchTestimonialVideos(cat);
-      setVideos(Array.isArray(data) ? data : []);
+      const list = Array.isArray(data) ? data : [];
+      // Sort chronologically: first uploaded video appears first, next appears second
+      list.sort((a, b) => {
+        const diffOrder = (Number(a.orderIndex) || 0) - (Number(b.orderIndex) || 0);
+        if (diffOrder !== 0) return diffOrder;
+        if (a.createdAt && b.createdAt) {
+          const diffTime = new Date(a.createdAt) - new Date(b.createdAt);
+          if (diffTime !== 0) return diffTime;
+        }
+        return (Number(a.id) || 0) - (Number(b.id) || 0);
+      });
+      setVideos(list);
     } catch (err) {
       console.error('Error loading videos:', err);
       setVideos([]);

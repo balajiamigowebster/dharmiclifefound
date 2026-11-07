@@ -62,7 +62,8 @@ exports.getTestimonialVideos = async (req, res) => {
       where,
       order: [
         ['orderIndex', 'ASC'],
-        ['createdAt', 'DESC']
+        ['createdAt', 'ASC'],
+        ['id', 'ASC']
       ]
     });
 

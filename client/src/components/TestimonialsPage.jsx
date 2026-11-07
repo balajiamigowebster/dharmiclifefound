@@ -40,6 +40,20 @@ export const TESTIMONIAL_CATEGORIES = [
   }
 ];
 
+// Helper to sort videos in ascending order: first uploaded video appears first, next appears second
+function sortVideosChronologically(list) {
+  if (!Array.isArray(list)) return [];
+  return [...list].sort((a, b) => {
+    const diffOrder = (Number(a.orderIndex) || 0) - (Number(b.orderIndex) || 0);
+    if (diffOrder !== 0) return diffOrder;
+    if (a.createdAt && b.createdAt) {
+      const diffTime = new Date(a.createdAt) - new Date(b.createdAt);
+      if (diffTime !== 0) return diffTime;
+    }
+    return (Number(a.id) || 0) - (Number(b.id) || 0);
+  });
+}
+
 export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenContact }) {
   const [selectedCategory, setSelectedCategory] = useState('udaliyal-dharmam-classes');
   const [videosByCategory, setVideosByCategory] = useState({
@@ -57,8 +71,8 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
           fetchTestimonialVideos('manoviyal-dharmam-classes')
         ]);
         setVideosByCategory({
-          'udaliyal-dharmam-classes': Array.isArray(udaliyalVideos) ? udaliyalVideos : [],
-          'manoviyal-dharmam-classes': Array.isArray(manoviyalVideos) ? manoviyalVideos : []
+          'udaliyal-dharmam-classes': sortVideosChronologically(udaliyalVideos),
+          'manoviyal-dharmam-classes': sortVideosChronologically(manoviyalVideos)
         });
       } catch (err) {
         console.warn('Error loading testimonial videos:', err);
