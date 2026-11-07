@@ -1,96 +1,75 @@
-import React, { useState } from 'react';
-import { Star, Quote, ChevronLeft, ChevronRight, Home, ChevronRight as BreadcrumbArrow, Sparkles, ArrowRight, Heart } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Star,
+  Quote,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  ChevronRight as BreadcrumbArrow,
+  Sparkles,
+  ArrowRight,
+  Heart,
+  Video,
+  Film,
+  Play,
+  User,
+  Clock,
+  BookOpen,
+  Brain,
+  Activity,
+  Calendar
+} from 'lucide-react';
+import { fetchTestimonialVideos } from '../api';
+import { getMediaUrl } from '../config';
+
+export const TESTIMONIAL_CATEGORIES = [
+  {
+    slug: 'udaliyal-dharmam-classes',
+    name: 'Udaliyal Dharmam Classes',
+    subtitle: 'Natural Laws Governing the Physical Body',
+    desc: 'Heartfelt reflections and experiences from students who transformed their health, vitality, and lifestyle discipline through Udaliyal Dharmam teachings.',
+    icon: Activity
+  },
+  {
+    slug: 'manoviyal-dharmam-classes',
+    name: 'Manoviyal Dharmam Classes',
+    subtitle: 'Natural Laws Governing the Mind',
+    desc: 'Personal journeys of mental well-being, mindfulness, inner tranquility, and emotional resilience shared by practitioners of Manoviyal Dharmam.',
+    icon: Brain
+  }
+];
 
 export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenContact }) {
-  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('udaliyal-dharmam-classes');
+  const [videosByCategory, setVideosByCategory] = useState({
+    'udaliyal-dharmam-classes': [],
+    'manoviyal-dharmam-classes': []
+  });
+  const [loading, setLoading] = useState(true);
 
-  const featuredReviews = [
-    {
-      id: 1,
-      name: 'Christine Eve',
-      role: 'Founder & CEO',
-      quote: 'posuere luctus orci. Donec vitae mattis quam, vitae tempor arcu. Aenean non odio porttitor, convallis erat sit amet. Being a survivor now, I realized I was not educated or aware about what breast cancer actually was and how it impacted and affected people.',
-      rating: 5,
-      avatar: '/images/testimonial.jpg'
-    },
-    {
-      id: 2,
-      name: 'Kevin Smith',
-      role: 'Crowd Company Founder',
-      quote: 'posuere luctus orci. Donec vitae mattis quam, vitae tempor arcu. Aenean non odio porttitor, convallis erat sit amet. Being a survivor now, I realized I was not educated or aware about what breast cancer actually was and how it impacted and affected people.',
-      rating: 5,
-      avatar: '/images/team-2.jpg'
-    },
-    {
-      id: 3,
-      name: 'Jessica Brown',
-      role: 'Founder & CEO',
-      quote: 'posuere luctus orci. Donec vitae mattis quam, vitae tempor arcu. Aenean non odio porttitor, convallis erat sit amet. Being a survivor now, I realized I was not educated or aware about what breast cancer actually was and how it impacted and affected people.',
-      rating: 5,
-      avatar: '/images/team-1.jpg'
-    },
-    {
-      id: 4,
-      name: 'David Anderson',
-      role: 'Customer',
-      quote: 'posuere luctus orci. Donec vitae mattis quam, vitae tempor arcu. Aenean non odio porttitor, convallis erat sit amet. Being a survivor now, I realized I was not educated or aware about what breast cancer actually was and how it impacted and affected people.',
-      rating: 5,
-      avatar: '/images/team-4.jpg'
-    },
-    {
-      id: 5,
-      name: 'Susan Neill',
-      role: 'Founder & CEO',
-      quote: 'posuere luctus orci. Donec vitae mattis quam, vitae tempor arcu. Aenean non odio porttitor, convallis erat sit amet. Being a survivor now, I realized I was not educated or aware about what breast cancer actually was and how it impacted and affected people.',
-      rating: 5,
-      avatar: '/images/team-3.jpg'
+  useEffect(() => {
+    async function loadAllVideos() {
+      setLoading(true);
+      try {
+        const [udaliyalVideos, manoviyalVideos] = await Promise.all([
+          fetchTestimonialVideos('udaliyal-dharmam-classes'),
+          fetchTestimonialVideos('manoviyal-dharmam-classes')
+        ]);
+        setVideosByCategory({
+          'udaliyal-dharmam-classes': Array.isArray(udaliyalVideos) ? udaliyalVideos : [],
+          'manoviyal-dharmam-classes': Array.isArray(manoviyalVideos) ? manoviyalVideos : []
+        });
+      } catch (err) {
+        console.warn('Error loading testimonial videos:', err);
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
+    loadAllVideos();
+  }, []);
 
-  const gridReviews = [
-    {
-      id: 1,
-      name: 'Alexsia Jorgina',
-      location: 'From USA',
-      quote: 'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula.',
-      avatar: '/images/testimonial.jpg',
-      rating: 5
-    },
-    {
-      id: 2,
-      name: 'Alexsia Jorgina',
-      location: 'From USA',
-      quote: 'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula.',
-      avatar: '/images/testimonial.jpg',
-      rating: 5
-    },
-    {
-      id: 3,
-      name: 'Jessica Brown',
-      location: 'From USA',
-      quote: 'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula.',
-      avatar: '/images/team-1.jpg',
-      rating: 5
-    },
-    {
-      id: 4,
-      name: 'Alexsia Jorgina',
-      location: 'From USA',
-      quote: 'Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula.',
-      avatar: '/images/testimonial.jpg',
-      rating: 5
-    }
-  ];
-
-  const nextSlide = () => {
-    setCarouselIndex((prev) => (prev + 1) % featuredReviews.length);
-  };
-
-  const prevSlide = () => {
-    setCarouselIndex((prev) => (prev - 1 + featuredReviews.length) % featuredReviews.length);
-  };
-
-  const currentFeatured = featuredReviews[carouselIndex];
+  const currentCategoryObj = TESTIMONIAL_CATEGORIES.find((c) => c.slug === selectedCategory) || TESTIMONIAL_CATEGORIES[0];
+  const activeVideos = videosByCategory[selectedCategory] || [];
 
   return (
     <div className="bg-white min-h-screen animate-fadeIn font-sans">
@@ -105,7 +84,7 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
                 Testimonials
               </h1>
               <p className="text-xs sm:text-sm text-gray-300 mt-1 font-sans">
-                Community Reflections &bull; Voices of Our Patrons and Beneficiaries
+                Community Reflections &bull; Voices of Our Students and Beneficiaries
               </p>
             </div>
 
@@ -125,8 +104,8 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
         </div>
       </div>
 
-      {/* 2. Voices of Our Community Intro Widget (Matching exact design) */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      {/* 2. Voices of Our Community Intro Widget */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
         <div className="bg-[#FFFDF9] border border-[#EEDAC5] rounded-2xl shadow-xl overflow-hidden font-serif">
           
           {/* Hero Quote Header */}
@@ -183,192 +162,214 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
         </div>
       </div>
 
-      {/* 3. Featured Carousel Section ("What they’re talking about welowe") */}
-      {/* <section className="py-16 bg-white">
+      {/* 3. VIDEO TESTIMONIALS SECTION */}
+      <section className="py-12 pb-20 bg-stone-50/70 border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-3xl mx-auto mb-14">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-10">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
               <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-              <span>Our testimonials</span>
+              <Film size={14} className="text-[#901C25]" />
+              <span>Video Reflections</span>
               <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-              What they’re talking about welowe
+            <h2 className="text-3xl sm:text-4xl font-bold font-serif text-gray-900 leading-tight">
+              Student Video Testimonials
             </h2>
+            <p className="text-gray-600 text-sm sm:text-base mt-2">
+              Hear directly from students who have completed our life-transforming courses on physical well-being and mental harmony.
+            </p>
           </div>
 
-         
-          <div className="max-w-4xl mx-auto bg-stone-50 rounded-3xl p-8 sm:p-12 border border-gray-100 shadow-xl relative">
-            <div className="absolute top-6 right-8 text-[#901C25]/10">
-              <Quote size={80} />
-            </div>
+          {/* Two Category Tabs */}
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+            {TESTIMONIAL_CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat.slug;
+              const IconComp = cat.icon;
+              const count = (videosByCategory[cat.slug] || []).length;
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-             
-              <div className="shrink-0 text-center">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#E48A2D] shadow-lg mx-auto bg-gray-100">
-                  <img
-                    src={currentFeatured.avatar}
-                    alt={currentFeatured.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-
-              
-              <div className="flex-1 text-center md:text-left space-y-4">
-                
-                <div className="flex items-center justify-center md:justify-start gap-1">
-                  {[...Array(currentFeatured.rating)].map((_, i) => (
-                    <Star key={i} size={18} className="fill-[#E48A2D] text-[#E48A2D]" />
-                  ))}
-                </div>
-
-             
-                <p className="text-gray-700 text-base sm:text-lg italic leading-relaxed font-sans">
-                  "{currentFeatured.quote}"
-                </p>
-
-             
-                <div>
-                  <h4 className="text-xl font-bold font-serif text-gray-900">{currentFeatured.name}</h4>
-                  <p className="text-xs sm:text-sm text-[#901C25] font-semibold">{currentFeatured.role}</p>
-                </div>
-              </div>
-            </div>
-
-            
-            <div className="flex items-center justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
-              <button
-                onClick={prevSlide}
-                aria-label="Previous testimonial"
-                className="w-10 h-10 rounded-full border border-gray-300 hover:border-[#901C25] hover:bg-[#901C25] hover:text-white flex items-center justify-center transition"
-              >
-                <ChevronLeft size={18} />
-              </button>
-
-              <div className="flex gap-2">
-                {featuredReviews.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCarouselIndex(i)}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      i === carouselIndex ? 'w-6 bg-[#901C25]' : 'w-2.5 bg-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={nextSlide}
-                aria-label="Next testimonial"
-                className="w-10 h-10 rounded-full border border-gray-300 hover:border-[#901C25] hover:bg-[#901C25] hover:text-white flex items-center justify-center transition"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section> */}
-
-      {/* 4. Grid Review Section ("People’s talk about us") */}
-      {/* <section className="py-16 bg-stone-50 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#E48A2D] mb-2">
-              <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-              <span>Our testimonial</span>
-              <span className="w-6 h-0.5 bg-[#E48A2D]"></span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif text-gray-900 leading-tight">
-              People’s talk about us
-            </h2>
-          </div>
-
-         
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {gridReviews.map((review, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                 
-                  <div className="flex items-center gap-1 text-[#E48A2D]">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} size={16} className="fill-[#E48A2D]" />
-                    ))}
+              return (
+                <button
+                  key={cat.slug}
+                  onClick={() => setSelectedCategory(cat.slug)}
+                  className={`p-5 rounded-2xl transition-all duration-300 text-left border relative overflow-hidden flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-[#901C25] to-[#781820] text-white border-[#901C25] shadow-lg transform -translate-y-0.5'
+                      : 'bg-white text-gray-800 border-gray-200 hover:border-red-300 hover:bg-stone-50 shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        isSelected ? 'bg-white/15 text-[#FFD700]' : 'bg-red-50 text-[#901C25]'
+                      }`}
+                    >
+                      <IconComp size={20} />
+                    </div>
+                    {count > 0 && (
+                      <span
+                        className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                          isSelected ? 'bg-[#E48A2D] text-white' : 'bg-stone-100 text-gray-700'
+                        }`}
+                      >
+                        {count} {count === 1 ? 'Video' : 'Videos'}
+                      </span>
+                    )}
                   </div>
 
-                  
-                  <p className="text-gray-700 text-sm sm:text-base leading-relaxed italic">
-                    "{review.quote}"
-                  </p>
-                </div>
+                  <div>
+                    <h3
+                      className={`text-base sm:text-lg font-bold font-serif ${
+                        isSelected ? 'text-white' : 'text-gray-900'
+                      }`}
+                    >
+                      {cat.name}
+                    </h3>
+                    <p
+                      className={`text-xs mt-1 ${
+                        isSelected ? 'text-white/80' : 'text-gray-500'
+                      }`}
+                    >
+                      {cat.subtitle}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-             
-                <div className="flex items-center gap-4 mt-6 pt-6 border-t border-gray-100">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-200 shrink-0">
-                    <img
-                      src={review.avatar}
-                      alt={review.name}
-                      className="w-full h-full object-cover"
+          {/* Active Category Banner Description */}
+          <div className="max-w-4xl mx-auto mb-10 bg-white p-5 rounded-2xl border border-[#EEDAC5] shadow-sm text-center">
+            <p className="text-xs sm:text-sm text-gray-700 italic">
+              "{currentCategoryObj.desc}"
+            </p>
+          </div>
+
+          {/* Video Cards Grid */}
+          {loading ? (
+            <div className="py-16 text-center">
+              <div className="w-10 h-10 border-4 border-[#901C25] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+              <p className="text-sm text-gray-500 font-medium">Loading testimonials...</p>
+            </div>
+          ) : activeVideos.length === 0 ? (
+            /* Elegant Empty State when no videos uploaded yet */
+            <div className="max-w-2xl mx-auto bg-white rounded-3xl p-10 sm:p-14 border-2 border-dashed border-[#D3A17E]/60 text-center shadow-sm">
+              <div className="w-20 h-20 rounded-2xl bg-[#FFF6ED] text-[#901C25] flex items-center justify-center mx-auto mb-5 border border-[#EEDAC5]">
+                <Film size={36} />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif text-gray-900 mb-2">
+                Videos Coming Soon
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 max-w-lg mx-auto leading-relaxed">
+                We are curating and compiling authentic video reflections from students of{' '}
+                <strong className="text-[#901C25]">{currentCategoryObj.name}</strong>.
+                Videos will appear here shortly as they are published.
+              </p>
+              <div className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-[#8B2613] bg-[#FFF6ED] px-4 py-2 rounded-full border border-[#EEDAC5]">
+                <Sparkles size={14} className="text-[#E48A2D]" />
+                <span>Stay tuned for inspiring student journeys</span>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {activeVideos.map((video) => (
+                <div
+                  key={video.id}
+                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                >
+                  {/* Video Player */}
+                  <div className="bg-black aspect-video relative overflow-hidden">
+                    <video
+                      src={getMediaUrl(video.videoUrl)}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-contain"
                     />
                   </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 font-serif text-base">{review.name}</h4>
-                    <span className="text-xs text-gray-500 font-semibold">{review.location}</span>
+
+                  {/* Content Info */}
+                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <h4 className="text-base sm:text-lg font-bold font-serif text-gray-900 leading-snug group-hover:text-[#901C25] transition">
+                          {video.title}
+                        </h4>
+                        {video.duration && (
+                          <span className="shrink-0 px-2 py-0.5 rounded-full bg-stone-100 text-gray-600 text-[10px] font-bold flex items-center gap-1">
+                            <Clock size={11} />
+                            <span>{video.duration}</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {video.speakerName && (
+                        <p className="text-xs text-[#901C25] font-semibold flex items-center gap-1.5">
+                          <User size={13} />
+                          <span>{video.speakerName}</span>
+                        </p>
+                      )}
+
+                      {video.description && (
+                        <p className="text-xs sm:text-sm text-gray-600 mt-2 line-clamp-3 leading-relaxed">
+                          {video.description}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                      <span>{currentCategoryObj.name}</span>
+                      <span className="flex items-center gap-1 text-[#E48A2D] font-semibold">
+                        <Play size={10} className="fill-[#E48A2D]" />
+                        <span>Student Video</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
         </div>
-      </section> */}
+      </section>
 
-      {/* 5. Bottom CTA Banner ("Your story starts from here") */}
-      {/* <section className="bg-gradient-to-r from-[#901C25] via-[#73161d] to-[#901C25] text-white py-14 border-t-4 border-[#E48A2D]">
+      {/* 4. Bottom Support CTA */}
+      <section className="bg-gradient-to-r from-[#901C25] via-[#73161d] to-[#901C25] text-white py-12 border-t-4 border-[#E48A2D]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            <div className="space-y-2 text-center md:text-left">
+            <div className="space-y-1.5 text-center md:text-left">
               <span className="inline-block px-3 py-1 bg-[#E48A2D] text-white text-xs font-bold uppercase rounded-full tracking-wider">
-                Results in few seconds
+                Dharmic Living &bull; Community
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold font-serif text-white">
-                Your story starts from here
+                Learn Udaliyal &amp; Manoviyal Dharmam
               </h3>
-              <p className="text-white/80 text-sm">
-                Ready to raise funds for idea? Join our compassionate movement.
+              <p className="text-white/80 text-xs sm:text-sm">
+                Join our free awareness sessions and experience natural physical health and mental peace.
               </p>
             </div>
 
             <div className="flex items-center gap-4 shrink-0">
               <button
                 onClick={() => onOpenContact ? onOpenContact() : onNavigate('contact')}
-                className="px-8 py-3.5 bg-white text-[#901C25] hover:bg-stone-100 font-bold text-sm rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2"
+                className="px-6 py-3 bg-white text-[#901C25] hover:bg-stone-100 font-bold text-xs sm:text-sm rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2"
               >
-                <span>Make it Happen</span>
-                <ArrowRight size={16} />
+                <span>Contact Us</span>
+                <ArrowRight size={15} />
               </button>
 
               <button
-                onClick={() => onOpenDonation('Testimonials Giving')}
-                className="px-8 py-3.5 bg-[#E48A2D] hover:bg-[#c9751e] text-white font-bold text-sm rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2"
+                onClick={() => onOpenDonation('Testimonials Movement')}
+                className="px-6 py-3 bg-[#E48A2D] hover:bg-[#c9751e] text-white font-bold text-xs sm:text-sm rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2"
               >
-                <Heart size={16} className="fill-white" />
-                <span>Support Us</span>
+                <Heart size={15} className="fill-white" />
+                <span>Support Seva</span>
               </button>
             </div>
-
           </div>
         </div>
-      </section> */}
+      </section>
 
     </div>
   );

@@ -11,6 +11,7 @@ const { sendContactInquiryEmail } = require('./config/mailer');
 const mediaRoutes = require('./routes/mediaRoutes');
 const activityItemsRoutes = require('./routes/activityItemsRoutes');
 const awardItemsRoutes = require('./routes/awardItemsRoutes');
+const testimonialVideoRoutes = require('./routes/testimonialVideoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -114,6 +115,12 @@ app.use('/dharmiclife/api/activity-items', activityItemsRoutes);
 // Award Items Routes (Awards with images and tributes linked to DB)
 app.use('/api/award-items', awardItemsRoutes);
 app.use('/dharmiclife/api/award-items', awardItemsRoutes);
+
+// Testimonial Video Routes (Udaliyal Dharmam & Manoviyal Dharmam video testimonials)
+app.use('/api/testimonial-videos', testimonialVideoRoutes);
+app.use('/dharmiclife/api/testimonial-videos', testimonialVideoRoutes);
+app.use('/api/testimonials-videos', testimonialVideoRoutes);
+app.use('/dharmiclife/api/testimonials-videos', testimonialVideoRoutes);
 
 // Root & Health status
 app.get(['/', '/dharmiclife', '/api/health', '/dharmiclife/api/health'], (req, res) => {

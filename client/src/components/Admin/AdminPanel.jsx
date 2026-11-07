@@ -26,10 +26,12 @@ import {
   FolderTree,
   Upload,
   Loader2,
-  Award
+  Award,
+  Film
 } from 'lucide-react';
 import ActivitiesAdminManager from './ActivitiesAdminManager';
 import AwardsAdminManager from './AwardsAdminManager';
+import TestimonialsDashboard from './Testimonials-dashboard';
 import {
   fetchHomepageContent,
   updateHomepageContent,
@@ -62,6 +64,7 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
     if (typeof window !== 'undefined') {
       const search = window.location.search;
       if (search.includes('tab=awardsManager')) return 'awardsManager';
+      if (search.includes('tab=testimonials')) return 'testimonialsManager';
       if (search.includes('tab=activitiesManager')) return 'activitiesManager';
       if (search.includes('tab=about')) return 'about';
       if (search.includes('tab=coreActivities')) return 'coreActivities';
@@ -717,6 +720,17 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
               >
                 <Award size={16} />
                 <span>Awards</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('testimonialsManager')}
+                className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition flex items-center gap-3 mt-1 ${
+                  activeTab === 'testimonialsManager'
+                    ? 'bg-[#901C25] text-white shadow-sm'
+                    : 'text-gray-700 hover:bg-stone-50'
+                }`}
+              >
+                <Film size={16} />
+                <span>Testimonials</span>
               </button>
             </div>
 
@@ -2127,6 +2141,13 @@ export default function AdminPanel({ onNavigate, onContentUpdated }) {
             {/* ---------------------------------------------------- */}
             {activeTab === 'awardsManager' && (
               <AwardsAdminManager />
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB: TESTIMONIALS MANAGER (DB Table: testimonial_videos) */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'testimonialsManager' && (
+              <TestimonialsDashboard />
             )}
 
             {/* Bottom Save Bar */}

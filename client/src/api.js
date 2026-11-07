@@ -520,3 +520,92 @@ export async function syncAwardItems(awardType, items) {
   }
 }
 
+// ---------------------------------------------
+// TESTIMONIAL VIDEOS API (Udaliyal Dharmam & Manoviyal Dharmam)
+// ---------------------------------------------
+
+export async function fetchTestimonialVideos(category = null) {
+  try {
+    const baseUrl = LIVE_BACKEND_URL || API_BASE;
+    const url = category
+      ? `${baseUrl}/testimonial-videos?category=${encodeURIComponent(category)}`
+      : `${baseUrl}/testimonial-videos`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    return json.data || [];
+  } catch (err) {
+    console.warn(`Failed to fetch testimonial videos (${category}):`, err.message);
+    return [];
+  }
+}
+
+export function saveTestimonialVideo(videoData, files = {}, isUpdate = false, itemId = null, onProgress = null) {
+  return new Promise((resolve) => {
+    const formData = new FormData();
+
+    Object.keys(videoData).forEach((key) => {
+      const val = videoData[key];
+      if (val !== undefined && val !== null) {
+        formData.append(key, val);
+      }
+    });
+
+    if (files.videoFile) {
+      formData.append('videoFile', files.videoFile);
+    }
+    if (files.thumbnailFile) {
+      formData.append('thumbnailFile', files.thumbnailFile);
+    }
+
+    const xhr = new XMLHttpRequest();
+    const method = isUpdate && itemId ? 'PUT' : 'POST';
+    const endpoint = isUpdate && itemId
+      ? `${API_BASE}/testimonial-videos/${itemId}`
+      : `${API_BASE}/testimonial-videos`;
+
+    xhr.open(method, endpoint);
+
+    if (xhr.upload && onProgress) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText);
+        resolve(json);
+      } catch (err) {
+        resolve({
+          success: xhr.status >= 200 && xhr.status < 300,
+          status: xhr.status,
+          message: xhr.responseText || 'Server returned invalid response'
+        });
+      }
+    };
+
+    xhr.onerror = () => {
+      resolve({ success: false, message: 'Network request error' });
+    };
+
+    xhr.send(formData);
+  });
+}
+
+export async function deleteTestimonialVideo(id) {
+  try {
+    const res = await fetch(`${API_BASE}/testimonial-videos/${id}`, {
+      method: 'DELETE'
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to delete testimonial video:', err);
+    return { success: false, message: err.message };
+  }
+}
+
+

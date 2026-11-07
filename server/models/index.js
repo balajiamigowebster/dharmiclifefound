@@ -4,6 +4,7 @@ const ActivityItem = require('./ActivityItem');
 const AdminUser = require('./AdminUser');
 const AwardItem = require('./AwardItem');
 const ContactMessage = require('./ContactMessage');
+const TestimonialVideo = require('./TestimonialVideo');
 
 const db = {
   sequelize,
@@ -11,7 +12,8 @@ const db = {
   ActivityItem,
   AdminUser,
   AwardItem,
-  ContactMessage
+  ContactMessage,
+  TestimonialVideo
 };
 
 module.exports = db;
