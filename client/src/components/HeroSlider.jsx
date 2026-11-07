@@ -71,12 +71,12 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
             <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/10 pointer-events-none"></div>
 
             {/* Slide Content */}
-            <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-              <div className="max-w-2xl sm:max-w-3xl space-y-4 sm:space-y-6">
+            <div className="relative z-10 h-full max-w-7xl mx-auto px-14 sm:px-16 lg:px-8 flex flex-col justify-center">
+              <div className="max-w-2xl sm:max-w-3xl space-y-3 sm:space-y-6">
                 
                 {/* Badge */}
                 <div
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E48A2D]/25 border border-[#E48A2D]/40 text-[#E48A2D] text-xs sm:text-sm font-bold uppercase tracking-wider backdrop-blur-sm transition-all duration-700 delay-100 ${
+                  className={`inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#E48A2D]/25 border border-[#E48A2D]/40 text-[#E48A2D] text-[11px] sm:text-sm font-bold uppercase tracking-wider backdrop-blur-sm transition-all duration-700 delay-100 ${
                     isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
                   }`}
                 >
@@ -86,7 +86,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
 
                 {/* Main Headline */}
                 <h1
-                  className={`text-3xl sm:text-5xl lg:text-6xl font-bold font-serif text-white leading-tight drop-shadow-md transition-all duration-700 delay-200 ${
+                  className={`text-2xl sm:text-5xl lg:text-6xl font-bold font-serif text-white leading-tight drop-shadow-md transition-all duration-700 delay-200 ${
                     isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
                   }`}
                 >
@@ -99,7 +99,7 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
 
                 {/* Description */}
                 <p
-                  className={`text-sm sm:text-base lg:text-lg text-white/95 drop-shadow leading-relaxed max-w-xl transition-all duration-700 delay-300 ${
+                  className={`text-xs sm:text-base lg:text-lg text-white/95 drop-shadow leading-relaxed max-w-xl transition-all duration-700 delay-300 ${
                     isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
                   }`}
                 >
@@ -116,17 +116,19 @@ export default function HeroSlider({ onNavigate, onOpenDonation, content }) {
       <button
         onClick={prevSlide}
         aria-label="Previous slide"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#901C25] text-white flex items-center justify-center transition border border-white/15 backdrop-blur-sm"
+        className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-[#901C25] text-white flex items-center justify-center transition border border-white/20 backdrop-blur-sm shadow-md"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={18} className="sm:hidden" />
+        <ChevronLeft size={24} className="hidden sm:block" />
       </button>
 
       <button
         onClick={nextSlide}
         aria-label="Next slide"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/40 hover:bg-[#901C25] text-white flex items-center justify-center transition border border-white/15 backdrop-blur-sm"
+        className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-[#901C25] text-white flex items-center justify-center transition border border-white/20 backdrop-blur-sm shadow-md"
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={18} className="sm:hidden" />
+        <ChevronRight size={24} className="hidden sm:block" />
       </button>
 
       {/* Slide Indicators */}
