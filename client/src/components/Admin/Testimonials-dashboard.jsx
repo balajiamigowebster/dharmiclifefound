@@ -587,7 +587,7 @@ export default function TestimonialsDashboard() {
                 className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition flex flex-col justify-between"
               >
                 {/* Video Player */}
-                <div className="bg-black aspect-video relative group">
+                <div className="bg-black h-[320px] sm:h-[380px] w-full relative group overflow-hidden flex items-center justify-center">
                   <video
                     src={getMediaUrl(item.videoUrl)}
                     controls

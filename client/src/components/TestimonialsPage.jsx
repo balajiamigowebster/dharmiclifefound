@@ -287,14 +287,14 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-6xl mx-auto">
               {activeVideos.map((video) => (
                 <div
                   key={video.id}
-                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group"
                 >
-                  {/* Video Player */}
-                  <div className="bg-black aspect-video relative overflow-hidden">
+                  {/* Video Player - Elevated height for crystal-clear viewing on Desktop & Laptop */}
+                  <div className="bg-black h-[360px] sm:h-[420px] lg:h-[460px] w-full relative overflow-hidden flex items-center justify-center">
                     <video
                       src={getMediaUrl(video.videoUrl)}
                       controls
