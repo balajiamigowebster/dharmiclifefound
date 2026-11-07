@@ -237,7 +237,7 @@ export default function EventPage({ onNavigate }) {
               </div>
 
               {/* Highlights List */}
-              <div className="bg-[#FFF8F0] p-4 sm:p-5 rounded-2xl border border-[#EEDAC5] space-y-2.5">
+              {/* <div className="bg-[#FFF8F0] p-4 sm:p-5 rounded-2xl border border-[#EEDAC5] space-y-2.5">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[#8B2613] flex items-center gap-1.5">
                   <Sparkles size={14} className="text-[#E48A2D]" />
                   <span>What the Satsang Encompasses</span>
@@ -256,15 +256,15 @@ export default function EventPage({ onNavigate }) {
                     <span><strong>Mind-Body Equilibrium:</strong> Practical insights on overcoming everyday stresses through Manoviyal Dharmam.</span>
                   </li>
                 </ul>
-              </div>
+              </div> */}
 
               {/* Important Instruction Notice */}
-              <div className="p-4 bg-[#FFF6ED] rounded-xl border-l-4 border-[#901C25] text-xs text-gray-700 leading-relaxed flex items-start gap-2.5">
+              {/* <div className="p-4 bg-[#FFF6ED] rounded-xl border-l-4 border-[#901C25] text-xs text-gray-700 leading-relaxed flex items-start gap-2.5">
                 <Info size={16} className="text-[#901C25] shrink-0 mt-0.5" />
                 <div>
                   <strong>Student Access Note:</strong> Joining links and access details will be shared directly with registered old students through their respective official batch communication groups.
                 </div>
-              </div>
+              </div> */}
 
             </div>
 
