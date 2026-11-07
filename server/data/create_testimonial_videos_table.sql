@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS `testimonial_videos` (
   `category` VARCHAR(255) NOT NULL COMMENT 'udaliyal-dharmam-classes or manoviyal-dharmam-classes',
   `categoryName` VARCHAR(255) DEFAULT 'Udaliyal Dharmam Classes',
   `title` TEXT NOT NULL COMMENT 'Video title or topic',
-  `speakerName` VARCHAR(255) DEFAULT NULL COMMENT 'Student / Speaker name',
+  `name` VARCHAR(255) DEFAULT NULL COMMENT 'Student / Person name',
+  `speakerName` VARCHAR(255) DEFAULT NULL COMMENT 'Student / Speaker name alias',
+  `location` VARCHAR(255) DEFAULT NULL COMMENT 'City / Location (e.g. Puducherry, Chennai)',
   `videoUrl` TEXT NOT NULL COMMENT 'Relative path (/uploads/videos/...) or video URL',
   `thumbnailUrl` TEXT DEFAULT NULL COMMENT 'Optional thumbnail/poster image',
   `description` TEXT DEFAULT NULL COMMENT 'Student reflection quote or notes',
@@ -18,3 +20,6 @@ CREATE TABLE IF NOT EXISTS `testimonial_videos` (
   INDEX `idx_category` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Migration script if table already exists:
+-- ALTER TABLE `testimonial_videos` ADD COLUMN IF NOT EXISTS `name` VARCHAR(255) DEFAULT NULL AFTER `title`;
+-- ALTER TABLE `testimonial_videos` ADD COLUMN IF NOT EXISTS `location` VARCHAR(255) DEFAULT NULL AFTER `speakerName`;

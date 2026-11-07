@@ -22,7 +22,17 @@ const TestimonialVideo = sequelize.define('TestimonialVideo', {
     type: DataTypes.TEXT,
     allowNull: false
   },
+  // Student / Speaker Name
+  name: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   speakerName: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  // Location / City (e.g. Puducherry, Chennai)
+  location: {
     type: DataTypes.STRING,
     allowNull: true
   },

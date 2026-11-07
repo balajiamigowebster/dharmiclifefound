@@ -13,6 +13,7 @@ import {
   Film,
   Play,
   User,
+  MapPin,
   Clock,
   BookOpen,
   Brain,
@@ -304,12 +305,21 @@ export default function TestimonialsPage({ onNavigate, onOpenDonation, onOpenCon
                         )}
                       </div>
 
-                      {video.speakerName && (
-                        <p className="text-xs text-[#901C25] font-semibold flex items-center gap-1.5">
-                          <User size={13} />
-                          <span>{video.speakerName}</span>
-                        </p>
-                      )}
+                      {/* Name & Location */}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs">
+                        {(video.name || video.speakerName) && (
+                          <span className="text-[#901C25] font-semibold flex items-center gap-1">
+                            <User size={13} />
+                            <span>{video.name || video.speakerName}</span>
+                          </span>
+                        )}
+                        {video.location && (
+                          <span className="text-gray-500 font-medium flex items-center gap-1">
+                            <MapPin size={13} className="text-[#E48A2D]" />
+                            <span>{video.location}</span>
+                          </span>
+                        )}
+                      </div>
 
                       {video.description && (
                         <p className="text-xs sm:text-sm text-gray-600 mt-2 line-clamp-3 leading-relaxed">

@@ -12,6 +12,7 @@ import {
   X,
   Play,
   User,
+  MapPin,
   Clock,
   ExternalLink,
   MessageSquareQuote
@@ -48,7 +49,8 @@ export default function TestimonialsDashboard() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [title, setTitle] = useState('');
-  const [speakerName, setSpeakerName] = useState('');
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState('');
   const [existingVideoUrl, setExistingVideoUrl] = useState('');
@@ -76,7 +78,8 @@ export default function TestimonialsDashboard() {
   const resetForm = () => {
     setEditingId(null);
     setTitle('');
-    setSpeakerName('');
+    setName('');
+    setLocation('');
     setDescription('');
     setDuration('');
     setExistingVideoUrl('');
@@ -88,7 +91,8 @@ export default function TestimonialsDashboard() {
   const handleStartEdit = (item) => {
     setEditingId(item.id);
     setTitle(item.title || '');
-    setSpeakerName(item.speakerName || '');
+    setName(item.name || item.speakerName || '');
+    setLocation(item.location || '');
     setDescription(item.description || '');
     setDuration(item.duration || '');
     setExistingVideoUrl(item.videoUrl || '');
@@ -116,6 +120,11 @@ export default function TestimonialsDashboard() {
       return;
     }
 
+    if (!name.trim()) {
+      setMessage({ type: 'error', text: 'Please enter the Student / Person Name.' });
+      return;
+    }
+
     if (!editingId && !selectedVideoFile && !existingVideoUrl) {
       setMessage({ type: 'error', text: 'Please select a video file to upload.' });
       return;
@@ -129,7 +138,9 @@ export default function TestimonialsDashboard() {
       category: selectedCategory,
       categoryName: activeCatObj ? activeCatObj.name : 'Udaliyal Dharmam Classes',
       title: title.trim(),
-      speakerName: speakerName.trim(),
+      name: name.trim(),
+      speakerName: name.trim(),
+      location: location.trim(),
       description: description.trim(),
       duration: duration.trim(),
       videoUrl: existingVideoUrl
@@ -205,7 +216,7 @@ export default function TestimonialsDashboard() {
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold font-serif">Testimonials Dashboard</h2>
             <p className="text-white/80 text-xs sm:text-sm mt-1 max-w-2xl">
-              Upload and manage student video reflections for <strong>Udaliyal Dharmam Classes</strong> and <strong>Manoviyal Dharmam Classes</strong>. Videos are saved directly in <code className="text-[#E48A2D] bg-black/20 px-1 py-0.5 rounded">uploads/videos</code> and linked to MySQL database.
+              Upload and manage student video reflections for <strong>Udaliyal Dharmam Classes</strong> and <strong>Manoviyal Dharmam Classes</strong>. Videos are saved directly in <code className="text-[#E48A2D] bg-black/20 px-1 py-0.5 rounded">uploads/videos</code> and linked to MySQL database with Name and Location.
             </p>
           </div>
 
@@ -260,7 +271,7 @@ export default function TestimonialsDashboard() {
         </div>
       )}
 
-      {/* Category Selection Tabs (Design matching Awards Dashboard) */}
+      {/* Category Selection Tabs */}
       <div className="bg-white p-2.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col sm:flex-row gap-3">
         {TESTIMONIAL_CATEGORIES.map((cat) => {
           const isSelected = selectedCategory === cat.slug;
@@ -336,20 +347,38 @@ export default function TestimonialsDashboard() {
               />
             </div>
 
-            {/* Speaker / Student Name */}
+            {/* Name */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                Student / Speaker Name
+                Student / Person Name *
               </label>
               <div className="relative">
                 <input
                   type="text"
-                  value={speakerName}
-                  onChange={(e) => setSpeakerName(e.target.value)}
-                  placeholder="e.g. S. Ramanathan, Puducherry"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. S. Ramanathan"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:border-[#901C25] focus:ring-1 focus:ring-[#901C25] outline-none text-sm transition"
                 />
                 <User size={16} className="absolute left-3.5 top-3 text-gray-400" />
+              </div>
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                Location / City
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="e.g. Puducherry, Chennai, Bangalore"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:border-[#901C25] focus:ring-1 focus:ring-[#901C25] outline-none text-sm transition"
+                />
+                <MapPin size={16} className="absolute left-3.5 top-3 text-[#E48A2D]" />
               </div>
             </div>
 
@@ -503,7 +532,7 @@ export default function TestimonialsDashboard() {
             </div>
             <h4 className="text-base font-bold font-serif text-gray-800">No Videos Added Yet</h4>
             <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-md mx-auto">
-              There are currently no video testimonials in <strong>{activeCategory?.name}</strong>. Click "+ Add New Video" above to upload student reflections.
+              There are currently no video testimonials in <strong>{activeCategory?.name}</strong>. Click "+ Add New Video" above to upload student reflections with Name and Location.
             </p>
             <button
               onClick={() => {
@@ -548,12 +577,21 @@ export default function TestimonialsDashboard() {
                       )}
                     </div>
 
-                    {item.speakerName && (
-                      <p className="text-xs text-[#901C25] font-semibold mt-1 flex items-center gap-1.5">
-                        <User size={13} />
-                        <span>{item.speakerName}</span>
-                      </p>
-                    )}
+                    {/* Name & Location */}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs">
+                      {(item.name || item.speakerName) && (
+                        <span className="text-[#901C25] font-semibold flex items-center gap-1">
+                          <User size={13} />
+                          <span>{item.name || item.speakerName}</span>
+                        </span>
+                      )}
+                      {item.location && (
+                        <span className="text-gray-500 font-medium flex items-center gap-1">
+                          <MapPin size={13} className="text-[#E48A2D]" />
+                          <span>{item.location}</span>
+                        </span>
+                      )}
+                    </div>
 
                     {item.description && (
                       <p className="text-xs text-gray-600 mt-2 line-clamp-3 leading-relaxed">
@@ -595,4 +633,3 @@ export default function TestimonialsDashboard() {
     </div>
   );
 }
-

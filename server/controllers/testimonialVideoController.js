@@ -71,7 +71,9 @@ exports.createTestimonialVideo = async (req, res) => {
       category,
       categoryName,
       title,
+      name,
       speakerName,
+      location,
       description,
       duration,
       orderIndex,
@@ -117,11 +119,16 @@ exports.createTestimonialVideo = async (req, res) => {
         : 'Udaliyal Dharmam Classes';
     }
 
+    const personName = (name || speakerName || '').trim();
+    const personLocation = (location || '').trim();
+
     const newVideo = await TestimonialVideo.create({
       category: category.trim(),
       categoryName: cleanCategoryName.trim(),
       title: title.trim(),
-      speakerName: speakerName ? speakerName.trim() : null,
+      name: personName || null,
+      speakerName: personName || null,
+      location: personLocation || null,
       videoUrl: resolvedVideoUrl.trim(),
       thumbnailUrl: resolvedThumbnailUrl ? resolvedThumbnailUrl.trim() : (req.body.thumbnailUrl || null),
       description: description ? description.trim() : null,
@@ -153,7 +160,9 @@ exports.updateTestimonialVideo = async (req, res) => {
       category,
       categoryName,
       title,
+      name,
       speakerName,
+      location,
       description,
       duration,
       orderIndex,
@@ -188,7 +197,15 @@ exports.updateTestimonialVideo = async (req, res) => {
     if (category) item.category = category.trim();
     if (categoryName) item.categoryName = categoryName.trim();
     if (title) item.title = title.trim();
-    if (speakerName !== undefined) item.speakerName = speakerName ? speakerName.trim() : null;
+    
+    const personName = name !== undefined ? name : speakerName;
+    if (personName !== undefined) {
+      item.name = personName ? personName.trim() : null;
+      item.speakerName = personName ? personName.trim() : null;
+    }
+    if (location !== undefined) {
+      item.location = location ? location.trim() : null;
+    }
     if (description !== undefined) item.description = description ? description.trim() : null;
     if (duration !== undefined) item.duration = duration ? duration.trim() : null;
     if (orderIndex !== undefined && orderIndex !== '') item.orderIndex = parseInt(orderIndex, 10);
