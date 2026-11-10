@@ -132,20 +132,20 @@ export default function TrusteesPage({ onNavigate }) {
             >
               {/* Left Column: Authentic Portrait Photo */}
               <div className="shrink-0 flex flex-col items-center">
-                <div className="w-[280px] h-[280px] sm:w-[300px] sm:h-[300px] rounded-lg overflow-hidden border border-[#eedac5] shadow-md bg-stone-100 group relative">
+                <div className="w-[280px] sm:w-[300px] rounded-2xl overflow-hidden border border-[#eedac5] shadow-md bg-stone-100 group relative flex items-center justify-center">
                   <img
                     src={trustee.image}
                     alt={trustee.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-auto object-contain rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                     onError={(e) => {
                       if (trustee.fallbackImage && e.target.src !== trustee.fallbackImage) {
                         e.target.src = trustee.fallbackImage;
                       }
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none rounded-2xl"></div>
                 </div>
               </div>
 

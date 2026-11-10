@@ -6,7 +6,7 @@ export const trusteesData = [
     badge: 'Leadership Profile',
     designation: 'Founder & Managing Trustee, Dharmic Life Foundation',
     tenure: '',
-    image: '/images/trustees/balaji.png',
+    image: '/images/trustees/balaji-trustee.jpeg',
     fallbackImage: 'https://amigowebster.in/dharmiclifefoundation/wp-content/uploads/2026/08/987789-Edited-580x580.png',
     quote: '',
     quotePosition: 0,
