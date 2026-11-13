@@ -180,7 +180,7 @@ export default function AnnadhanamPage({ onNavigate }) {
                 <span>Service at Rajiv Gandhi Government Hospital</span>
               </h3>
               <p className="text-sm sm:text-base text-gray-800">
-                At <strong>Dharmic Life Foundation</strong>, Annadhanam is one of our core activities. We frequently serve healthy, nourishing meals with care and respect to pregnant women and their attendants at Rajiv Gandhi Government Hospital, Puducherry.
+                In <strong>Dharmic Life Foundation</strong>, Annadhanam is one of our core activities. We frequently serve healthy, nourishing meals with care and respect to pregnant women and their attendants at Rajiv Gandhi Government Hospital, Puducherry.
               </p>
               <p className="text-sm sm:text-base text-gray-800 pt-1">
                 Serving pregnant mothers is especially meaningful, as it nourishes both the mother and the precious new life growing within her.

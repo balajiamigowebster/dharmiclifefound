@@ -16,7 +16,7 @@ export const activitiesData = [
       '/images/photo-2.jpg',
       '/images/act-annadhanam.jpg'
     ],
-    summary: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
+    summary: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in the society goes hungry.',
     badge: 'Mahadanam',
     bodyParagraphs: [
       'Annadhanam is deeply rooted in Indian culture and respected as Mahadanam—the greatest of all charities—because food sustains life itself.',

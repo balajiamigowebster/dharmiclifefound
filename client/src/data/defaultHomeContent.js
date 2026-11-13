@@ -55,7 +55,7 @@ export const defaultHomeContent = {
         id: 1,
         slug: 'annadhanam',
         title: 'Annadhanam (When Hunger ends, Dharma begins)',
-        description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in our community goes hungry.',
+        description: 'Distributing nutritious meals to the homeless and underprivileged families to ensure that no one in the society goes hungry.',
         image: '/images/home-annadhanam.jpeg',
         badge: 'Annam Parabrahma'
       },
