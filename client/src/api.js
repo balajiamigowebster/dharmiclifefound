@@ -158,7 +158,10 @@ function mergeHomeContent(data) {
     coreActivities: {
       ...defaultHomeContent.coreActivities,
       ...(data.coreActivities || {}),
-      items: data.coreActivities?.items?.length > 0 ? data.coreActivities.items : defaultHomeContent.coreActivities.items
+      items: (data.coreActivities?.items?.length > 0 ? data.coreActivities.items : defaultHomeContent.coreActivities.items).map((it) => ({
+        ...it,
+        description: (it.description || '').replace(/our community/gi, 'the society')
+      }))
     },
     stats: {
       ...defaultHomeContent.stats,

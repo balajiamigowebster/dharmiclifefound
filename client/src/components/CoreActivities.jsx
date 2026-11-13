@@ -168,7 +168,7 @@ export default function CoreActivities({ content, onSelectActivity, onNavigate }
                       {act.title}
                     </h3>
                     <p className="mt-2.5 text-xs sm:text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                      {act.description}
+                      {(act.description || '').replace(/our community/gi, 'the society')}
                     </p>
                   </div>
 

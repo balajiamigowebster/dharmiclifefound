@@ -98,7 +98,7 @@ export default function ActivitiesPage({ onNavigate, onSelectActivity }) {
                     {act.fullTitle}
                   </h3>
                   <p className="mt-3 text-sm text-gray-600 line-clamp-3 leading-relaxed">
-                    {act.summary}
+                    {(act.summary || '').replace(/our community/gi, 'the society')}
                   </p>
                 </div>
 
